@@ -64,7 +64,7 @@ spec:
             devices:
               - name: "/dev/disk/by-id/wwn-0x55cd2e404c1ca321"
               - name: "/dev/disk/by-id/wwn-0x55cd2e414d948115"
-              - name: "/dev/disk/by-id/wwn-0x5000c500dc5504c0"
+              - name: "/dev/disk/by-id/wwn-0x5000c500dc5504c0" 
           - name: verus
             devices:
               - name: "/dev/disk/by-id/wwn-0x55cd2e404c1ca2fd"
