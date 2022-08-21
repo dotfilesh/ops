@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "${GLOBALSECRET_SHORT_DOMAIN/./-}"
+  namespace: networking 
+spec:
+  secretName: "${GLOBALSECRET_SHORT_DOMAIN/./-}-tls"
+  issuerRef:
+    name: "${CERT_DEFAULT_CLUSTERISSUER}"
+    kind: ClusterIssuer
+  commonName: "${GLOBALSECRET_SHORT_DOMAIN}"
+  dnsNames:
+  - "${GLOBALSECRET_SHORT_DOMAIN}"
+  - "*.${GLOBALSECRET_SHORT_DOMAIN}"

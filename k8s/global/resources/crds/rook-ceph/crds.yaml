@@ -1,0 +1,31 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: GitRepository
+metadata:
+  name: source-rook-ceph
+  namespace: flux-system
+spec:
+  interval: 6h
+  url: https://github.com/rook/rook.git
+  ref:
+    tag: v1.9.9
+  ignore: |
+    # exclude all
+    /*
+    # include crd directory
+    !/deploy/examples/crds.yaml
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: crds-rook-ceph
+  namespace: flux-system
+spec:
+  interval: 6h
+  prune: false
+  timeout: 5m0s
+  wait: true
+  sourceRef:
+    kind: GitRepository
+    name: source-rook-ceph
+    namespace: flux-system

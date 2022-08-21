@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "${GLOBALSECRET_PUBLIC_DOMAIN/./-}"
+  namespace: networking 
+spec:
+  secretName: "${GLOBALSECRET_PUBLIC_DOMAIN/./-}-tls"
+  issuerRef:
+    name: "${CERT_DEFAULT_CLUSTERISSUER}"
+    kind: ClusterIssuer
+    # No namespace is set as ClusterIssuers are cluster-scope.
+    # ns is only set at all as CI's ref a secret.
+  commonName: "${GLOBALSECRET_PUBLIC_DOMAIN}"
+  dnsNames:
+  - "${GLOBALSECRET_PUBLIC_DOMAIN}"
+  - "*.git.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  - "*.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  - "*.${GLOBALSECRET_PUBLIC_DOMAIN}"

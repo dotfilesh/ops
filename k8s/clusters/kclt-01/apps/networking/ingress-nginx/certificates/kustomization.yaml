@@ -1,0 +1,11 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # This is a list of domains I wish to have certificates issued for.
+  - public-domain.yaml
+  - testing-domain.yaml
+  # - short-domain.yaml
+  - tertiary-domain.yaml
+  - partner-domain.yaml
+  - personal-domain.yaml

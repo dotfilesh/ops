@@ -1,0 +1,7 @@
+# This installs the vital CRDs required for Everything Else.
+# As such, if each cluster's .../flux/ is run 1st, this is run 0th.
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - github.com/fluxcd/flux2/manifests/install?ref=v0.32.0

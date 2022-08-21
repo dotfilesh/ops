@@ -1,0 +1,39 @@
+[
+    {
+        "op": "replace",
+        "path": "/machine/install/disk",
+        "value": "/dev/nvme0n1"
+    },
+    {
+        "op": "add",
+        "path": "/machine/network/interfaces",
+        "value": [
+            {
+                "interface": "eth0",
+                "mtu": 1500,
+                "dhcp": true
+            }
+        ]
+    },
+    {
+        "op": "add",
+        "path": "/machine/certSANs/-",
+        "value": "${PUBLIC_IPV4}"
+    },
+    {
+        "op": "add",
+        "path": "/machine/certSANs/-",
+        "value": "${DATACENTER_NAME}.${API_SUBDOMAIN}"
+    },
+    {
+        "op": "add",
+        "path": "/machine/files",
+        "value": [
+            {
+                "content": "[plugins.\"io.containerd.grpc.v1.cri\"]\n    enable_unprivileged_ports = true\n    enable_unprivileged_icmp = true\n",
+                "path": "/var/cri/conf.d/allow-unpriv-ports.toml",
+                "op": "create"
+            }
+        ]
+    }
+]

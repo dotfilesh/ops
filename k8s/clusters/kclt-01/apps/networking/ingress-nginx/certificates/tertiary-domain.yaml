@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "${SECRET_TERTIARY_DOMAIN/./-}"
+  namespace: networking 
+spec:
+  secretName: "${SECRET_TERTIARY_DOMAIN/./-}-tls"
+  issuerRef:
+    name: "${CERT_DEFAULT_CLUSTERISSUER}"
+    kind: ClusterIssuer
+  commonName: "${SECRET_TERTIARY_DOMAIN}"
+  dnsNames:
+  - "${SECRET_TERTIARY_DOMAIN}"
+  - "*.${SECRET_TERTIARY_DOMAIN}"

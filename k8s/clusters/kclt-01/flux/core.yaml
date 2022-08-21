@@ -1,0 +1,32 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: core
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./k8s/clusters/kclt-01/core
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-cluster
+  dependsOn:
+    - name: sources 
+    - name: config
+    - name: crds
+    - name: global
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-configs
+      - kind: Secret
+        name: cluster-secrets
+      - kind: ConfigMap
+        name: global-configs
+      - kind: Secret
+        name: global-secrets

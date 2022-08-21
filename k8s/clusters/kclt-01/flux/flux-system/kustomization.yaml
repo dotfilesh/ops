@@ -1,0 +1,9 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../../../global/init/source-helm-cilium/
+  - cilium-installation.yaml
+  - ../../../../global/init/source-git-flux/
+  - flux-installation.yaml
+  - flux-cluster.yaml
