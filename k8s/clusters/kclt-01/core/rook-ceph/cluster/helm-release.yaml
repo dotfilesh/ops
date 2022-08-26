@@ -101,8 +101,6 @@ spec:
             cpu: "1000m"
             memory: "4Gi"
         prepareosd:
-          limits:
-            memory: "400Mi"
           requests:
             cpu: "500m"
             memory: "50Mi"
