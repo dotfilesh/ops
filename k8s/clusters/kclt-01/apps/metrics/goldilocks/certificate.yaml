@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "goldilocks-${CLUSTER_NAME}-sys-${GLOBALSECRET_PUBLIC_DOMAIN/./-}"
+  namespace: metrics
+spec:
+  secretName: "goldilocks-${CLUSTER_NAME}-sys-${GLOBALSECRET_PUBLIC_DOMAIN/./-}-tls"
+  issuerRef:
+    name: "${CERT_DEFAULT_CLUSTERISSUER}"
+    kind: ClusterIssuer
+  commonName: "goldilocks.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  dnsNames:
+  - "goldilocks.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
