@@ -148,7 +148,3 @@ spec:
               resources:
                 requests:
                   storage: 10Gi
-        retention: 2d
-        retentionSize: "6GB"
-        ruleSelectorNilUsesHelmValues: false
-        serviceMonitorSelectorNilUsesHelmValues: false
