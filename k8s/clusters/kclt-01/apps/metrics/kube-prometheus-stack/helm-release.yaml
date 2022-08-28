@@ -112,7 +112,7 @@ spec:
         ingressClassName: nginx
         pathType: Prefix
         hosts:
-          - &host_prometheus prometheus-${CLUSTER_NAME}.${INGRESS_DOMAIN}
+          - &host_prometheus prometheus.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}
         tls:
           - hosts:
               - *host_prometheus
