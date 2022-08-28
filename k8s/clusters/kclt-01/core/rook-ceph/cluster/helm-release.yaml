@@ -136,6 +136,9 @@ spec:
             failureDomain: host
             replicated:
               size: 3
+              hybridStorage:
+                primaryDeviceClass: ssd
+                secondaryDeviceClass: hdd
         storageClass:
             enabled: true
             isDefault: false 
@@ -189,7 +192,7 @@ spec:
           metadataPool:
             failureDomain: host
             replicated:
-              size: 4
+              size: 3
           dataPool:
             failureDomain: host
             erasureCoded:
