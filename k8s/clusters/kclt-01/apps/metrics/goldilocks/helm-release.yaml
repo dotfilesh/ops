@@ -38,4 +38,4 @@ spec:
         tls:
           - hosts:
               - *host
-            secretName: goldilocks-${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}
+            secretName: goldilocks.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}

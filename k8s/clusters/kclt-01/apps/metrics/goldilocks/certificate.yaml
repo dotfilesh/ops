@@ -4,7 +4,7 @@ metadata:
   name: "goldilocks-${CLUSTER_NAME}-sys-${GLOBALSECRET_PUBLIC_DOMAIN/./-}"
   namespace: metrics
 spec:
-  secretName: "goldilocks-${CLUSTER_NAME}-sys-${GLOBALSECRET_PUBLIC_DOMAIN/./-}-tls"
+  secretName: "goldilocks.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
   issuerRef:
     name: "${CERT_DEFAULT_CLUSTERISSUER}"
     kind: ClusterIssuer
