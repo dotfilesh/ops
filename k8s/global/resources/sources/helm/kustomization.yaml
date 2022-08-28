@@ -6,6 +6,7 @@ resources:
   - bitnami.yaml
   - cockroachdb.yaml
   - emberstack.yaml
+  - fairwinds.yaml
   - gitlab.yaml
   - grafana.yaml
   - ingress-nginx.yaml
