@@ -31,7 +31,7 @@ spec:
         annotations:
           hajimari.io/appName: *app
         hosts:
-          - host: &host "goldilocks.${CLUSTER_NAME}.sys.${SECRET_PUBLIC_DOMAIN}"
+          - host: &host "goldilocks.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
             paths:
               - path: /
                 type: Prefix
