@@ -3,7 +3,7 @@ apiVersion: ceph.rook.io/v1
 kind: CephObjectStoreUser
 metadata:
   name: cloudnative-pg
-  namespace: database
+  namespace: rook-ceph
 spec:
   store: ceph-bucket
   displayName: cloudnative-pg
