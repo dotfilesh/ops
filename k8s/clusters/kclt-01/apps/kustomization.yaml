@@ -4,5 +4,6 @@ kind: Kustomization
 resources:
   - database
   - kube-system
+  - kyverno
   - metrics
   - networking
