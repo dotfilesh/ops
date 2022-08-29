@@ -38,7 +38,7 @@ spec:
       barmanObjectStore:
         wal:
           compression: bzip2
-          maxParalell: 8
+          maxParallel: 8
         endpointURL: https://rook-ceph-rgw-ceph-bucket.rook-ceph/
         destinationPath: s3://cloudnative-pg-backup/
         serverName: "postgres-recovery"
