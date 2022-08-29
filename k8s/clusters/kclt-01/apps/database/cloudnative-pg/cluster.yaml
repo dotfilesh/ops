@@ -41,7 +41,7 @@ spec:
           maxParalell: 8
         endpointURL: https://rook-ceph-rgw-ceph-bucket.rook-ceph/
         destinationPath: s3://cloudnative-pg-backup/
-        serverName: "postgres"
+        serverName: "postgres-recovery"
         s3Credentials:
           accessKeyId:
             name: rook-ceph-object-user-ceph-bucket-cloudnative-pg
