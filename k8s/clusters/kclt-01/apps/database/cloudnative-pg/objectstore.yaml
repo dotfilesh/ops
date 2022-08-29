@@ -1,0 +1,18 @@
+---
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStoreUser
+metadata:
+  name: cloudnative-pg
+  namespace: database
+spec:
+  store: ceph-bucket
+  displayName: cloudnative-pg
+  quotas:
+    maxBuckets: 1
+    maxSize: 50G
+  capabilities:
+    user: "*"
+    buckets: "*"
+    usage: "*"
+    metadata: "*"
+    zone: "read"

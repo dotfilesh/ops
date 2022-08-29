@@ -1,0 +1,35 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres
+  namespace: database
+spec:
+  instances: 3
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 15Gi
+    storageClass: ceph-block
+  superuserSecret:
+    name: postgres-superuser
+  bootstrap:
+    recovery:
+      source: postgres-backup
+  monitoring:
+    enablePodMonitor: true
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      endpointURL: https://rook-ceph-rgw-ceph-bucket.rook-ceph/
+      destinationPath: s3://cloudnative-pg-backup/
+      serverName: "postgres"
+      s3Credentials:
+        accessKeyId:
+          name: rook-ceph-object-user-ceph-bucket-cloudnative-pg
+          key: AccessKey
+        secretAccessKey:
+          name: rook-ceph-object-user-ceph-bucket-cloudnative-pg
+          key: SecretKey
