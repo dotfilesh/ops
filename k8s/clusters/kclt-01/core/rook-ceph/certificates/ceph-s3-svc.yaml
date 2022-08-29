@@ -1,0 +1,16 @@
+# Currently out of commission until it can be put through the nginx
+# ingress.
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "s3-ceph-svc"
+  namespace: rook-ceph
+spec:
+  secretName: "s3-ceph-svc-tls"
+  issuerRef:
+    name: "cluster-internal-ca"
+    kind: ClusterIssuer
+  commonName: "rook-ceph-rgw-ceph-bucket.rook-ceph.svc"
+  dnsNames:
+  - "rook-ceph-rgw-ceph-bucket.rook-ceph.svc"
