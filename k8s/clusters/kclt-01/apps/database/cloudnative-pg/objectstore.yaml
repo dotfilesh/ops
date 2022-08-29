@@ -12,7 +12,7 @@ spec:
     maxSize: 50G
   capabilities:
     user: "*"
-    buckets: "*"
+    bucket: "*"
     usage: "*"
     metadata: "*"
     zone: "read"
