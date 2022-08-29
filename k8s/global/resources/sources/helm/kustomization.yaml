@@ -2,19 +2,19 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - authentik.yaml
-  - bitnami.yaml
-  - cockroachdb.yaml
-  - emberstack.yaml
-  - fairwinds.yaml
-  - gitlab.yaml
-  - grafana.yaml
-  - ingress-nginx.yaml
-  - jetstack.yaml
-  - k8s-at-home.yaml
-  - kyverno.yaml
-  - metallb.yaml
-  # Not ready, see comment in ocis.yaml.
-  # - ./ocis.yaml
-  - prometheus-community.yaml
-  - rook-ceph.yaml
+  - authentik
+  - bitnami
+  - cockroachdb
+  - emberstack
+  - fairwinds
+  - gitlab
+  - grafana
+  - ingress-nginx
+  - jetstack
+  - k8s-at-home
+  - kyverno
+  - metallb
+  # Not ready, see comment in ocis/helm-release.yaml.
+  # - ./ocis
+  - prometheus-community
+  - rook-ceph
