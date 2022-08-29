@@ -12,6 +12,7 @@ resources:
   - ingress-nginx.yaml
   - jetstack.yaml
   - k8s-at-home.yaml
+  - kyverno.yaml
   - metallb.yaml
   # Not ready, see comment in ocis.yaml.
   # - ./ocis.yaml
