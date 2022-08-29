@@ -33,3 +33,20 @@ spec:
         secretAccessKey:
           name: rook-ceph-object-user-ceph-bucket-cloudnative-pg
           key: SecretKey
+  externalClusters:
+    - name: postgres-backup
+      barmanObjectStore:
+        wal:
+          compression: bzip2
+          maxParalell: 8
+        endpointURL: https://rook-ceph-rgw-ceph-bucket.rook-ceph/
+        destinationPath: s3://cloudnative-pg-backup/
+        serverName: "postgres"
+        s3Credentials:
+          accessKeyId:
+            name: rook-ceph-object-user-ceph-bucket-cloudnative-pg
+            key: AccessKey
+          secretAccessKey:
+            name: rook-ceph-object-user-ceph-bucket-cloudnative-pg
+            key: SecretKey
+
