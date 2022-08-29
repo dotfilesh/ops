@@ -23,7 +23,7 @@ spec:
       wal:
         compression: bzip2
         maxParallel: 8
-      endpointURL: https://rook-ceph-rgw-ceph-bucket.rook-ceph/
+      endpointURL: https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}/
       destinationPath: s3://cloudnative-pg-backup/
       serverName: "postgres"
       s3Credentials:
@@ -39,7 +39,7 @@ spec:
         wal:
           compression: bzip2
           maxParallel: 8
-        endpointURL: https://rook-ceph-rgw-ceph-bucket.rook-ceph/
+        endpointURL: https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}/
         destinationPath: s3://cloudnative-pg-backup/
         serverName: "postgres-recovery"
         s3Credentials:
