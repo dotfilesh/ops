@@ -14,7 +14,8 @@ spec:
             backend:
               service:
                 name: rook-ceph-rgw-ceph-bucket
-                port: 80
+                port: 
+                  number: 80
   tls:
     - hosts:
       - s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}
