@@ -4,7 +4,7 @@ metadata:
   name: "s3-${CLUSTER_NAME}-api-${GLOBALSECRET_PUBLIC_DOMAIN/./-}"
   namespace: rook-ceph
 spec:
-  secretName: "s3-${CLUSTER_NAME}-api-${GLOBALSECRET_PUBLIC_DOMAIN/./-}-tls"
+  secretName: "s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
   issuerRef:
     name: "${CERT_DEFAULT_CLUSTERISSUER}"
     kind: ClusterIssuer

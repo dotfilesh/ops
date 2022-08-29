@@ -1,0 +1,21 @@
+apiVersion: netwroking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rook-ceph-rgw-gateway
+  namespace: rook-ceph
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rook-ceph-rgw-ceph-bucket
+                port: 80
+  tls:
+    - hosts:
+      - s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}
+      secretName: s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}

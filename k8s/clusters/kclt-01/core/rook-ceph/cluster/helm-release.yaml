@@ -200,10 +200,10 @@ spec:
               codingChunks: 1
           gateway:
             port: 80
-            securePort: 443
+            #securePort: 443
             instances: 1
             type: s3
-            sslCertificateRef: "s3-${CLUSTER_NAME}-api-${GLOBALSECRET_PUBLIC_DOMAIN/./-}-tls"
+            #sslCertificateRef: "s3-${CLUSTER_NAME}-api-${GLOBALSECRET_PUBLIC_DOMAIN/./-}-tls"
             resources:
               requests:
                 cpu: 500m
