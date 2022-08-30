@@ -48,7 +48,7 @@ spec:
         enabled: true
         password: "HSFlOOr8pFkcpDrjksr5k49pPmO3Dk20hG95RIvk4jJxMybrddxjFDc6LCCJ02nO"
     persistence:
-      storageClass: ceph-blockpool
+      storageClass: ceph-block
       dataDir:
         enabled: true
         Size: 16Gi
