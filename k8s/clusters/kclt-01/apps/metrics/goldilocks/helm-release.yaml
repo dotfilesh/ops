@@ -44,9 +44,9 @@ spec:
           - hosts:
               - *host
             secretName: goldilocks.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}
-        resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        memory: 100M
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 100M
