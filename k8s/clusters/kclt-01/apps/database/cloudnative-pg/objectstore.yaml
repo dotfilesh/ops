@@ -4,6 +4,10 @@ kind: CephObjectStoreUser
 metadata:
   name: cloudnative-pg
   namespace: rook-ceph
+  labels:
+    # this is necessary for a kyverno policy which will copy the
+    # secret from rook-ceph to database
+    sync_secret_to_namespace: database
 spec:
   store: ceph-bucket
   displayName: cloudnative-pg
