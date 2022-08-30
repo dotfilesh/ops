@@ -44,6 +44,7 @@ spec:
       onlineMode: true
       memory: 4500M
       serviceType: LoadBalancer
+      loadBalancerIP: ${METALLB_MINECRAFTSURVIVAL_ADDR}
       rcon:
         enabled: true
         password: ${SECRET_RCON_PASSWORD}
