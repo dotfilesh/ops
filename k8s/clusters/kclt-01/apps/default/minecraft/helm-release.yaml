@@ -27,7 +27,7 @@ spec:
         memory: 2Gi
         cpu: 500m
       limits:
-        memory: &maxMemory 12Gi
+        memory: 12Gi
         cpu: 5000m
     minecraftServer:
       eula: "TRUE"
@@ -42,7 +42,7 @@ spec:
       motd: "§dMinecraft for the §lGirlies§r§d!"
       pvp: true
       onlineMode: true
-      memory: *maxMemory
+      memory: 4500M
       serviceType: LoadBalancer
       rcon:
         enabled: true
@@ -52,3 +52,4 @@ spec:
       dataDir:
         enabled: true
         Size: 16Gi
+    image:
