@@ -46,7 +46,7 @@ spec:
       serviceType: LoadBalancer
       rcon:
         enabled: true
-        password: "HSFlOOr8pFkcpDrjksr5k49pPmO3Dk20hG95RIvk4jJxMybrddxjFDc6LCCJ02nO"
+        password: ${SECRET_RCON_PASSWORD}
     persistence:
       storageClass: ceph-block
       dataDir:
