@@ -12,6 +12,7 @@ machineCert: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJQekNCOHFBREFnRUNBaEVBckw
 machineCertKey: ENC[AES256_GCM,data:+U2c5Dz0aEvcmnkGW2j9Dvi0254/AC0AwO7R2jVI7ezRMMHBaFHJgOLDgPgsm77DCmNXks0Wyc+vlB6qQJo56zfoDatmpV2MgDWUoyrBpo2EiIIMnP5mAHuUNlXUx9qjOlnZSuMfXa1TGh/FJy7ZiXu6/epuQoFtDqfhq97Y+LG4B87fnKSS3C7WQYNKa7KwkeCA59JwXmrjPLbnH6BARy1N7+Ku9fdWVv96KEp5I/pMxejP,iv:gdvHDbxfUpjTsuQHs4tcX0tcKyOAED4AVWC5QEihyzA=,tag:a2xnOqZrmrrhnn5bm8TLJg==,type:str]
 machineToken: ENC[AES256_GCM,data:eLEYSQDy+iaSOPoiGWgnCh/cgWPDdnY=,iv:U06F457PzNcXNQXx0LKKL9zLdcjpygt9TNXLx+vquzI=,tag:3ZBpullvH3YmbnOy0BBKIw==,type:str]
 domainName: dotfile.sh
+secretPublicIp: ENC[AES256_GCM,data:kN5WlLWwwHOoDl679w==,iv:0pBBkqsGYA6EFtFvKT4v1IXBJIBthnrrEs+rlU4SBqM=,tag:C8kgRDBYq1qPzHppChUiZw==,type:str]
 kubeDomainName: kclt-01.kube.api.dotfile.sh
 clusterEndpointIP: 10.64.0.48
 sops:
@@ -29,8 +30,8 @@ sops:
             b3ZGWmk3QWxKaGdBUVFPUlZFdnpCZ1EKRl6salTdR1duEg/rbOl97xvc9xlx1b5+
             k80FYe8oYm3HF/h9IUuWi2DREGxlPg98vVvrc5ZwrUplXZth/Am1sA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2022-08-17T18:27:51Z"
-    mac: ENC[AES256_GCM,data:XY5KfLpDCdPUAI/EXcLyf39VB8rI/Q7mQF3Vre0FDdrkrLCMJyGVb+G+kmd8u+4zcZbhdlim733nqejEhMmCwE3GfFy2IS/UpGLN1D8WuNiuDXLA76EWShMO1KOmkTonZcyvMb0YdVpixnEdD7VEQLfzXjYXy/XelZOBpk156y0=,iv:3cKS6TTBbyO1oUsgFqIlTB6WE1yFv9iJWVLOhr65RLs=,tag:EN+JK/xvHI2Cndm9eaGcLQ==,type:str]
+    lastmodified: "2022-09-07T19:23:08Z"
+    mac: ENC[AES256_GCM,data:MEzxcwGIjC8miMnXH5jTUg6oyRRVjHHv60xVZK3Z0Eqttn/VwuvTLiveYfu5jgMsOGxWntJlCK0AuqYrJXWI5dBhhn01qf57P0fofVOcj/kJZ+a4H8SIxueqM0ImUi/dHBo9Dlh/xQSZtB+Cl3cPI3/egLpNDThoL6dan8N5iak=,iv:AMHrDc1oTrd2grfAq7g5r/V5ENEb+OcGBDz7XJS/rQA=,tag:enffZ29Dxw8C/llQzyKwrg==,type:str]
     pgp:
         - created_at: "2022-08-15T16:45:41Z"
           enc: |
