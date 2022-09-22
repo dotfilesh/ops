@@ -1,6 +1,6 @@
 clusterName: kclt-01
-talosVersion: v1.1.2
-kubernetesVersion: v1.24.4
+talosVersion: v1.2.3
+kubernetesVersion: v1.25.1
 endpoint: https://${clusterEndpointIP}:6443
 #domain: cluster.local
 clusterPodNets:
@@ -10,8 +10,8 @@ clusterSvcNets:
 cniConfig:
   name: none
 nodes:
-  - hostname: formula #.${kubeDomainName}
-    ipAddress: 10.64.8.1
+  - hostname: woglinde
+    ipAddress: 10.64.8.254
     controlPlane: true
     installDisk: /dev/nvme0n1
     networkInterfaces:
@@ -20,7 +20,43 @@ nodes:
         mtu: 1500
         vip:
           ip: ${clusterEndpointIP}
-  - hostname: lailah #.${kubeDomainName}
+  - hostname: wellgunde
+    ipAddress: 10.64.8.253
+    controlPlane: true
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - interface: eth0
+        dhcp: true
+        mtu: 1500
+        vip:
+          ip: ${clusterEndpointIP}
+  - hostname: flosshilde
+    ipAddress: 10.64.8.252
+    controlPlane: true
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - interface: eth0
+        dhcp: true
+        mtu: 1500
+        vip:
+          ip: ${clusterEndpointIP}
+  - hostname: formula
+    ipAddress: 10.64.8.1
+    controlPlane: false
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - interface: eth0
+        mtu: 1500
+        dhcp: true
+  - hostname: urban
+    ipAddress: 10.64.8.2
+    controlPlane: false
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - interface: eth0
+        mtu: 1500
+        dhcp: true
+  - hostname: lailah
     ipAddress: 10.64.8.3
     controlPlane: false
     installDisk: /dev/nvme0n1
@@ -28,7 +64,7 @@ nodes:
       - interface: eth0
         dhcp: true
         mtu: 1500
-  - hostname: verus #.${kubeDomainName}
+  - hostname: verus
     ipAddress: 10.64.8.4
     controlPlane: false
     installDisk: /dev/nvme0n1
@@ -36,8 +72,16 @@ nodes:
       - interface: eth0
         mtu: 1500
         dhcp: true
-  - hostname: mastema #.${kubeDomainName}
+  - hostname: mastema
     ipAddress: 10.64.8.5
+    controlPlane: false
+    installDisk: /dev/nvme0n1
+    networkInterfaces:
+      - interface: eth0
+        mtu: 1500
+        dhcp: true
+  - hostname: amdusias
+    ipAddress: 10.64.8.7
     controlPlane: false
     installDisk: /dev/nvme0n1
     networkInterfaces:
@@ -67,12 +111,14 @@ controlPlane:
           - ${secretPublicIp}
           - ${clusterEndpointIP}
           - ${kubeDomainName}
+          - ${secretIPv4}
       token: ${clusterToken}
     machine:
       certSANs:
         - ${clusterEndpointIP}
         - ${secretPublicIp}
         - ${kubeDomainName}
+        - ${secretIPv4}
       ca:
         crt: ${machineCert}
         key: ${machineCertKey}
@@ -106,6 +152,7 @@ worker:
         - ${secretPublicIp}
         - ${clusterEndpointIP}
         - ${kubeDomainName}
+        - ${secretIPv4}
       files:
         - content: |
             [plugins."io.containerd.grpc.v1.cri"]

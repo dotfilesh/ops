@@ -11,10 +11,10 @@ k8sServiceAccountKey: ENC[AES256_GCM,data:Z+cTRpnDJspHe6y4hlTjk1poJ6ioAId18nQCTC
 machineCert: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJQekNCOHFBREFnRUNBaEVBckw5aXhtU0FlaTJWTzlBRXJuVjRSekFGQmdNclpYQXdFREVPTUF3R0ExVUUKQ2hNRmRHRnNiM013SGhjTk1qSXdPREUxTVRZeU56TXlXaGNOTXpJd09ERXlNVFl5TnpNeVdqQVFNUTR3REFZRApWUVFLRXdWMFlXeHZjekFxTUFVR0F5dGxjQU1oQUZvQ25MVEExWDlPM2ZiODY4OVo1c01wTmxIVHI2cm9LZld5CmZYSVlBWEsrbzJFd1h6QU9CZ05WSFE4QkFmOEVCQU1DQW9Rd0hRWURWUjBsQkJZd0ZBWUlLd1lCQlFVSEF3RUcKQ0NzR0FRVUZCd01DTUE4R0ExVWRFd0VCL3dRRk1BTUJBZjh3SFFZRFZSME9CQllFRkY1aU5yT0YySm00YXRlZwpqT0JzNFprZnBnampNQVVHQXl0bGNBTkJBQzNUakwyeDY4RWdnWVYrQlhxR1BqQ0FUcGRFNlN5ZlFaYThJMUExCnNNd254am9SUS9ZRWVCd1pHNHNodTBkT1NwZDk5K2FtaEozYVFhNGNpbXdGL3dRPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
 machineCertKey: ENC[AES256_GCM,data:+U2c5Dz0aEvcmnkGW2j9Dvi0254/AC0AwO7R2jVI7ezRMMHBaFHJgOLDgPgsm77DCmNXks0Wyc+vlB6qQJo56zfoDatmpV2MgDWUoyrBpo2EiIIMnP5mAHuUNlXUx9qjOlnZSuMfXa1TGh/FJy7ZiXu6/epuQoFtDqfhq97Y+LG4B87fnKSS3C7WQYNKa7KwkeCA59JwXmrjPLbnH6BARy1N7+Ku9fdWVv96KEp5I/pMxejP,iv:gdvHDbxfUpjTsuQHs4tcX0tcKyOAED4AVWC5QEihyzA=,tag:a2xnOqZrmrrhnn5bm8TLJg==,type:str]
 machineToken: ENC[AES256_GCM,data:eLEYSQDy+iaSOPoiGWgnCh/cgWPDdnY=,iv:U06F457PzNcXNQXx0LKKL9zLdcjpygt9TNXLx+vquzI=,tag:3ZBpullvH3YmbnOy0BBKIw==,type:str]
-domainName: dotfile.sh
-secretPublicIp: ENC[AES256_GCM,data:kN5WlLWwwHOoDl679w==,iv:0pBBkqsGYA6EFtFvKT4v1IXBJIBthnrrEs+rlU4SBqM=,tag:C8kgRDBYq1qPzHppChUiZw==,type:str]
+secretDomainName: ENC[AES256_GCM,data:ZgynPx5gGRH3Vw==,iv:g78N44i2I+cCD0+khGdk53Co+2kR2Q5xKq6QPrp5AIE=,tag:ZQk9VAsKnlvIRPGuHrSjWw==,type:str]
 kubeDomainName: kclt-01.kube.api.dotfile.sh
 clusterEndpointIP: 10.64.0.48
+secretIPv4: ENC[AES256_GCM,data:Q4cE1HEMPTFLq4v6xw==,iv:Tm0un7hrykgqa08Vg5IK9Mr6fYg+U1qI3Laxta3Zt2o=,tag:5yN+vQh0lq8+JE0kdhh/kA==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -30,8 +30,8 @@ sops:
             b3ZGWmk3QWxKaGdBUVFPUlZFdnpCZ1EKRl6salTdR1duEg/rbOl97xvc9xlx1b5+
             k80FYe8oYm3HF/h9IUuWi2DREGxlPg98vVvrc5ZwrUplXZth/Am1sA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2022-09-07T19:23:08Z"
-    mac: ENC[AES256_GCM,data:MEzxcwGIjC8miMnXH5jTUg6oyRRVjHHv60xVZK3Z0Eqttn/VwuvTLiveYfu5jgMsOGxWntJlCK0AuqYrJXWI5dBhhn01qf57P0fofVOcj/kJZ+a4H8SIxueqM0ImUi/dHBo9Dlh/xQSZtB+Cl3cPI3/egLpNDThoL6dan8N5iak=,iv:AMHrDc1oTrd2grfAq7g5r/V5ENEb+OcGBDz7XJS/rQA=,tag:enffZ29Dxw8C/llQzyKwrg==,type:str]
+    lastmodified: "2022-09-22T17:59:34Z"
+    mac: ENC[AES256_GCM,data:cX6aZdODza4+6V0L9E8k6U1HVkYDv3bmdgn4qY7m21VSMFc53sBQ4MV/LN5EGhGz9O2wAtx07+tHcp2NtIVElugtrcV99EPYS3DTgPZfzjWmhZbWhVM7EFXLyFoYNKT4qiDWlPs13l4HAON5alYsTsdd2CDrgm59+xvaegUheIU=,iv:OKYAhnEVdvJU+DnP7tKbxk3NwvWV8ZjKN7vpWLP17ZI=,tag:eMuhaYtFbB6ibGj381sm8Q==,type:str]
     pgp:
         - created_at: "2022-08-15T16:45:41Z"
           enc: |

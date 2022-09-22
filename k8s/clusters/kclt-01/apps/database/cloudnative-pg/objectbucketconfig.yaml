@@ -20,3 +20,14 @@ spec:
     usage: "*"
     metadata: "*"
     zone: "read"
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: cloudnative-pg-backup
+  namespace: rook-ceph
+spec:
+  generateBucketName: cloudnative-pg-backup
+  storageClassName: ceph-bucket
+  additionalConfig:
+    maxSize: 50G
