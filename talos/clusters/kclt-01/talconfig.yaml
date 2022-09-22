@@ -108,7 +108,6 @@ controlPlane:
       apiServer:
         admissionControl: []
         certSANs:
-          - ${secretPublicIp}
           - ${clusterEndpointIP}
           - ${kubeDomainName}
           - ${secretIPv4}
@@ -116,7 +115,6 @@ controlPlane:
     machine:
       certSANs:
         - ${clusterEndpointIP}
-        - ${secretPublicIp}
         - ${kubeDomainName}
         - ${secretIPv4}
       ca:
@@ -149,7 +147,6 @@ worker:
         crt: ${machineCert}
         key: ${machineCertKey}
       certSANs:
-        - ${secretPublicIp}
         - ${clusterEndpointIP}
         - ${kubeDomainName}
         - ${secretIPv4}
