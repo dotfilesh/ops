@@ -6,5 +6,5 @@ resources:
   - backup.yaml
   - cluster.yaml
   - helm-release.yaml
-  - objectstoreuser.yaml
+  - objectbucketconfig.yaml 
   - secret.sops.yaml
