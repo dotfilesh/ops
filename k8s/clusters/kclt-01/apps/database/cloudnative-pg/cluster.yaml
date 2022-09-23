@@ -12,16 +12,16 @@ spec:
     storageClass: ceph-block
   superuserSecret:
     name: postgres-superuser
-  bootstrap:
-    initdb:
-      database: app
-      owner: app
-      secret:
-        name: app-secret
-    # # Yeah idk how to automatically attempt recovery, THEN make
-    # a new DB failing that so...
-    #recovery:
-    #  source: postgres-backup
+  #bootstrap:
+  #  initdb:
+  #    database: app
+  #    owner: app
+  #    secret:
+  #      name: app-secret
+  #  # # Yeah idk how to automatically attempt recovery, THEN make
+  #  # a new DB failing that so...
+  #  #recovery:
+  #  #  source: postgres-backup
   monitoring:
     enablePodMonitor: true
   backup:
