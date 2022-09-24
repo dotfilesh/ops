@@ -1,0 +1,162 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: thanos
+  namespace: metrics
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: thanos
+      version: 11.1.2
+      sourceRef:
+        kind: HelmRepository
+        name: bitnami-charts
+        namespace: flux-system
+      interval: 30m
+  install:
+    createNamespace: true
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  dependsOn:
+    - name: kube-prometheus-stack
+      namespace: metrics
+  values:
+    objectstoreConfig:
+      type: s3
+      config:
+        # This is due to being accessed internally via its service
+        # URL, access from external to the cluster still requires
+        # HTTPS.
+        insecure: true
+    query:
+      enabled: true
+      replicaCount: 3
+      replicaLabel:
+        - "__replica__"
+      dnsDiscovery:
+        sidecarsService: kube-prometheus-stack-thanos-discovery
+        sidecarsNamespace: metrics
+      ingress:
+        enabled: true
+        # NOTE: why isn't this using the standard hots[] setup?
+        hostname: &host "query.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        ingressClassName: "nginx"
+        tls: true
+        extraTls:
+          - hosts:
+            - *host
+    queryFrontend:
+      enabled: false
+    bucketweb:
+      enabled: true
+      replicaCount: 3
+      updateStrategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 1
+          maxSurge: 1
+        podAntiAffinityPreset: hard
+      ingress:
+        enabled: true
+        hostname: &host "bucketweb.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        ingressClassName: "nginx"
+        tls: true
+        extraTls:
+          - hosts:
+            - *host
+    compactor:
+      enabled: true
+      extraFlags:
+        - "--compact.concurrency"
+        - "4"
+      retentionResolutionRaw: 14d
+      retentionResolution5m: 14d
+      retentionResolution1h: 14d
+      ingress:
+        enabled: true
+        hostname: &host "compactor.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        ingressClassName: "nginx"
+        tls: true
+        extraTls:
+          - hosts:
+            - *host
+      persistence:
+        enabled: true
+        storageClass: "ceph-block"
+        size: 50Gi
+    storegateway:
+      enabled: true
+      replicaCount: 3
+      podAntiAffinityPreset: hard
+      ingress:
+        enabled: true
+        hostname: &host "storagegateway.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        ingressClassName: "nginx"
+        tls: true
+        extraTls:
+          - hosts:
+            - *host
+      persistence:
+        enabled: true
+        storageClass: "ceph-block"
+        size: 20Gi
+    ruler:
+      enabled: true
+      replicaCount: 3
+      podAntiAffinityPreset: hard
+      dnsDiscovery:
+        enabled: true
+      alertmanagers:
+        - http://kube-prometheus-stack-alertmanager.metrics:9093
+      clusterName: ${CLUSTER_NAME}
+      extraFlags:
+        - "--web.prefix-header=X-Forwarded-Prefix"
+      config: |-
+        groups:
+          - name: "PrometheusWatcher"
+            rules:
+              - alert: "PrometheusDown"
+                expr: absent(up{job="kube-prometheus-stack-prometheus"})
+      ingress:
+        enabled: true
+        hostname: &host "ruler.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        ingressClassName: "nginx"
+        tls: true
+        extraTls:
+          - hosts:
+            - *host
+      persistence:
+        enabled: true
+        storageClass: "ceph-block"
+        size: 20Gi
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+  valuesFrom:
+    - targetPath: objectstoreConfig.config.bucket
+      kind: ConfigMap
+      name: thanos-ceph-bucket
+      valuesKey: BUCKET_NAME
+    - targetPath: objstoreConfig.config.endpoint
+      kind: ConfigMap
+      name: thanos-ceph-bucket
+      valuesKey: BUCKET_HOST
+    - targetPath: objstoreConfig.config.region
+      kind: ConfigMap
+      name: thanos-ceph-bucket
+      valuesKey: BUCKET_REGION
+    - targetPath: objstoreConfig.config.access_key
+      kind: Secret
+      name: thanos-ceph-bucket
+      valuesKey: AWS_ACCESS_KEY_ID
+    - targetPath: objstoreConfig.config.secret_key
+      kind: Secret
+      name: thanos-ceph-bucket
+      valuesKey: AWS_SECRET_ACCESS_KEY
+

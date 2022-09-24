@@ -1,0 +1,11 @@
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: thanos-ceph-bucket
+  namespace: metrics
+spec:
+  generateBucketName: thanos-bucket
+  storageClassName: ceph-bucket
+  additionalConfig:
+    maxSize: 50G
