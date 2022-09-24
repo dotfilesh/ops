@@ -26,6 +26,9 @@ spec:
     - name: kube-prometheus-stack
       namespace: metrics
   values:
+    # NOTE: do not be illiterate. this does *not* say `objectstoreConfig`.
+    # This says `objstoreConfig`, which is what the helm chart
+    # expects.
     objstoreConfig:
       type: s3
       config:
