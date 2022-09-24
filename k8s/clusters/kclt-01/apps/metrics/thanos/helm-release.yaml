@@ -60,7 +60,7 @@ spec:
         rollingUpdate:
           maxUnavailable: 1
           maxSurge: 1
-        podAntiAffinityPreset: hard
+      podAntiAffinityPreset: hard
       ingress:
         enabled: true
         hostname: &host "bucketweb.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
