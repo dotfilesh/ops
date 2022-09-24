@@ -10,5 +10,6 @@ spec:
     kind: ClusterIssuer
   commonName: "thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
   dnsNames:
+  - "thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
   - "*.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
 
