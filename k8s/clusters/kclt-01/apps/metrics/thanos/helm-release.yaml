@@ -139,7 +139,7 @@ spec:
       serviceMonitor:
         enabled: true
   valuesFrom:
-    - targetPath: objectstoreConfig.config.bucket
+    - targetPath: objstoreConfig.config.bucket
       kind: ConfigMap
       name: thanos-ceph-bucket
       valuesKey: BUCKET_NAME
