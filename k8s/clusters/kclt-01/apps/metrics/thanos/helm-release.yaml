@@ -53,6 +53,7 @@ spec:
         extraTls:
           - hosts:
             - *host
+            secretName: *host
     queryFrontend:
       enabled: false
     bucketweb:
@@ -72,6 +73,7 @@ spec:
         extraTls:
           - hosts:
             - *host
+            secretName: *host
     compactor:
       enabled: true
       extraFlags:
@@ -88,6 +90,7 @@ spec:
         extraTls:
           - hosts:
             - *host
+            secretName: *host
       persistence:
         enabled: true
         storageClass: "ceph-block"
@@ -104,6 +107,7 @@ spec:
         extraTls:
           - hosts:
             - *host
+            secretName: *host
       persistence:
         enabled: true
         storageClass: "ceph-block"
@@ -133,6 +137,7 @@ spec:
         extraTls:
           - hosts:
             - *host
+            secretName: *host
       persistence:
         enabled: true
         storageClass: "ceph-block"
