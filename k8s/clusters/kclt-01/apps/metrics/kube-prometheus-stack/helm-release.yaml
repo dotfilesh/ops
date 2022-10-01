@@ -124,6 +124,9 @@ spec:
         enabled: true
         pathType: Prefix
         ingressClassName: nginx
+        annotations:
+          nginx.ingress.kubernetes.io/ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
         hosts:
           - &host sidecar.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}
         tls:
@@ -167,4 +170,3 @@ spec:
           objectStorageConfig:
             name: thanos-objstore-secret
             key: objstore.yml
-
