@@ -112,10 +112,23 @@ spec:
         ingressClassName: nginx
         pathType: Prefix
         hosts:
-          - &host_prometheus prometheus.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}
+          - &host prometheus.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}
         tls:
           - hosts:
-              - *host_prometheus
+              - *host
+      thanosService:
+        enabled: true
+      thanosServiceMonitor:
+        enabled: true
+      thanosIngress:
+        enabled: true
+        pathType: Prefix
+        ingressClassName: nginx
+        hosts:
+          - &host sidecar.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}
+        tls:
+          - hosts:
+            - *host
     prometheusSpec:
         additionalScrapeConfigs:
           - job_name: node-exporter
@@ -148,3 +161,10 @@ spec:
               resources:
                 requests:
                   storage: 10Gi
+        thanos:
+          image: quay.io/thanos/thanos:v0.28.0
+          version: "v0.27.0"
+          objectStorageConfig:
+            name: thanos-objstore-secret
+            key: objstore.yml
+
