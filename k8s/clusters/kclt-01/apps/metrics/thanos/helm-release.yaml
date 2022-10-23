@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: thanos
-      version: 11.5.3
+      version: 11.5.5
       sourceRef:
         kind: HelmRepository
         name: bitnami
@@ -167,4 +167,3 @@ spec:
       kind: Secret
       name: thanos-ceph-bucket
       valuesKey: AWS_SECRET_ACCESS_KEY
-
