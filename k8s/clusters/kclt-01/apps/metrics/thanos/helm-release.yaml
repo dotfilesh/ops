@@ -45,7 +45,7 @@ spec:
         sidecarsService: kube-prometheus-stack-thanos-discovery
         sidecarsNamespace: metrics
         stores:
-          - "dnssrv+_grpc._tcp.kube-prometheus-stack-thanos-discovery"
+          - "dnssrv+_grpc._tcp.kube-prometheus-stack-thanos-discovery.metrics.svc.cluster.local"
       ingress:
         enabled: true
         # NOTE: why isn't this using the standard hots[] setup?
