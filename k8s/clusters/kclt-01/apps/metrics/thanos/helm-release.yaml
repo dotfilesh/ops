@@ -57,7 +57,7 @@ spec:
             - *host
             secretName: &thanosWebSecret thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}
     queryFrontend:
-      enabled: true 
+      enabled: false
     bucketweb:
       enabled: true
       replicaCount: 3
