@@ -1,0 +1,11 @@
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: authentik-cnpg-backup
+  namespace: auth
+spec:
+  generateBucketName: authentik-cnpg-backup
+  storageClassName: ceph-bucket
+  additionalConfig:
+    maxSize: 8Gi

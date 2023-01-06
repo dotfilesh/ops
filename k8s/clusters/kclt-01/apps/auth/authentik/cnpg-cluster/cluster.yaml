@@ -1,0 +1,68 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-cnpg
+  namespace: auth
+spec:
+  instances: 3
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 2Gi
+    storageClass: ceph-block
+  superuserSecret:
+    name: authentik-cnpg-user-superuser
+  bootstrap:
+    # Note you will have to change this if you have to recover
+    # the database.
+    initdb:
+      database: authentik
+      owner: authentik
+      secret:
+        name: authentik-cnpg-user-authentik
+  monitoring:
+    enablePodMonitor: true
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore:
+      wal:
+        compression: bzip2
+        # TODO: Investigate viability of encrypted backups.
+        #encryption: AES256
+        maxParallel: 8
+      # TODO: instead of using the bucket host (internal, e.g. it
+      # presently resolves to rook-ceph-rgw-ceph-bucket.rook-ceph.svc)
+      # try and set the endpoint url to something accessable from the
+      # internet broadly, allowing for cross-site connections without
+      # vpn shennanigans?
+      #   endpointURL: https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}/ 
+      # ---
+      # Where do these variables come from? See the README in this
+      # directory.
+      endpointURL: http://${BUCKET_HOST}/
+      destinationPath: s3://${BUCKET_NAME}/
+        # what does the below do?
+        #serverName: "${BUCKET_NAME}"
+      s3Credentials:
+        accessKeyId:
+          name: authentik-cnpg-backup 
+          key: AWS_ACCESS_KEY_ID
+        secretAccessKey:
+          name: authentik-cnpg-backup 
+          key: AWS_SECRET_ACCESS_KEY
+  externalClusters:
+    - name: authentik-cnpg-backup
+      barmanObjectStore:
+        wal:
+          compression: bzip2
+          maxParallel: 8
+        endpointURL: http://${BUCKET_HOST}
+        destinationPath: s3://${BUCKET_NAME}/
+          #serverName: "postgres-recovery"
+        s3Credentials:
+          accessKeyId:
+            name: authentik-cnpg-backup 
+            key: AWS_ACCESS_KEY_ID 
+          secretAccessKey:
+            name: authentik-cnpg-backup 
+            key: AWS_SECRET_ACCESS_KEY
