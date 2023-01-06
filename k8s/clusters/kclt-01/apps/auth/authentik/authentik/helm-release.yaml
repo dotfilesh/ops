@@ -39,6 +39,7 @@ spec:
         name: "authentik"
         user: "authentik"
     ingress:
+      ingressClassName: "nginx"
       enabled: true
       hosts:
         - host: &host auth.${GLOBALSECRET_PUBLIC_DOMAIN}
