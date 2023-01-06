@@ -200,6 +200,7 @@ spec:
               codingChunks: 1
           gateway:
             port: 80
+            # TODO: why is this commented out?
             #securePort: 443
             instances: 1
             type: s3
