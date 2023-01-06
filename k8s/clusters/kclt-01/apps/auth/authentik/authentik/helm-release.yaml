@@ -46,10 +46,10 @@ spec:
           paths:
             - path: "/"
               pathType: Prefix
-      tls:
-        - hosts:
-          - host: *host
-          secretName: "auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
+                #tls:
+                #- hosts:
+                #- host: *host
+                #secretName: "auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
     postgresql:
       # disable the built-in PostgreSQL chart.
       enabled: false
