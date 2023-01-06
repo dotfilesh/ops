@@ -8,6 +8,10 @@ metadata:
 spec:
   interval: 30m
   path: "./k8s/clusters/kclt-01/apps/auth/authentik/cnpg-cluster"
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-cluster
   postBuild:
     substituteFrom:
       - kind: ConfigMap
