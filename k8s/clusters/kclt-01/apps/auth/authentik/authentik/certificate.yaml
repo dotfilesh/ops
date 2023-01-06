@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "auth-${GLOBALSECRET_PUBLIC_DOMAIN/./-}"
+  namespace: auth
+spec:
+  secretName: "auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  issuerRef:
+    name: "${CERT_DEFAULT_CLUSTERISSUER}"
+    kind: ClusterIssuer
+  commonName: "auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  dnsNames:
+  - "auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  - "*.auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
