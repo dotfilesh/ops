@@ -50,6 +50,9 @@ spec:
                 #- hosts:
                 #- host: *host
                 #secretName: "auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
+    readinessProbe:
+      # extremely long, 
+      initialDelaySeconds: 300
     postgresql:
       # disable the built-in PostgreSQL chart.
       enabled: false
