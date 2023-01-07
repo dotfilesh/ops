@@ -5,7 +5,7 @@ metadata:
   name: source-cloudnative-pg
   namespace: flux-system
 spec:
-  interval: 12h
+  interval: 6h
   url: https://github.com/cloudnative-pg/charts.git
   ref:
     # renovate: registryUrl=https://github.com/cloudnative-pg/charts chart=cloudnative-pg
@@ -22,9 +22,11 @@ metadata:
   name: crds-cloudnative-pg
   namespace: flux-system
 spec:
-  interval: 30m
+  interval: 6h
   prune: false
+  timeout: 5m0s
   wait: true
   sourceRef:
     kind: GitRepository
     name: source-cloudnative-pg
+    namespace: flux-system
