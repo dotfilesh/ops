@@ -6,4 +6,4 @@ resources:
   - authentik-cnpg-user-superuser.sops.yaml
   - backup.yaml
   - cluster.yaml
-  - objectbucketconfig.yaml
+  - objectbucketclaim.yaml
