@@ -35,7 +35,7 @@ spec:
       postgresql:
         # Uses a dedicated cnpg cluster.
         # I assume host <-> service.
-        host: "authentik-cnpg-any"
+        host: "authentik-cnpg-rw"
         name: "authentik"
     ingress:
       ingressClassName: "nginx"
