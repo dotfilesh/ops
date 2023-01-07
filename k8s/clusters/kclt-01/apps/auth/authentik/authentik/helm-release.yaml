@@ -50,6 +50,9 @@ spec:
                 #- hosts:
                 #- host: *host
                 #secretName: "auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
+    livenessProbe:
+      # extremely long, 
+      initialDelaySeconds: 300
     readinessProbe:
       # extremely long, 
       initialDelaySeconds: 300
