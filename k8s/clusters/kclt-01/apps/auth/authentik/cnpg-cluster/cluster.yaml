@@ -10,16 +10,18 @@ spec:
   storage:
     size: 2Gi
     storageClass: ceph-block
-  superuserSecret:
-    name: authentik-cnpg-user-superuser
+      # unable to BOTH provide the decryptionkey for secrets AND
+      # auth-namespace configmap variable subsitution in the Fluxtomize
+      #superuserSecret:
+      #name: authentik-cnpg-user-superuser
   bootstrap:
     # Note you will have to change this if you have to recover
     # the database.
     initdb:
       database: authentik
       owner: authentik
-      secret:
-        name: authentik-cnpg-user-authentik
+      #secret:
+      #name: authentik-cnpg-user-authentik
   monitoring:
     enablePodMonitor: true
   backup:
