@@ -88,7 +88,7 @@ spec:
         spec:
           httpGet:
             path: /health
-            port: *port
+            port: &port 8096
           initialDelaySeconds: 120
           periodSeconds: 10
           timeoutSeconds: 2
@@ -108,7 +108,7 @@ spec:
       main:
         ports:
           http:
-            port: &port 8096
+            port: *port 8096
     resources:
       requests:
         cpu: 10m
