@@ -9,6 +9,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: watch-media
+  namespace: default
 spec:
   storageClassName: ceph-filesystem
   accessModes:
