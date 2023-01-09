@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: authentik
-      version: 2022.12.2
+      version: 2022.12.4
       sourceRef:
         kind: HelmRepository
         name: authentik
@@ -34,9 +34,16 @@ spec:
         enabled: true
       postgresql:
         # Uses a dedicated cnpg cluster.
-        # I assume host <-> service.
         host: "authentik-cnpg-rw"
         name: "authentik"
+    postgresql:
+      # disable the built-in PostgreSQL chart.
+      enabled: false
+    prometheus:
+      rules:
+        create: true
+      serviceMonitor:
+        create: true
     ingress:
       ingressClassName: "nginx"
       enabled: true
@@ -49,19 +56,13 @@ spec:
                 #- hosts:
                 #- host: *host
                 #secretName: "auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
-    postgresql:
-      # disable the built-in PostgreSQL chart.
-      enabled: false
-    prometheus:
-      rules:
-        create: true
-      serviceMonitor:
-        create: true
     redis:
       # enable the built-in redis chart.
       # TODO: Move away from redis built-in subchart.
       enabled: true
-    replicas: 1
+    replicas: 3
+    securityContext:
+      fsGroup: 1000
     volumes:
       - name: media
         persistentVolumeClaim:
@@ -69,8 +70,10 @@ spec:
     volumeMounts:
       - name: media
         mountPath: /media
-    workers:
-      replicas: 2
+    worker:
+      replicas: 3
+      securityContext:
+        fsGroup: 1000
   valuesFrom:
     - targetPath: authentik.secret_key
       kind: Secret
