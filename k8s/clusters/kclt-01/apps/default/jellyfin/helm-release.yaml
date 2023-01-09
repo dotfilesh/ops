@@ -108,7 +108,7 @@ spec:
       main:
         ports:
           http:
-            port: *port 8096
+            port: *port 
     resources:
       requests:
         cpu: 10m
