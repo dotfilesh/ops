@@ -1,0 +1,19 @@
+# Due to the size of this volume, in a sane environment it would be
+# outside of the cluster and mounted via NFS.
+# This is not a sane environment.
+# As such, I explicitly want to make sure under no circumstances
+# should all the legally ripped media I have get exploded without me
+# explicitly wanting it to be.
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: watch-media
+spec:
+  storageClassName: ceph-filesystem
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 2Ti

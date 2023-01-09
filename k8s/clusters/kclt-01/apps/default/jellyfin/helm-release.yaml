@@ -1,0 +1,120 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: jellyfin
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.2.1
+      sourceRef:
+        name: bjw-s
+        namespace: flux-system
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    image:
+      repository: jellyfin/jellyfin
+      pullPolicy: IfNotPresent
+      tag: 10.8.8
+    controller:
+      enabled: true
+      type: statefulset
+      # jellyfin only allows for One container.
+      replicas: 1
+    env:
+      TZ: America/New_York
+      JELLYFIN_DATA_DIR: /data
+      JELLYFIN_CONFIG_DIR: /data/config
+      JELLYFIN_CACHE_DIR: /cache
+      JELLYFIN_PublishedServerUrl: &host "watch.${SECRET_TERTIARY_DOMAIN}"
+    ingress:
+      main:
+        enabled: true
+        hotsts:
+          - host: *host
+            paths:
+              pathType: Prefix
+        tls:
+          - hosts:
+            - host: *host
+            secretName: *host
+    persistence:
+      media:
+        enabled: true
+        type: pvc
+        mountPath: /media
+        existingClaim: watch-media
+        retain: true
+      jellyfin-data:
+        enabled: true
+        type: pvc
+        mountPath: /data
+        storageClass: ceph-block
+        accessMode: ReadWriteOnce
+        size: 32Gi
+        retain: false
+      transcode:
+        enabled: true
+        type: emptyDir
+        mountPath: /transcode # This will need to be set
+        # Normally would be better on high speed storage (NVMe, SSD),
+        # but the way rook-ceph is configured here, there's no
+        # distinction between device classes.
+        medium: Memory
+        sizeLimit: 8192Mi
+    podSecurityContext:
+      runAsUser: 568
+      runAsGroup: 568
+      fsGroup: 568
+      # Setting this expands which group ID can be assigned to
+      # a process. 44, 100, and 109 are related to hardware rendering,
+      # which at this time is not available.
+      #supplementalGroups:
+      #  - 44
+      #  - 100
+      #  - 109
+    probes:
+      liveness:
+        enabled: true
+        custom: true
+        spec:
+          httpGet:
+            path: /health
+            port: *port
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          timeoutSeconds: 2
+          failureThreshold: 3
+      readiness:
+        enabled: true
+        custom: true
+        spec:
+          httpGet:
+            health: /health
+            port: *port
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          timeoutSeconds: 2
+          failureThreshold: 3
+    service:
+      main:
+        ports:
+          http:
+            port: &port 8096
+    resources:
+      requests:
+        cpu: 10m
+        memory: 512Mi
+      limits:
+        # resources.limits.memory >=
+        # resources.requests.memory+emptyDir
+        1000Mi
+    volumeClaimTemplates: []

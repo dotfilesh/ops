@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "watch-${SECRET_TERTIARY_DOMAIN/./-}"
+  namespace: auth
+spec:
+  secretName: &host "watch.${SECRET_TERTIARY_DOMAIN}"
+  issuerRef:
+    name: "${CERT_DEFAULT_CLUSTERISSUER}"
+    kind: ClusterIssuer
+  commonName: *host 
+  dnsNames:
+  - *host 
