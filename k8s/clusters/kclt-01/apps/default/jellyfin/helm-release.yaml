@@ -114,7 +114,6 @@ spec:
         cpu: 10m
         memory: 512Mi
       limits:
-        # resources.limits.memory >=
-        # resources.requests.memory+emptyDir
-        1000Mi
+        # limits do not include the emptyDir
+        2048Mi
     volumeClaimTemplates: []
