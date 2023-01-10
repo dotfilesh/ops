@@ -117,5 +117,5 @@ spec:
         memory: 512Mi
       limits:
         # limits do not include the emptyDir
-        2048Mi
+        memory: 2048Mi
     volumeClaimTemplates: []
