@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: "watch-${SECRET_TERTIARY_DOMAIN/./-}"
-  namespace: auth
+  namespace: default
 spec:
   secretName: &host "watch.${SECRET_TERTIARY_DOMAIN}"
   issuerRef:
