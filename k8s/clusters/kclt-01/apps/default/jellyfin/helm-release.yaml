@@ -100,7 +100,7 @@ spec:
         custom: true
         spec:
           httpGet:
-            health: /health
+            path: /health
             port: *port
           initialDelaySeconds: 120
           periodSeconds: 10
