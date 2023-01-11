@@ -1,6 +1,6 @@
 clusterName: kclt-01
-talosVersion: v1.2.3
-kubernetesVersion: v1.25.1
+talosVersion: v1.3.1
+kubernetesVersion: v1.26.0
 endpoint: https://${clusterEndpointIP}:6443
 #domain: cluster.local
 clusterPodNets:
@@ -106,6 +106,7 @@ controlPlane:
       serviceAccount:
         key: ${k8sServiceAccountKey}
       apiServer:
+        disablePodSecurityPolicy: true
         admissionControl: []
         certSANs:
           - ${clusterEndpointIP}
@@ -125,7 +126,7 @@ controlPlane:
             [plugins."io.containerd.grpc.v1.cri"]
               enable_unprivileged_ports = true
               enable_unprivileged_icmp = true
-          path: /var/cri/conf.d/allow-unpriv-ports.toml
+          path: /etc/cri/conf.d/allow-unpriv-ports.toml
           op: create
       network:
         extraHostEntries:
@@ -155,7 +156,7 @@ worker:
             [plugins."io.containerd.grpc.v1.cri"]
               enable_unprivileged_ports = true
               enable_unprivileged_icmp = true
-          path: /var/cri/conf.d/allow-unpriv-ports.toml
+          path: /etc/cri/conf.d/allow-unpriv-ports.toml
           op: create
       network:
         extraHostEntries:
