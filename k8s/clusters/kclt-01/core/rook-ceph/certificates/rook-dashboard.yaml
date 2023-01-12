@@ -4,7 +4,7 @@ metadata:
   name: "rook-${CLUSTER_NAME}-sys-${GLOBALSECRET_PUBLIC_DOMAIN/./-}"
   namespace: rook-ceph 
 spec:
-  secretName: "rook-${CLUSTER_NAME}-sys-${GLOBALSECRET_PUBLIC_DOMAIN/./-}-tls"
+  secretName: "rook.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
   issuerRef:
     name: "${CERT_DEFAULT_CLUSTERISSUER}"
     kind: ClusterIssuer

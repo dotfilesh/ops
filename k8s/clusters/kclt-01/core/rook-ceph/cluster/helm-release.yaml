@@ -42,7 +42,7 @@ spec:
         tls:
           - hosts:
             - *host
-            secretName: "rook-${CLUSTER_NAME}-sys-${GLOBALSECRET_PUBLIC_DOMAIN/./-}-tls"
+            secretName: *host 
     cephClusterSpec:
       network:
         provider: host
