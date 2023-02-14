@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: "rook-${CLUSTER_NAME}-sys-${GLOBALSECRET_PUBLIC_DOMAIN/./-}"
+  name: "rook-${CLUSTER_NAME}-sys-${GLOBALSECRET__PUBLIC_DOMAIN/./-}"
   namespace: rook-ceph 
 spec:
-  secretName: "rook.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  secretName: "rook.${CLUSTER_NAME}.sys.${GLOBALSECRET__PUBLIC_DOMAIN}"
   issuerRef:
     name: "${CERT_DEFAULT_CLUSTERISSUER}"
     kind: ClusterIssuer
-  commonName: "rook.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  commonName: "rook.${CLUSTER_NAME}.sys.${GLOBALSECRET__PUBLIC_DOMAIN}"
   dnsNames:
-  - "rook.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  - "rook.${CLUSTER_NAME}.sys.${GLOBALSECRET__PUBLIC_DOMAIN}"

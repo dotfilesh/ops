@@ -49,7 +49,7 @@ spec:
         pathType: Prefix
         ingressClassName: "nginx"
         hosts:
-          - &host "alert-manager.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}"
+          - &host "alert-manager.${CLUSTER_NAME}.sys.${GLOBALSECRET__PUBLIC_DOMAIN}"
         tls:
           - hosts:
               - *host
@@ -112,7 +112,7 @@ spec:
         ingressClassName: nginx
         pathType: Prefix
         hosts:
-          - &host prometheus.${CLUSTER_NAME}.sys.${GLOBALSECRET_PUBLIC_DOMAIN}
+          - &host prometheus.${CLUSTER_NAME}.sys.${GLOBALSECRET__PUBLIC_DOMAIN}
         tls:
           - hosts:
               - *host
@@ -128,11 +128,11 @@ spec:
           nginx.ingress.kubernetes.io/ssl-redirect: "true"
           nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
         hosts:
-          - &host sidecar.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}
+          - &host sidecar.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}
         tls:
           - hosts:
             - *host
-            secretName: thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}
+            secretName: thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}
     prometheusSpec:
         additionalScrapeConfigs:
           - job_name: node-exporter

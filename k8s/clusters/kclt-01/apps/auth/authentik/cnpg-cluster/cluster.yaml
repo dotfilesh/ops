@@ -37,7 +37,7 @@ spec:
       # try and set the endpoint url to something accessable from the
       # internet broadly, allowing for cross-site connections without
       # vpn shennanigans?
-      #   endpointURL: https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}/ 
+      #   endpointURL: https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}/ 
       # ---
       # Where do these variables come from? See the README in this
       # directory.

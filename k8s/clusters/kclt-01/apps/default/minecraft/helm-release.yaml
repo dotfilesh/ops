@@ -47,7 +47,7 @@ spec:
       loadBalancerIP: ${METALLB_MINECRAFTSURVIVAL_ADDR}
       rcon:
         enabled: true
-        password: ${SECRET_RCON_PASSWORD}
+        password: ${SECRET__RCON_PASSWORD}
     persistence:
       storageClass: ceph-block
       dataDir:

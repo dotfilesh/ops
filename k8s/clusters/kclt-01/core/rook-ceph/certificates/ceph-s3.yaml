@@ -1,13 +1,13 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: "s3-${CLUSTER_NAME}-api-${GLOBALSECRET_PUBLIC_DOMAIN/./-}"
+  name: "s3-${CLUSTER_NAME}-api-${GLOBALSECRET__PUBLIC_DOMAIN/./-}"
   namespace: rook-ceph
 spec:
-  secretName: "s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  secretName: "s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
   issuerRef:
     name: "${CERT_DEFAULT_CLUSTERISSUER}"
     kind: ClusterIssuer
-  commonName: "s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  commonName: "s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
   dnsNames:
-  - "s3.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  - "s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"

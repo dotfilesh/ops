@@ -76,7 +76,7 @@ spec:
         enabled: true
         ingressClassName: "nginx"
         hosts:
-          - host: &host "echo.sys.${GLOBALSECRET_TESTING_DOMAIN}"
+          - host: &host "echo.sys.${GLOBALSECRET__TESTING_DOMAIN}"
             paths:
               - path: /
                 pathType: Prefix

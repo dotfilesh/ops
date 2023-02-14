@@ -49,13 +49,13 @@ spec:
       ingress:
         enabled: true
         # NOTE: why isn't this using the standard hots[] setup?
-        hostname: &host "query.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        hostname: &host "query.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
           - hosts:
             - *host
-            secretName: &thanosWebSecret thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}
+            secretName: &thanosWebSecret thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}
     queryFrontend:
       enabled: false
     bucketweb:
@@ -69,7 +69,7 @@ spec:
       podAntiAffinityPreset: hard
       ingress:
         enabled: true
-        hostname: &host "bucketweb.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        hostname: &host "bucketweb.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
@@ -86,7 +86,7 @@ spec:
       retentionResolution1h: 14d
       ingress:
         enabled: true
-        hostname: &host "compactor.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        hostname: &host "compactor.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
@@ -103,7 +103,7 @@ spec:
       podAntiAffinityPreset: hard
       ingress:
         enabled: true
-        hostname: &host "storagegateway.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        hostname: &host "storagegateway.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
@@ -133,7 +133,7 @@ spec:
                 expr: absent(up{job="kube-prometheus-stack-prometheus"})
       ingress:
         enabled: true
-        hostname: &host "ruler.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+        hostname: &host "ruler.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:

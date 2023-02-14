@@ -35,7 +35,7 @@ spec:
       JELLYFIN_DATA_DIR: /data
       JELLYFIN_CONFIG_DIR: /data/config
       JELLYFIN_CACHE_DIR: /cache
-      JELLYFIN_PublishedServerUrl: &host "watch.${SECRET_TERTIARY_DOMAIN}"
+      JELLYFIN_PublishedServerUrl: &host "watch.${SECRET__TERTIARY_DOMAIN}"
     ingress:
       main:
         enabled: true

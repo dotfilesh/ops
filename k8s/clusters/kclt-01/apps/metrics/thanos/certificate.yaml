@@ -1,15 +1,15 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: "thanos-${CLUSTER_NAME}-api-${GLOBALSECRET_PUBLIC_DOMAIN/./-}"
+  name: "thanos-${CLUSTER_NAME}-api-${GLOBALSECRET__PUBLIC_DOMAIN/./-}"
   namespace: metrics
 spec:
-  secretName: "thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  secretName: "thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
   issuerRef:
     name: "${CERT_DEFAULT_CLUSTERISSUER}"
     kind: ClusterIssuer
-  commonName: "thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  commonName: "thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
   dnsNames:
-  - "thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
-  - "*.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET_PUBLIC_DOMAIN}"
+  - "thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+  - "*.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
 

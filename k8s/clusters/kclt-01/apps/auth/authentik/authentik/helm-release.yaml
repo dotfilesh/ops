@@ -48,14 +48,10 @@ spec:
       ingressClassName: "nginx"
       enabled: true
       hosts:
-        - host: &host auth.${GLOBALSECRET_PUBLIC_DOMAIN}
+        - host: &host auth.${GLOBALSECRET__PUBLIC_DOMAIN}
           paths:
             - path: "/"
               pathType: Prefix
-                #tls:
-                #- hosts:
-                #- host: *host
-                #secretName: "auth.${GLOBALSECRET_PUBLIC_DOMAIN}"
     redis:
       # enable the built-in redis chart.
       # TODO: Move away from redis built-in subchart.

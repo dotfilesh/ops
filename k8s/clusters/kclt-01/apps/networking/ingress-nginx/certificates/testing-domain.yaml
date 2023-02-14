@@ -1,16 +1,16 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: "${GLOBALSECRET_TESTING_DOMAIN/./-}"
+  name: "${GLOBALSECRET__TESTING_DOMAIN/./-}"
   namespace: networking 
 spec:
-  secretName: "${GLOBALSECRET_TESTING_DOMAIN/./-}-tls"
+  secretName: "${GLOBALSECRET__TESTING_DOMAIN}"
   issuerRef:
     name: "${CERT_DEFAULT_CLUSTERISSUER}"
     kind: ClusterIssuer
-  commonName: "${GLOBALSECRET_TESTING_DOMAIN}"
+  commonName: "${GLOBALSECRET__TESTING_DOMAIN}"
   dnsNames:
-  - "${GLOBALSECRET_TESTING_DOMAIN}"
-  - "*.${GLOBALSECRET_TESTING_DOMAIN}"
-  - "*.git.${GLOBALSECRET_TESTING_DOMAIN}"
-  - "*.sys.${GLOBALSECRET_TESTING_DOMAIN}"
+  - "${GLOBALSECRET__TESTING_DOMAIN}"
+  - "*.${GLOBALSECRET__TESTING_DOMAIN}"
+  - "*.git.${GLOBALSECRET__TESTING_DOMAIN}"
+  - "*.sys.${GLOBALSECRET__TESTING_DOMAIN}"

@@ -5,4 +5,4 @@ metadata:
   namespace: flux-system
   name: global-configs
 data:
-  GLOBAL_TESTKEY: "value"
+  GLOBAL__TESTKEY: "value"
