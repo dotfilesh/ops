@@ -1,7 +1,6 @@
 ---
 name: Issue Report
 about: Discuss a new issue with the current setup
-title: "[INVESTIGATE]"
 labels: bug, documentation
 assignees: whit-colm
 
