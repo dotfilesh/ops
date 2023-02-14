@@ -1,7 +1,6 @@
 ---
 name: New Idea
 about: Add to the to-do list
-title: "[FR] -"
 labels: enhancement
 assignees: whit-colm
 
