@@ -22,11 +22,5 @@ spec:
     remediation:
       retries: 5
   values:
-    configInline:
-      address-pools:
-        - name: default
-          # If using BGP, then this would be redundant and should be
-          # handled by Cilium
-          protocol: layer2
-          addresses: 
-            - ${METALLB_CIDR}
+    crds:
+      enabled: false

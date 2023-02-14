@@ -5,4 +5,5 @@ resources:
   - cert-manager
   - kube-prometheus-stack
   - kyverno
+  - metallb
   - rook-ceph
