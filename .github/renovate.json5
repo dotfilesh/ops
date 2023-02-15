@@ -3,6 +3,7 @@
   "extends": [
     "config:base",
     ":dependencyDashboard",
+    ":semanticCommits",
     "docker:enableMajor",
     ":enablePreCommit",
     // Will implement at later time.
@@ -26,7 +27,7 @@
   "regexManagers": [
     {
       "description": "Process CRD dependencies",
-      "fileMatch": ["cluster/crds/.+\\.ya?ml$"],
+      "fileMatch": ["k8s/(global/resources|clusters/[\\w-]+)/crds.+\\.ya?ml$"],
       "matchStrings": [
         // GitRepository where 'Git release/tag' matches 'Helm' version
         "registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n",

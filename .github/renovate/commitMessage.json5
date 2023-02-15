@@ -1,6 +1,10 @@
 {
     "commitMessageTopic": "{{depName}}",
-    "commitMessageExtra": "-> {{newVersion}}",
+    // Show from what version to what version.
+    // e.g. (relevant part in brackets): 
+    // "feat(helm): Update FooBar [v1.0.0 -> v1.1.0] "
+    // "feat(helm): Update FooBar [v1.0.0: -> v1.1.0] "
+    "commitMessageExtra": "{{currentVersion}} -> {{newVersion}}",
     "commitMessageSuffix": "",
     "packageRules": [
         {
