@@ -6,9 +6,10 @@
     "docker:enableMajor",
     ":enablePreCommit",
     // Will implement at later time.
-    //"github>dotfilesh/ops//.github/renovate/groups.json5",
-    //"github>dotfilesh/ops//.github/renovate/labels.json5",
-    //"github>dotfilesh/ops//.github/renovate/commitMessage.json5",
+    "github>dotfilesh/ops//.github/renovate/commitMessage.json5",
+    "github>dotfilesh/ops//.github/renovate/groups.json5",
+    "github>dotfilesh/ops//.github/renovate/labels.json5",
+    "github>dotfilesh/ops//.github/renovate/semanticCommits.json5",
   ],
   "platform": "github",
   "rebaseWhen": "conflicted",

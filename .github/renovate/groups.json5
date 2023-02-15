@@ -11,7 +11,10 @@
         {
             "groupName": "metallb",
             "description": "MetalLB kustomization (for CRDs) and chart",
-            "matchPackagePatterns": [],
+            "matchPackagePatterns": ["metallb"]
+            "matchDatasources": ["github-tags", "helm"],
+            "group": { "commitMessageTopic": "{{{groupName}}} group" },
+            "separateMinorPatch": true
         },
         // node-feature-discovery not implemented yet, to be done so at a later time.
         /*{
