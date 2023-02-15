@@ -2,6 +2,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  # Trick the cert-manager helm chart to working. It's weird.
-  # renovate: datsource=helm image=cert-manager
+  # renovate: datasource=helm image=cert-manager 
   - https://github.com/cert-manager/cert-manager/releases/download/v1.10.1/cert-manager.crds.yaml
