@@ -27,14 +27,16 @@
     "regexManagers": [
         {
             "description": "Process CRD dependencies",
-            "fileMatch": ["k8s/(global/resources|clusters/[\\w-]+)/crds.+\\.ya?ml$"],
+            "fileMatch": ["k8s/.+\\.ya?ml$"],
+            //"fileMatch": ["k8s/(global/resources|clusters/[\\w-]+)/crds.+\\.ya?ml$"],
             "matchStrings": [
                 // GitRepository where 'Git release/tag' matches 'Helm' version
                 "registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n",
                 // Kustomization where 'GitHub release artifact URL' matches 'Docker image' version
                 "datasource=(?<datasource>\\S+) image=(?<depName>\\S+)\n.*?-\\s(.*?)\/(?<currentValue>[^/]+)\/[^/]+\n"
             ],
-            "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}"
+            "datasourceTemplate": "{{#if datasource}}{{{datasource}}}{{else}}helm{{/if}}",
+            "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
         }
     ]
 }
