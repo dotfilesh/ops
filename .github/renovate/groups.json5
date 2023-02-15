@@ -31,7 +31,7 @@
             "matchDatasources": ["docker", "github-releases", "helm"],
             "matchUpdateTypes": ["minor", "patch"],
             "group": { "commitMessageTopic": "{{{groupName}}} group" },
-           "separateMinorPatch": false
+            "separateMinorPatch": false
         },
     ]
 }
