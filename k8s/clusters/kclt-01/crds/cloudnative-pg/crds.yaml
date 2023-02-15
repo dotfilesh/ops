@@ -8,7 +8,7 @@ spec:
   interval: 6h
   url: https://github.com/cloudnative-pg/charts.git
   ref:
-    # renovate: registryUrl=https://github.com/cloudnative-pg/charts chart=cloudnative-pg
+    # renovate: registryUrl=https://cloudnative-pg.github.io/charts chart=cloudnative-pg
     tag: cloudnative-pg-v0.16.1
   ignore: |
     # exclude all
