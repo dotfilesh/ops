@@ -11,7 +11,7 @@
         {
             "groupName": "metallb",
             "description": "MetalLB kustomization (for CRDs) and chart",
-            "matchPackagePatterns": ["metallb"]
+            "matchPackagePatterns": ["metallb"],
             "matchDatasources": ["github-tags", "helm"],
             "group": { "commitMessageTopic": "{{{groupName}}} group" },
             "separateMinorPatch": true
