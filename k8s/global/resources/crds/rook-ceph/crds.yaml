@@ -8,7 +8,7 @@ spec:
   interval: 6h
   url: https://github.com/rook/rook.git
   ref:
-    tag: v1.10.8
+    tag: v1.10.11
   ignore: |
     # exclude all
     /*
