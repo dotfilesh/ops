@@ -1,0 +1,14 @@
+{
+    // Automatically merge packages without a PR. Not used at this time.
+    "packageRules": [
+        {
+            "description": "Auto merge Helm charts",
+            "matchDatasources": ["helm"],
+            "automerge": true,
+            "automergeType": "branch",
+            "requiredStatusChecks": null,
+            "matchUpdateTypes": ["minor", "patch"],
+            "matchPackageNames": [""]
+        }
+    ]
+}
