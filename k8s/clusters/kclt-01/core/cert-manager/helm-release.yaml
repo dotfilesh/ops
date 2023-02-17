@@ -24,6 +24,7 @@ spec:
       retries: 5
   values:
     image:
+      # renovate: registryUrl=https://charts.jetstack.io chart=cert-manager
       tag: v1.9.1
     installCRDs: false 
     webhook:
