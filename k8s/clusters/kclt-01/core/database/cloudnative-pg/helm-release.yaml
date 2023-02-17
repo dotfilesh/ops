@@ -23,5 +23,9 @@ spec:
     remediation:
       retries: 5
   values:
+    # this is the only reason that CNPG is a 📁 core item instead of
+    # an 📁 apps one. CRD installation is a prerequisite and the
+    # way the CNPG repository is set up, it is difficult to install
+    # the CRDs within 📁 crds as they normally would. Please see #42
     crds:
       create: true
