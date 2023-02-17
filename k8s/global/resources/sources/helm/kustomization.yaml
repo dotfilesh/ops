@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - authentik
   - bitnami
+  - cloudnative-pg
   - cockroachdb
   - emberstack
   - fairwinds
