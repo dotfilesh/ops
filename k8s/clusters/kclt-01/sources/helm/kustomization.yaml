@@ -4,4 +4,4 @@ resources:
   - bjw-s
   - cloudnative-pg
   - minecraft-server-charts
-  - traefik
+  #- traefik
