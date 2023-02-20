@@ -1,8 +1,3 @@
-#---
-#apiVersion: kustomize.config.k8s.io/v1beta1
-#kind: Kustomization
-#resources:
-#  - ../../../../global/init/source-git-flux/
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
 kind: Kustomization
