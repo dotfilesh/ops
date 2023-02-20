@@ -11,7 +11,7 @@ spec:
   prune: false
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: kclt-01 
     namespace: flux-system
   #decryption:
   #  provider: sops

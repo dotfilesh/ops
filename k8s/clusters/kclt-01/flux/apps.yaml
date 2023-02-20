@@ -10,7 +10,7 @@ spec:
   prune: true
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: ops 
   dependsOn:
     - name: core
   decryption:
