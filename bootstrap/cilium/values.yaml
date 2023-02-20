@@ -1,0 +1,18 @@
+cluster:
+  name: kclt-01
+# required for Cilium >=1.12 due to it liking to poke at the
+# kernel without asking.
+securityContext:
+  privileged: true
+ipam:
+  mode: "kubernetes"
+# one day... (I <3 IPv6) :(
+#ipv6:
+#  enabled: true
+updateStrategy:
+  rollingUpdate:
+    maxUnavailable: 2
+  type: RollingUpdate
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 2
