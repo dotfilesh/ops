@@ -37,7 +37,7 @@ The reason the partition labels are used is that it makes the configuration gene
 
 The full configuration file can be viewed in `cloverfs/EFI/CLOVER/config.plist`. This just lists the relevant changes alluded to above.
 
-```plist
+```
 <key>Boot</key>
 <dict>
   <!-- Other keys have been omitted for brevity -->
