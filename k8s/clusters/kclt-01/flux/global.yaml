@@ -6,7 +6,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  path: ./k8s/global/resources
+  path: ./k8s/global/
   prune: false
   decryption:
     provider: sops
@@ -14,4 +14,4 @@ spec:
       name: sops-age
   sourceRef:
     kind: GitRepository
-    name: flux-cluster
+    name: ops 

@@ -21,7 +21,7 @@ This repository provides the configuration for our cloud infrastructure. Working
 
 ## ⛵ Kubernetes
 
-This repo borrows heavily from [k8s-at-home/template-cluster-k3](https://github.com/k8s-at-home/template-cluster-k3s) and its derivatives such as [Devil Buhl's home-ops](https://github.com/onedr0p/home-ops) and [Toboshii Nakama](https://github.com/toboshii/home-ops) in structure and practices.
+This repo borrows heavily from [k8s-at-home/template-cluster-k3](https://github.com/k8s-at-home/template-cluster-k3s) and its derivatives such as [Devil Buhl's home-ops](https://github.com/onedr0p/home-ops) and [Toboshii Nakama's](https://github.com/toboshii/home-ops) in structure and practices.
 
 ### Installation
 
@@ -47,7 +47,7 @@ Clusters run on [Talos Linux](https://talos.dev/), an immutable and ephemeral Li
 
 ### Directories
 
-> The cloud infrastructure is intended to be able to support multiple clusters, and as such provides a distinction between [global configuration](./k8s/global/) and [cluster deployments || config](./k8s/clusters/). Clusters are named based on the airport geographically closes (\*ish) + sequential discriminator.
+> The cloud infrastructure is intended to be able to support multiple clusters, and as such provides a distinction between [global configuration](./k8s/global/) and [cluster deployments || config](./k8s/clusters/). Clusters are named based on the airport geographically closest (\*ish) + sequential discriminator.
 
 ```sh
 📁 k8s       # All k8s infrastructure defined below
@@ -59,12 +59,11 @@ Clusters run on [Talos Linux](https://talos.dev/), an immutable and ephemeral Li
 │   ├─📁 core      # critical apps, ns dir tree, req: 📁 config, 📁 crds, 📁 sources
 │   ├─📁 crds      # cluster-scope CRDs
 │   └─📁 flux      # flux 'endpoint' for each cluster, contains flux-system dir
-└─📁 global    # kit needed by all clusters
-  ├─📁 init      # bootstrap resources
-  └─📁 resources # global resources
-    ├─📁 config    # config data applied to all clusters
-    ├─📁 crds      # custom resources available for all clusters
-    └─📁 sources   # (Helm|Git)Repository Flux sources
+├─📁 global    # global resources
+│ ├─📁 config    # config data applied to all clusters
+│ ├─📁 crds      # custom resources available for all clusters
+│ └─📁 sources   # (Helm|Git)Repository Flux sources
+└─📁 init      # files needed for bootstrapping
 ```
 
 
