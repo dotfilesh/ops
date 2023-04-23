@@ -24,7 +24,7 @@ spec:
     image:
       repository: jellyfin/jellyfin
       pullPolicy: IfNotPresent
-      tag: 10.8.9
+      tag: 10.8.10
     controller:
       enabled: true
       type: statefulset
