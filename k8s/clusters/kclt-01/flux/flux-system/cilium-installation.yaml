@@ -10,7 +10,7 @@ spec:
     spec:
       interval: 30m0s
       chart: cilium
-      version: 1.13.3
+      version: 1.13.4
       sourceRef:
         kind: HelmRepository
         name: cilium
