@@ -9,8 +9,13 @@
 # k8s-at-home provides a chart.
 #
 # TODO: delete this comment.
+#
+# UPDATE 2023-08-08:
+# it's in 3.0
+# no helm chart is yet published
+# not sure when it will
 ---
-apiVersion: source.toolkit.fluxcd.io/v1beta1
+apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: owncloud
