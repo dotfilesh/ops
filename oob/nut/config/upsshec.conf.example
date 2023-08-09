@@ -1,0 +1,4 @@
+# TODO: investigate and integrate this.
+# https://networkupstools.org/docs/man/upssched.html
+
+CMDSCRIPT /bin/upssched-cmd
