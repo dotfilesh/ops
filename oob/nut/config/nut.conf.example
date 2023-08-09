@@ -1,0 +1,7 @@
+# An example nut.conf with the MODE set to standalone.
+# The MODE is set to standalone in this instance as this example has
+# only a single UPS in mind with a single OOB system monitoring it. In
+# the event multiple UPS's are used or are monitored by multiple OOB
+# machines, this will need to be changed to client.
+
+MODE=standalone

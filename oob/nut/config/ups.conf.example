@@ -1,0 +1,10 @@
+# An example ups.conf with a single dummy value. This will need to be
+# configued for each site. It is provided here for continuity.
+
+# See https://networkupstools.org/docs/man/ups.conf.html for more
+# config options.
+maxretry = 3
+[example]
+        driver = "dummy-ups"
+        port = "auto"
+        desc = "Example UPS"
