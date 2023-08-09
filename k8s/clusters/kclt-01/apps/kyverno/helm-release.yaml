@@ -23,18 +23,21 @@ spec:
     remediation:
       retries: 5
   values:
-    installCRDs: false
-    replicaCount: 3
-    extraArgs:
-      - --autogenInternals=false
-      - --clientRateLimitQPS=30
-      - --clientRateLimitBurst=60
-    serviceMonitor:
-      enabled: true
-    topologySpreadConstraints:
-      - maxSkew: 1
-        topologyKey: kubernetes.io/hostname
-        whenUnsatisfiable: DoNotSchedule
-        labelSelector:
-          matchLabels:
-            app.kubernetes.io/instance: kyverno
+    crds:
+      install: true
+    admissionController:
+      replicas: 3
+      serviceMonitor:
+        enabled: true
+      initContainer:
+        extraArgs:
+          - --autogenInternals=false
+          - --clientRateLimitQPS=30
+          - --clientRateLimitBurst=60
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: kyverno
