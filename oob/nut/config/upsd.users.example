@@ -1,0 +1,7 @@
+[admin]
+        password = secretpassword 
+        actions = SET
+        instcmds = ALL
+[monuser]
+        password = password
+        upsmon primary
