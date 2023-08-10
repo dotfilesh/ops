@@ -2,7 +2,7 @@
 creation_rules:
     # Attempt first to confirm if file is within a specific cluster. If
     # so encrypt with clusters key. Try both 📁 k8s/ and 📁 talos/
-  - path_regex: (k8s|talos)/clusters/kclt-01/.*\.sops\.ya?ml
+  - path_regex: (k8s|talos)/clusters/kclt-01/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
     encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
     # keys: 
     #   age: 
@@ -15,7 +15,7 @@ creation_rules:
     #
     # If not a cluster, see if the file is in 📁 k8s/ or 📁 talos/
     # if so, default to use global key.
-  - path_regex: (k8s|talos)/.*\.sops\.ya?ml
+  - path_regex: (k8s|talos)/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
     encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
     # keys: 
     #   age: 
@@ -26,7 +26,7 @@ creation_rules:
       age187teecmpvsa4kcme6apvqege0wqjnwd9whfpkq730m48mf8n93xqjn0jve
     pgp: 2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB
     # If nothing's taking, encrypt solely with Whit personal key.
-  - path_regex: .*\.sops\.ya?ml
+  - path_regex: .*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
     # keys:
     #   pgp:
     #     - rwx@whits.io
