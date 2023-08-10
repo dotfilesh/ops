@@ -1,8 +1,8 @@
 clusterName: kclt-01
-talosVersion: v1.3.1
-kubernetesVersion: v1.26.0
+talosVersion: v1.5.0
+kubernetesVersion: v1.28.0
 endpoint: https://${clusterEndpointIP}:6443
-#domain: cluster.local
+domain: cluster.local
 clusterPodNets:
   - 10.244.0.0/16
 clusterSvcNets:
@@ -10,10 +10,33 @@ clusterSvcNets:
 cniConfig:
   name: none
 nodes:
-  - hostname: woglinde
+  - hostname: junks # Temporary.
     ipAddress: 10.64.8.254
     controlPlane: true
-    installDisk: /dev/nvme0n1
+    disableSearchDomain: true
+    installDiskSelector:
+      type: nvme
+    namservers:
+      - 1.1.1.1
+      - 9.9.9.9
+      - 8.8.8.8
+    networkInterfaces:
+      - interface: eth0
+        dhcp: true
+        mtu: 1500
+        vip:
+          ip: ${clusterEndpointIP}
+  - hostname: woglinde
+    ipAddress: 10.64.8.1
+    controlPlane: true
+    disableSearchDomain: true
+    installDiskSelector:
+      type: nvme
+      size: <= 150GB
+    namservers:
+      - 1.1.1.1
+      - 9.9.9.9
+      - 8.8.8.8
     networkInterfaces:
       - interface: eth0
         dhcp: true
@@ -21,9 +44,16 @@ nodes:
         vip:
           ip: ${clusterEndpointIP}
   - hostname: wellgunde
-    ipAddress: 10.64.8.253
+    ipAddress: 10.64.8.2
     controlPlane: true
-    installDisk: /dev/nvme0n1
+    disableSearchDomain: true
+    installDiskSelector:
+      type: nvme
+      size: <= 150GB
+    namservers:
+      - 1.1.1.1
+      - 9.9.9.9
+      - 8.8.8.8
     networkInterfaces:
       - interface: eth0
         dhcp: true
@@ -31,9 +61,16 @@ nodes:
         vip:
           ip: ${clusterEndpointIP}
   - hostname: flosshilde
-    ipAddress: 10.64.8.252
+    ipAddress: 10.64.8.3
     controlPlane: true
-    installDisk: /dev/nvme0n1
+    disableSearchDomain: true
+    installDiskSelector:
+      type: nvme
+      size: <= 150GB
+    namservers:
+      - 1.1.1.1
+      - 9.9.9.9
+      - 8.8.8.8
     networkInterfaces:
       - interface: eth0
         dhcp: true
@@ -41,49 +78,61 @@ nodes:
         vip:
           ip: ${clusterEndpointIP}
   - hostname: formula
-    ipAddress: 10.64.8.1
+    ipAddress: 10.64.8.9
     controlPlane: false
-    installDisk: /dev/nvme0n1
+    installDiskSelector:
+      type: nvme
+      size: <= 150GB
     networkInterfaces:
       - interface: eth0
         mtu: 1500
         dhcp: true
   - hostname: urban
-    ipAddress: 10.64.8.2
+    ipAddress: 10.64.8.10
     controlPlane: false
-    installDisk: /dev/nvme0n1
+    installDiskSelector:
+      type: nvme
+      size: <= 150GB
     networkInterfaces:
       - interface: eth0
         mtu: 1500
         dhcp: true
   - hostname: lailah
-    ipAddress: 10.64.8.3
+    ipAddress: 10.64.8.11
     controlPlane: false
-    installDisk: /dev/nvme0n1
+    installDiskSelector:
+      type: nvme
+      size: <= 150GB
     networkInterfaces:
       - interface: eth0
         dhcp: true
         mtu: 1500
   - hostname: verus
-    ipAddress: 10.64.8.4
+    ipAddress: 10.64.8.12
     controlPlane: false
-    installDisk: /dev/nvme0n1
+    installDiskSelector:
+      type: nvme
+      size: <= 150GB
     networkInterfaces:
       - interface: eth0
         mtu: 1500
         dhcp: true
   - hostname: mastema
-    ipAddress: 10.64.8.5
+    ipAddress: 10.64.8.13
     controlPlane: false
-    installDisk: /dev/nvme0n1
+    installDiskSelector:
+      type: nvme
+      size: <= 150GB
     networkInterfaces:
       - interface: eth0
         mtu: 1500
         dhcp: true
   - hostname: amdusias
-    ipAddress: 10.64.8.7
+    ipAddress: 10.64.8.14
     controlPlane: false
-    installDisk: /dev/nvme0n1
+    installDiskSelector:
+      type: nvme
+      size: <= 150GB
     networkInterfaces:
       - interface: eth0
         mtu: 1500
@@ -92,19 +141,6 @@ controlPlane:
   inlinePatch:
     cluster:
       aescbcEncryptionSecret: ${aescbcEncryptionKey}
-      aggregatorCA:
-        crt: ${k8sAggregatorCert}
-        key: ${k8sAggregatorCertKey}
-      ca:
-        crt: ${clusterCert}
-        key: ${clusterCertKey}
-      etcd:
-        ca:
-          crt: ${etcdCert}
-          key: ${etcdCertKey}
-      secret: ${clusterSecret}
-      serviceAccount:
-        key: ${k8sServiceAccountKey}
       apiServer:
         disablePodSecurityPolicy: true
         admissionControl: []
@@ -112,41 +148,35 @@ controlPlane:
           - ${clusterEndpointIP}
           - ${kubeDomainName}
           - ${secretIPv4}
-      token: ${clusterToken}
     machine:
       certSANs:
         - ${clusterEndpointIP}
         - ${kubeDomainName}
         - ${secretIPv4}
-      ca:
-        crt: ${machineCert}
-        key: ${machineCertKey}
       files:
         - content: |
             [plugins."io.containerd.grpc.v1.cri"]
               enable_unprivileged_ports = true
               enable_unprivileged_icmp = true
-          path: /etc/cri/conf.d/allow-unpriv-ports.toml
+          path: /etc/cri/conf.d/20-customization.part
           op: create
       network:
         extraHostEntries:
           - aliases:
               - ${kubeDomainName}
             ip: ${clusterEndpointIP}
-      token: ${machineToken}
+  patches:
+    - | -
+      - op: add
+        path: /machine/features
+        value:
+          kubePrism:
+            enabled: true
 worker:
   inlinePatch:
     cluster:
       aescbcEncryptionSecret: ${aescbcEncryptionKey}
-      ca:
-        crt: ${clusterCert}
-        key: ${clusterCertKey}
-      secret: ${clusterSecret}
-      token: ${clusterToken}
     machine:
-      ca:
-        crt: ${machineCert}
-        key: ${machineCertKey}
       certSANs:
         - ${clusterEndpointIP}
         - ${kubeDomainName}
@@ -156,11 +186,17 @@ worker:
             [plugins."io.containerd.grpc.v1.cri"]
               enable_unprivileged_ports = true
               enable_unprivileged_icmp = true
-          path: /etc/cri/conf.d/allow-unpriv-ports.toml
+          path: /etc/cri/conf.d/20-customization.part
           op: create
       network:
         extraHostEntries:
           - aliases:
               - ${kubeDomainName}
             ip: ${clusterEndpointIP}
-      token: ${machineToken}
+  patches:
+    - | -
+      - op: add
+        path: /machine/features
+        value:
+          kubePrism:
+            enabled: true
