@@ -165,6 +165,13 @@ controlPlane:
           - aliases:
               - ${kubeDomainName}
             ip: ${clusterEndpointIP}
+  patches:
+    - | -
+      - op: add
+        path: /machine/features
+        value:
+          kubePrism:
+            enabled: true
 worker:
   inlinePatch:
     cluster:
@@ -186,3 +193,10 @@ worker:
           - aliases:
               - ${kubeDomainName}
             ip: ${clusterEndpointIP}
+  patches:
+    - | -
+      - op: add
+        path: /machine/features
+        value:
+          kubePrism:
+            enabled: true
