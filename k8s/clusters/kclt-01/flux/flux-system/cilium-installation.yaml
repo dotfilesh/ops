@@ -19,11 +19,15 @@ spec:
     remediation:
       retries: 5
   upgrade:
+    cleanupOnFail: true
     remediation:
       retries: 5
+  uninstall:
+    keepHistory: false
   values:
     cluster:
       name: kclt-01
+      id: 1
     # required for Cilium >=1.12 due to it liking to poke at the
     # kernel without asking.
     securityContext:

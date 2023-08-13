@@ -7,6 +7,14 @@ clusterPodNets:
   - 10.244.0.0/16
 clusterSvcNets:
   - 10.96.0.0/12
+additionalApiServerCertSans:
+  - ${clusterEndpointIP}
+  - ${secretKubeDomainName}
+  - ${secretIPv4}
+additionalMachineCertSans:
+  - ${clusterEndpointIP}
+  - ${secretKubeDomainName}
+  - ${secretIPv4}
 cniConfig:
   name: none
 nodes:
@@ -80,6 +88,7 @@ nodes:
   - hostname: formula
     ipAddress: 10.64.8.9
     controlPlane: false
+    disableSearchDomain: true
     installDiskSelector:
       type: nvme
       size: <= 150GB
@@ -90,6 +99,7 @@ nodes:
   - hostname: urban
     ipAddress: 10.64.8.10
     controlPlane: false
+    disableSearchDomain: true
     installDiskSelector:
       type: nvme
       size: <= 150GB
@@ -100,6 +110,7 @@ nodes:
   - hostname: lailah
     ipAddress: 10.64.8.11
     controlPlane: false
+    disableSearchDomain: true
     installDiskSelector:
       type: nvme
       size: <= 150GB
@@ -110,6 +121,7 @@ nodes:
   - hostname: verus
     ipAddress: 10.64.8.12
     controlPlane: false
+    disableSearchDomain: true
     installDiskSelector:
       type: nvme
       size: <= 150GB
@@ -120,6 +132,7 @@ nodes:
   - hostname: mastema
     ipAddress: 10.64.8.13
     controlPlane: false
+    disableSearchDomain: true
     installDiskSelector:
       type: nvme
       size: <= 150GB
@@ -130,6 +143,7 @@ nodes:
   - hostname: amdusias
     ipAddress: 10.64.8.14
     controlPlane: false
+    disableSearchDomain: true
     installDiskSelector:
       type: nvme
       size: <= 150GB
@@ -140,19 +154,14 @@ nodes:
 controlPlane:
   inlinePatch:
     cluster:
-      aescbcEncryptionSecret: ${aescbcEncryptionKey}
+      #aescbcEncryptionSecret: ${aescbcEncryptionKey}
       apiServer:
-        disablePodSecurityPolicy: true
-        admissionControl: []
-        certSANs:
-          - ${clusterEndpointIP}
-          - ${kubeDomainName}
-          - ${secretIPv4}
-    machine:
-      certSANs:
-        - ${clusterEndpointIP}
-        - ${kubeDomainName}
-        - ${secretIPv4}
+        admissionControl: null
+    machine: &machine
+      kubelet:
+        extraArgs:
+          feature-gates: GracefulNodeShutdown=true
+          rotate-server-certificates: true
       files:
         - content: |
             [plugins."io.containerd.grpc.v1.cri"]
@@ -163,7 +172,7 @@ controlPlane:
       network:
         extraHostEntries:
           - aliases:
-              - ${kubeDomainName}
+              - ${secretKubeDomainName}
             ip: ${clusterEndpointIP}
   patches:
     - | -
@@ -174,25 +183,8 @@ controlPlane:
             enabled: true
 worker:
   inlinePatch:
-    cluster:
-      aescbcEncryptionSecret: ${aescbcEncryptionKey}
     machine:
-      certSANs:
-        - ${clusterEndpointIP}
-        - ${kubeDomainName}
-        - ${secretIPv4}
-      files:
-        - content: |
-            [plugins."io.containerd.grpc.v1.cri"]
-              enable_unprivileged_ports = true
-              enable_unprivileged_icmp = true
-          path: /etc/cri/conf.d/20-customization.part
-          op: create
-      network:
-        extraHostEntries:
-          - aliases:
-              - ${kubeDomainName}
-            ip: ${clusterEndpointIP}
+      <<: *machine
   patches:
     - | -
       - op: add
