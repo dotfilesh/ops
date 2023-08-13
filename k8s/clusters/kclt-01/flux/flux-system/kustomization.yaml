@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../../../../init/source-helm-cilium/
   - cilium-installation.yaml
+  - cilium
   - ../../../../init/source-git-flux/
   - flux-installation.yaml
   - ops.yaml
