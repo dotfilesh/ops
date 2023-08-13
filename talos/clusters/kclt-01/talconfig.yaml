@@ -154,7 +154,7 @@ nodes:
 controlPlane:
   inlinePatch:
     cluster:
-      #aescbcEncryptionSecret: ${aescbcEncryptionKey}
+      secretboxEncryptionSecret: ${secretboxEncryptionKey}
       apiServer:
         admissionControl: null
     machine: &machine
@@ -174,8 +174,8 @@ controlPlane:
           - aliases:
               - ${secretKubeDomainName}
             ip: ${clusterEndpointIP}
-  patches:
-    - | -
+  patches: &patch
+    - |-
       - op: add
         path: /machine/features
         value:
@@ -185,10 +185,5 @@ worker:
   inlinePatch:
     machine:
       <<: *machine
-  patches:
-    - | -
-      - op: add
-        path: /machine/features
-        value:
-          kubePrism:
-            enabled: true
+  patches: 
+    <<: *patch
