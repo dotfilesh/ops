@@ -157,6 +157,9 @@ controlPlane:
       secretboxEncryptionSecret: ${secretboxEncryptionKey}
       apiServer:
         admissionControl: null
+      # kube-proxy's job will be done better by Cilium
+      proxy:
+        disabled: true
     machine: &machine
       kubelet:
         extraArgs:
