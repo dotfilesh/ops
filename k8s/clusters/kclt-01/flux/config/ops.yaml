@@ -20,7 +20,7 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: kclt-01.ops
+  name: ops
   namespace: flux-system
 spec:
   interval: 5m0s
@@ -30,3 +30,21 @@ spec:
   sourceRef:
     kind: GitRepository
     name: ops
+  decryption:
+    provider: sops
+    secretRef:
+      name: sops-age
+  postBuild:
+    substituteFrom:
+      - kind: ConfigMap
+        name: cluster-config
+        optional: false
+      - kind: Secret
+        name: cluster-secrets
+        optional: false
+      - kind: ConfigMap
+        name: global-configs
+        optional: false
+      - kind: Secret
+        name: global-secrets
+        optional: false

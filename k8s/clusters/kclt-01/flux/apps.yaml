@@ -2,7 +2,7 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps
+  name: cluster-apps
   namespace: flux-system
 spec:
   interval: 10m
@@ -12,7 +12,7 @@ spec:
     kind: GitRepository
     name: ops 
   dependsOn:
-    - name: core
+    - name: cluster-global
   decryption:
     provider: sops
     secretRef:

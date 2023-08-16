@@ -6,5 +6,5 @@ resources:
   - cilium-installation.yaml
   - cilium
   - ../../../../init/source-git-flux/
-  - flux-installation.yaml
+  - flux.yaml
   - ops.yaml
