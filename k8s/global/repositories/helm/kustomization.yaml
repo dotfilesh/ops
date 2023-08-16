@@ -2,21 +2,21 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - authentik
-  - bitnami
+  - authentik-charts.yaml
+  - bitnami-charts.yaml
   - cilium-charts.yaml
-  - cloudnative-pg
-  - cockroachdb
-  - emberstack
-  - fairwinds
-  - gitlab
-  - grafana
-  - ingress-nginx
-  - jetstack
-  - k8s-at-home
-  - kyverno
-  - metallb
+  - cloudnative-pg-charts.yaml
+  - cockroachdb-charts.yaml
+  - emberstack-charts.yaml
+  - fairwinds-charts.yaml
+  - gitlab-charts.yaml
+  - grafana-charts.yaml
+  - ingress-nginx-charts.yaml
+  - jetstack-charts.yaml
+  - k8s-at-home-charts.yaml
+  - kyverno-charts.yaml
+  - metallb-charts.yaml
   # Not ready, see comment in ocis/helm-release.yaml.
   # - ./ocis
-  - prometheus-community
-  - rook-ceph
+  - prometheus-community-charts.yaml
+  - rook-ceph-charts.yaml
