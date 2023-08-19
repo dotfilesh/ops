@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: github-deploy-key
+    namespace: flux-system
+stringData:
+    identity: ENC[AES256_GCM,data:Gk6JoFfbYLUkDvfZ6I1HsGhHk6Y+akGnbTB0ciZJDkgFlYf14KR0vmgCX03MyMe8yhATuNpGgcQt/jAnv/+zUcomET3B/sQ5nSvDapuCme88xA8VJfntqAfKK/1sfpVOwF5Iuwgitgc0YU2qKacnFA3mbA1u/jKnUprfoG52Ek9eJIkVbuFNP04RF99u1EiCdOdM32CFS0aV5BJVu1RIyxdrxyhHyLkIsbFq1IsZL6eptPef67K78ZhCSQY8XbRdPirwSW2fTouy3h4b27DDaeZXAMZ8nlP/Gv1s0f6qk4cAzmAEbXLUXvucjtwnWLXIWQk+Eu6CghC61GmGNOUz5IoliNDj9xVv4dZvWKXb51J8nCRrayD69/BsUIN6ESohKxWoBdHYNi+djs2kgxCQOHt0w+FMxC/4n6f8AxJ7cXcOYe9IsB5KH4Or6YQHMl5MzsQ2tLNs+Q0O3HDjcuidZ3DTVAkRenAyI9bfSoxmJXpoquOqpbpyi5ZK8bQdvKUSzlo98hw594TqSTGOGieGmx4DMs/T/r9itZXN,iv:ETLdM9Jv3HrEdy86PLQ7UlPc1BRYRX0CNdZP4xFJrlQ=,tag:0ebIz57eYxWk6NdUW04FmQ==,type:str]
+    identity.pub: ENC[AES256_GCM,data:BsDQUcnfBnMgP4osD2spuHjzyJ5TV7M8EvpFrVElzWmHzDgwjBVpkycZUWvRTvySlQPB3ByRKCvA8pOevOV9MvxpoTCK9KIQv/5h2zo9IJplIpH5pq1v5VSpOhuUytX4,iv:tyI+RzbQlJmT6l4j11g0C4Y0qDLonw9qYk6ZNTzyP28=,tag:IxgA1tiHuBHHEWU+iy+4vg==,type:str]
+    known_hosts: ENC[AES256_GCM,data:LldSCJ4qAQABQ4T02+2hfiwtKrr2Mj0x0X12VakAl6V8kmxGEeubCWg0dAA22K5tHivtNjxKTln+o80E+dyGMervoKNGVWDQfBn3fQsbkGXYs8d9rzMImx4qBQGCQM6iAjswA+32yVbwrtavlhun1P1gIIr+EphsAHfM2hbYERcb9uswRfH+B8VTj1W4j23K9g0+Qm3ycMpUygvjvYN0IW+U7fIa0Jk9w4MhcdAO/HAJqNhOB9EP5/6rmgGhmyXdMDeysgbSNhvmvaKbgueT6oSTTnglEoa0dqszfr+dpNZSRxGUFjwae1EYWxGcdaEJKCRZNJassZYV+O6lu76zrBbG+1T2pzhzgXID+p1ZPV3ARUtcAAFjA1aAVrHHr/U43ANqZYal26cyRVIKYqgH368jFupcCvcGkNG9mFgADRBLZBFdWCkKSBI2IfTm8QvY2u8AMJ5YoMinTvyQNpaDKrmutBfS7RmBmcblX2iw7WL4+s2vEXtRDXiNgf6qU1X3BRD8nTClsY7G6+tbpoS0BnIuOlVOJBU/7INEVMPoLAumBcqsQT/dcUGVPLpmsAc/ZDsv3/1G63rbZjJUNGmKo/6zoxLsnk9hZ3QpGiDlXx9IWMNND/Dqs5z8BkC5SHrLLj2xpzp8DRyIY12HISpXHqvEJ7shJyNWGOXjt0KqFvINOaUkPPQ3YGz4MlGs+JdEsJ+fHq/XmpZwpgey6c48CmX49/g8NgRZQpTgVoJ47nJqSs1WwqHZIemM5387o8gSAwUabFacUDc0YriVADFBdh7SHcrXRl2YcFjEpdbjPUztF5z1l+4S1c6lP0S+fHhltQtHlCiXA/LgGwY6N7BC/92vlY6aA5xjsUVKqpMe1zVX/2cRBtaWJobafSLR4SM8+il707MhhoPIsME/9Y8I7exhtep9a5OmJV8d+4a1dJUoPZc2BY2wWgrPMbGc5DyrT9XQbsik72v6OR3a2v2UO32oC0SU3OQOlrI0BaUyauXy1Ciu3iLILDvQcfitLt8ZAU6HMkzrA8ezGl7VaqmcoM4LoYNISOHrgdKcwoB0A1NBFyhKEp/2eOnegqpinM/IwcO7fbgcokH7iEcT,iv:A8zI/WroX1nm4xeiS0FizQQ/oP0aTg7bVxKoE3dqC/0=,tag:3QX836NDT3XhErQMWpR+mg==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB2SDhHRUNMcnZjVHkrdERL
+            dHBranNwelh5MjJlZEU4V1I0dFJYdWN4Wmg4Ck1GMHY3c0Z0RFFjN0JWMm5CSEhY
+            c3UwcGFNYzVtTldwRm5veXpLZWV3VmsKLS0tIHhlRG4vQjdUd29xSFVid2wrSXJK
+            ZThQajF2TTBjaXdycHhvbGNFdjl1ZHMK8lffZDF7IHvgKggGTkrWxAfyIEiqEzhi
+            zlE1pdWKXVdaaKK8Tpt8zShSF6HdnagkES9tluAdKePenlGEaR8CVw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2023-08-15T23:26:35Z"
+    mac: ENC[AES256_GCM,data:Ob8nE3e8hDckRaZbhphq1TpRB715nqaaTIxy6m+n26exT/Xncpx0DcyUKPK4Z4uiEiKKMqyELUEl2n75ADcds2TRF6pwZ0S8fpyqwduLh8IGHPvJPMG41WGfvch0XEgw1ls6jfNoIr1NkcULu2gtr0EhBzLqejxbVa/R3rRaM+c=,iv:DdbmcGv2Xgj2kUPsRwqXJSkz/avmXkMFpZpGh2c962I=,tag:AhXJqFZF0C+gWXq/cY8ZpA==,type:str]
+    pgp:
+        - created_at: "2023-08-15T23:14:30Z"
+          enc: |
+            -----BEGIN PGP MESSAGE-----
+
+            hF4DaZXJ7CKj2AMSAQdAEg8OzoTQicKRDpa1nGyj/CDSXVEKAaEkx9Zt/i1R5j0w
+            SHoWaCev1/csWlLcOAs56XLZfYYund2pTC6aCnDcMqzGrZ655soO16z4iN8pb7LU
+            0l4BkTmUnQUDXfSfQOsjDdKEgWMLiNT2QOZbXuyE4XJsynI/O439BBfYpV2Nk9b9
+            lSqpriGqEIe+FBRWkr/C870Eurv3gM00pBoc8PZpg+8uNQ1oBBRfT5DjjBP/xrxJ
+            =zVRH
+            -----END PGP MESSAGE-----
+          fp: 2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB
+        - created_at: "2023-08-15T23:14:30Z"
+          enc: |
+            -----BEGIN PGP MESSAGE-----
+
+            hF4DDA4n4RUgVFISAQdAD99IGGsKUUKyd8/W24jaWT90ug5e038TlHTeZ7SNGXEw
+            K7esur4Omhpisqtbp3OhvZAgZGX3Adha/6QaRyffAxIPOci8Py297vWZtGM10Qdm
+            0l4B+V/bkdUcvTu/7ZB/VLlzDhs71Qf5HT9gb+B7G3Il3SD5ajl3MYY1NPqBev+D
+            A8sNDCp6f86mTEQQdGGRE+Wy+8d3eiFXLkWa6UzI5q/JQFMWcMN2RBXmeNIjWO9A
+            =H0kA
+            -----END PGP MESSAGE-----
+          fp: 9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
+    encrypted_regex: ((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))
+    version: 3.7.3
