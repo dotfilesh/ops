@@ -1,0 +1,56 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: minecraft-survival
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: minecraft
+      version: 4.9.3
+      sourceRef:
+        kind: HelmRepository
+        name: minecraft-server-charts
+        namespace: flux-system
+      interval: 30m
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+    resources:
+      requests:
+        memory: 2Gi
+        cpu: 500m
+      limits:
+        memory: 12Gi
+        cpu: 5000m
+    minecraftServer:
+      eula: "TRUE"
+      version: "LATEST"
+      type: "PAPER"
+      paperDownloadUrl: "https://api.papermc.io/v2/projects/paper/versions/1.19.2/builds/135/downloads/paper-1.19.2-135.jar"
+      difficulty: normal
+      icon: "https://cdn.discordapp.com/attachments/588168204635865119/844264371979157504/Tumblr_l_47563468744304.png"
+      maxPlayers: 32
+      maxWorldSize: 32768
+      forcegameMode: true
+      motd: "§dMinecraft for the §lGirlies§r§d!"
+      pvp: true
+      onlineMode: true
+      memory: 4500M
+      serviceType: LoadBalancer
+      loadBalancerIP: ${CILIUM_LB_MINECRAFTSURVIVAL_ADDR}
+      rcon:
+        enabled: true
+        password: ${SECRET__RCON_PASSWORD}
+    persistence:
+      storageClass: $CLUSTER_STORAGE_BLOCK}
+      dataDir:
+        enabled: true
+        Size: 16Gi
+        #image:

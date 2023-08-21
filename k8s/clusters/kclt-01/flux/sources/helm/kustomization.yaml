@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
   - bjw-s
   - minecraft-server-charts
-  #- traefik

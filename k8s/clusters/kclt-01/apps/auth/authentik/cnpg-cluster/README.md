@@ -1,7 +1,6 @@
 # What's going on here?
 
-This explains the weird hack going on here to setup a database for
-authentik.
+CNPG is a very sophisticated system and I have the intelligence of a Swiss cheese plant. This explains why and how I have forced the square peg through the round hole.
 
 ## The Database
 
@@ -15,9 +14,7 @@ As such, each database is given its own cluster.
 ## Backups
 
 I am using Ceph's S3 rigamaroll, which I initiate
-using an `ObjectBucketClaim`. The OBC generates a new bucket
-with a unique name, stored in a configmap; and a corresponding user
-with total privileges over that bucket, stored in a secret.
+using an `ObjectBucketClaim`. This will 
 
 For example, if I created an OBC with the name of
 `cloudnative-pg-backup`, the configmap would have two fields:

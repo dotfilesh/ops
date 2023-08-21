@@ -15,16 +15,14 @@ spec:
         name: authentik
         namespace: flux-system
       interval: 30m
+  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
       retries: 5
   upgrade:
+    cleanupOnFail: true
     remediation:
       retries: 5
-  dependsOn:
-    - name: cloudnative-pg
-      namespace: database
   values:
     existingSecret: redis-cluster-config-secrets
     existingSecretPasswordKey: REDIS_SECRET_KEY
