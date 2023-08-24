@@ -1,0 +1,7 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: # Should be name of dir
+  labels:
+    kustomize.toolkit.fluxcd.io/prune: disabled

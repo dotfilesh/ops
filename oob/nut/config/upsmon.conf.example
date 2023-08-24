@@ -1,0 +1,39 @@
+# This goes wherever the upsmon.conf was installed.
+
+# List system to monitor
+MONITOR example@localhost 1 monuser password primary
+
+# Min num of power supplies that must be recv power to keep running.
+MINSUPPLIES 1
+
+# upsmon runs this command when the system needs to be brought down.
+SHUTDOWNCMD "/sbin/shutdown -h +0"
+
+# Polling frequency for normal activities, measured in seconds.
+POLLFREQ 5
+# Polling frequency in seconds while UPS on battery.
+POLLFREQALERT 5
+# How long upsmon will wait before giving up on another upsmon
+HOSTSYNC 15
+# Inteval to wait before declaring a stale UPS "dead".
+DEADTIME 15
+# Flag file for forcing UPS shutdown on the primary system.
+POWERDOWNFLAG /etc/killpower
+# Replace battery warning time in seconds
+RBWARNTIME 43200 # 12 hrs
+# No communications warning time in seconds
+NOCOMMWARNTIME 300 # 5 mins
+# last sleep interval before shutting down the system
+FINALDELAY 5
+
+# Path to the notify script
+NOTIFYCMD /path/to/notify.sh
+
+# Notify script events
+NOTIFYFLAG ONLINE       SYSLOG+WALL+EXEC
+NOTIFYFLAG ONBATT       SYSLOG+WALL+EXEC
+NOTIFYFLAG LOWBATT      SYSLOG+WALL+EXEC
+NOTIFYFLAG FSD          SYSLOG+WALL+EXEC
+NOTIFYFLAG COMMOK       SYSLOG+WALL+EXEC
+NOTIFYFLAG COMMBAD      SYSLOG+WALL+EXEC
+NOTIFYFLAG SHUTDOWN     SYSLOG+WALL+EXEC

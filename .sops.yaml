@@ -8,10 +8,13 @@ creation_rules:
     #   age: 
     #     - kclt-01.kube.sys.dotfile.sh
     #   pgp:
-    #     - rwx@whits.io
+    #     - rwx@whits.io (depreciated)
+    #     - rwx@whits.io (card)
     age: >-
       age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz 
-    pgp: 2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB
+    pgp: >-
+      2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
+      9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
     #
     # If not a cluster, see if the file is in 📁 k8s/ or 📁 talos/
     # if so, default to use global key.
@@ -21,13 +24,19 @@ creation_rules:
     #   age: 
     #     - kube.sys.dotfile.sh
     #   pgp:
-    #     - rwx@whits.io
+    #     - rwx@whits.io (depreciated)
+    #     - rwx@whits.io (card)
     age: >-
       age187teecmpvsa4kcme6apvqege0wqjnwd9whfpkq730m48mf8n93xqjn0jve
-    pgp: 2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB
+    pgp: >-
+      2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
+      9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
     # If nothing's taking, encrypt solely with Whit personal key.
   - path_regex: .*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
     # keys:
     #   pgp:
-    #     - rwx@whits.io
-    pgp: 2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB
+    #     - rwx@whits.io (depreciated)
+    #     - rwx@whits.io (card)
+    pgp: >-
+      2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
+      9BB4C5E61E5800ECF5174E6696E67F871ED1AF65

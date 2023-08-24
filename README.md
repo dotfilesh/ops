@@ -5,8 +5,8 @@ _... managed by Flux and Renovate_ 🤖
 
 <div align="center">
 
-[![talos](https://img.shields.io/badge/talos-v1.1.2-brightgreen?style=for-the-badge&logo=linux&logoColor=white)](https://www.talos.dev/)
-[![kubernetes](https://img.shields.io/badge/kubernetes-v1.24.3-brightgreen?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
+[![talos](https://img.shields.io/badge/talos-v1.5.0-brightgreen?style=for-the-badge&logo=linux&logoColor=white)](https://www.talos.dev/)
+[![kubernetes](https://img.shields.io/badge/kubernetes-v1.28.0-brightgreen?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge)](https://github.com/pre-commit/pre-commit)
 
 </div>
@@ -53,27 +53,23 @@ Clusters run on [Talos Linux](https://talos.dev/), an immutable and ephemeral Li
 📁 k8s       # All k8s infrastructure defined below
 ├─📁 clusters  # all instantiated k8s clusters, defined as code
 │ └─📁 icao-00   # example cluster
-│   ├─📁 apps      # regular apps, ns dir tree, req: 📁 core
-│   ├─📁 sources   # cluster-scope Flux sources ((Helm|Git)Repository)
-│   ├─📁 config    # cluster-scope config (e.g. secrets/configmaps)
-│   ├─📁 core      # critical apps, ns dir tree, req: 📁 config, 📁 crds, 📁 sources
-│   ├─📁 crds      # cluster-scope CRDs
-│   └─📁 flux      # flux 'endpoint' for each cluster, contains flux-system dir
-├─📁 global    # global resources
-│ ├─📁 config    # config data applied to all clusters
-│ ├─📁 crds      # custom resources available for all clusters
-│ └─📁 sources   # (Helm|Git)Repository Flux sources
-└─📁 init      # files needed for bootstrapping
+│   ├─📁 apps      # Apps in cluster by namespace
+│   ├─📁 bootstrap # Cluster-specific keys
+│   └─📁 flux      # Flux configuration.
+└─📁 global    # global resources
+  ├─📁 bootstrap # Bootstrapping data (flux installation, global key)
+  ├─📁 config    # Universal config data
+  └─📁 repos     # (Helm|Git)Repository Flux sources
 ```
 
 
 ### Networking:
 
-Poor.
+Some cilium nightmare.
 
 ### Data Backup
 
-Also poor. See backblaze.
+Ok question time is over now. go home.
 
 
 ---
