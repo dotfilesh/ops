@@ -15,6 +15,7 @@ spec:
         kind: HelmRepository
         name: cilium
         namespace: kube-system
+  maxHistory: 3
   install:
     remediation:
       retries: 5
@@ -29,18 +30,46 @@ spec:
     bgpControlPlane:
       enabled: true
     bgp:
-      enabled: true
+      enabled: false
       announce:
         loadbalancerIP: true
-        podCIDR: true
+        podCIDR: false
     bpf:
       hostRouting: true
       lbBypassFIBLookup: true
       masquerade: true
       tproxy: true
+    cgroup:
+      autoMount:
+        enabled: false
+      hostRoot: /sys/fs/cgroup
     cluster:
       name: kclt-01
       id: 1
+    cni:
+      exclusive: false
+    containerRuntime:
+      integration: containerd
+    ipam:
+      mode: "kubernetes"
+    # one day... (I <3 IPv6) :(
+    #ipv6:
+    #  enabled: true
+    # Matches talconfig clusterPodNets
+    ipv4NativeRoutingCIDR: 10.244.0.0/16
+    k8sServiceHost: localhost
+    k8sServicePort: 7445
+    kubeProxyReplacement: true
+    loadBalancer:
+      algorithm: maglev
+      mode: dsr
+    operator:
+      enabled: true
+      rollOutPods: true
+    podDisruptionBudget:
+      enabled: true
+      maxUnavailable: 2
+    rollOutCiliumPods: true
     securityContext:
       # False. that is what the list is for.
       privileged: false
@@ -70,24 +99,7 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
-    ipam:
-      mode: "kubernetes"
-    # one day... (I <3 IPv6) :(
-    #ipv6:
-    #  enabled: true
-    kubeProxyReplacement: true
-    l2announcements:
-      enabled: true
-      leaseDuration: 120s
-      leaseRenewDeadline: 60s
-      leaseRetryPeriod: 1s
-    loadBalancer:
-      algorithm: maglev
-      mode: dsr
-    podDisruptionBudget:
-      enabled: true
-      maxUnavailable: 2
-    rollOutCiliumPods: true
+    tunnel: disabled
     updateStrategy:
       rollingUpdate:
         maxUnavailable: 2
