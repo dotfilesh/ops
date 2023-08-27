@@ -280,10 +280,10 @@ controlPlane:
       proxy:
         disabled: true
     machine: &machine
-      kubelet:
-        extraArgs:
-          feature-gates: GracefulNodeShutdown=true
-          rotate-server-certificates: true
+      features:
+        kubePrism:
+          enabled: true
+          port: 7445
       files:
         - content: |
             [plugins."io.containerd.grpc.v1.cri"]
@@ -291,21 +291,19 @@ controlPlane:
               enable_unprivileged_icmp = true
           path: /etc/cri/conf.d/20-customization.part
           op: create
+      kubelet:
+        extraArgs:
+          feature-gates: GracefulNodeShutdown=true
+          rotate-server-certificates: true
+        nodeIP:
+          validSubnets:
+            - 10.64.6.0/24
       network:
         extraHostEntries:
           - aliases:
               - ${secretKubeDomainName}
             ip: ${clusterEndpointIP}
-  patches: &patch
-    - |-
-      - op: add
-        path: /machine/features
-        value:
-          kubePrism:
-            enabled: true
-            port: 7445
 worker:
   inlinePatch:
     machine:
       <<: *machine
-  patches: *patch
