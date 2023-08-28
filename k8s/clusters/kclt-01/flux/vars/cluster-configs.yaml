@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: flux-system
-  name: cluster-config
+  name: cluster-configs
 data:
   CLUSTER_NAME: "kclt-01"
 
