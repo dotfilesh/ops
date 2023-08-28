@@ -51,7 +51,7 @@ spec:
         tls:
           - hosts:
               - *host
-              secretName: *host
+            secretName: *host
     persistence:
       media:
         enabled: true
