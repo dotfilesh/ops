@@ -5,9 +5,9 @@ _... managed by Flux and Renovate_ 🤖
 
 <div align="center">
 
-[![talos](https://img.shields.io/badge/talos-v1.5.0-brightgreen?style=for-the-badge&logo=linux&logoColor=white)](https://www.talos.dev/)
-[![kubernetes](https://img.shields.io/badge/kubernetes-v1.28.0-brightgreen?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge)](https://github.com/pre-commit/pre-commit)
+[![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdotfilesh%2Fops%2Fmain%2Ftalos%2Fclusters%2Fkclt-01%2Ftalconfig.yaml&query=talosVersion&style=for-the-badge&logo=linux&logoColor=white&label=Talos&color=FC500D&cacheSeconds=86400)](https://www.talos.dev/)
+[![Dynamic YAML Badge](https://img.shields.io/badge/dynamic/yaml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fdotfilesh%2Fops%2Fmain%2Ftalos%2Fclusters%2Fkclt-01%2Ftalconfig.yaml&query=kubernetesVersion&style=for-the-badge&logo=kubernetes&logoColor=white&label=Kubernetes&color=326CE5&cacheSeconds=86400)](https://kubernetes.io/)
+[![Static Badge](https://img.shields.io/badge/pre--commit-enabled-white?style=for-the-badge&logo=pre-commit&logoColor=white&label=Pre-Commit&color=FAB040)](https://github.com/pre-commit/pre-commit)
 
 </div>
 

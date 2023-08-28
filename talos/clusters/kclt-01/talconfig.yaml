@@ -2,7 +2,7 @@ clusterName: &clusterName kclt-01
 talosVersion: v1.5.1
 kubernetesVersion: v1.28.0
 endpoint: https://${clusterEndpointIP}:6443
-domain: cluster.localdomain
+domain: localdomain
 clusterPodNets:
   - 10.244.0.0/16
 clusterSvcNets:
@@ -32,10 +32,10 @@ nodes:
       - interface: bond0
         bond:
           mode: 802.3ad
-          deviceSelector:
-            - hardwareAddr: 00:e0:4c:01:49:94
+          deviceSelectors:
+            - hardwareAddr: '00:e0:4c:01:49:94'
         dhcp: false
-        mtu: 9000
+        mtu: 1500
         addresses:
           - 10.64.6.8/20
         routes:
@@ -60,13 +60,9 @@ nodes:
       - 9.9.9.9
       - 8.8.8.8
     networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          deviceSelector:
-            - hardwareAddr: # Populate this
+      - interface: eno1
         dhcp: false
-        mtu: 9000
+        mtu: 1500
         addresses:
           - 10.64.6.1/20
         routes:
@@ -88,13 +84,9 @@ nodes:
       - 9.9.9.9
       - 8.8.8.8
     networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          deviceSelector:
-            - hardwareAddr: # Populate this
+      - interface: eno1
         dhcp: false
-        mtu: 9000
+        mtu: 1500
         addresses:
           - 10.64.6.2/20
         routes:
@@ -116,13 +108,9 @@ nodes:
       - 9.9.9.9
       - 8.8.8.8
     networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          deviceSelector:
-            - hardwareAddr: # Populate this
+      - interface: eno1
         dhcp: false
-        mtu: 9000
+        mtu: 1500
         addresses:
           - 10.64.6.3/20
         routes:
@@ -140,17 +128,13 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          deviceSelectors:
-            - hardwareAddr: e0:07:1b:f4:c4:74
+      - interface: eno1
         addresses:
           - 10.64.6.9/20
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 9000
+        mtu: 1500
         dhcp: false
     nodeLabels: &workerLabels
       node-role.kubernetes.io/worker: "worker"
@@ -165,17 +149,13 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          deviceSelectors:
-            - hardwareAddr: # Populate this
+      - interface: eno1
         addresses:
           - 10.64.6.10/20
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 9000
+        mtu: 1500
         dhcp: false
     nodeLabels: *workerLabels
   
@@ -187,18 +167,13 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          deviceSelectors:
-              # THIS IS A STAB IN THE DARK!!!
-            - hardwareAddr: 7C:D3:0A:B3:AE:EB
+      - interface: eno1
         addresses:
           - 10.64.6.11/20
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 9000
+        mtu: 1500
         dhcp: false
     nodeLabels: *workerLabels
   
@@ -210,18 +185,13 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          deviceSelectors:
-              # This is a stab in the dark, but a confident one.
-            - hardwareAddr: B0:83:FE:D5:D5:*
+      - interface: eno1
         addresses:
           - 10.64.6.12/20
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 9000
+        mtu: 1500
         dhcp: false
     nodeLabels: *workerLabels
   
@@ -233,18 +203,13 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          deviceSelectors:
-              # This is a stab in the dark, but a confident one.
-            - hardwareAddr: 18:66:DA:63:0E:*
+      - interface: eno1
         addresses:
           - 10.64.6.13/20
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 9000
+        mtu: 1500
         dhcp: false
     nodeLabels: *workerLabels
   
@@ -256,17 +221,13 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: bond0
-        bond:
-          mode: 802.3ad
-          deviceSelectors:
-            - hardwareAddr: # Populate this.
+      - interface: eno1
         addresses:
           - 10.64.6.14/20
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 9000
+        mtu: 1500
         dhcp: false
     nodeLabels: *workerLabels
 
@@ -280,10 +241,10 @@ controlPlane:
       proxy:
         disabled: true
     machine: &machine
-      kubelet:
-        extraArgs:
-          feature-gates: GracefulNodeShutdown=true
-          rotate-server-certificates: true
+      features:
+        kubePrism:
+          enabled: true
+          port: 7445
       files:
         - content: |
             [plugins."io.containerd.grpc.v1.cri"]
@@ -291,20 +252,19 @@ controlPlane:
               enable_unprivileged_icmp = true
           path: /etc/cri/conf.d/20-customization.part
           op: create
+      kubelet:
+        extraArgs:
+          feature-gates: GracefulNodeShutdown=true
+          rotate-server-certificates: true
+        nodeIP:
+          validSubnets:
+            - 10.64.6.0/24
       network:
         extraHostEntries:
           - aliases:
               - ${secretKubeDomainName}
             ip: ${clusterEndpointIP}
-  patches: &patch
-    - |-
-      - op: add
-        path: /machine/features
-        value:
-          kubePrism:
-            enabled: true
 worker:
   inlinePatch:
     machine:
       <<: *machine
-  patches: *patch
