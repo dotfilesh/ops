@@ -30,7 +30,8 @@ spec:
         - name: TZ
           value: "${TIMEZONE}"
       service:
-        loadBalancerIP: ${CILIUM_LB_INGRESS_ADDR}
+        annotations:
+          io.cilium/lb-ipam-ips: ${CILIUM_LB_INGRESS_ADDR}
         externalTrafficPolicy: Local
       publishService:
         enabled: true
