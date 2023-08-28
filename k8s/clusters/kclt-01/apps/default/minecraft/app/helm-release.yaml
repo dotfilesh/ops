@@ -51,7 +51,7 @@ spec:
         enabled: true
         password: ${SECRET__RCON_PASSWORD}
     persistence:
-      storageClass: $CLUSTER_STORAGE_BLOCK}
+      storageClass: ${CLUSTER_STORAGE_BLOCK}
       dataDir:
         enabled: true
         Size: 16Gi
