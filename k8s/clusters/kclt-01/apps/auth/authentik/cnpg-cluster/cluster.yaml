@@ -35,10 +35,10 @@ spec:
           # TODO: Investigate viability of encrypted backups.
         #encryption: AES256
         maxParallel: 8
-      endpointURL: &endpointUrl https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}/
+      # endpointURL: &endpointUrl https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}/
         # Using the internal service name WILL work, but is kinda ugly
         # versus using the public URL. Kept for posterity.
-      # endpointURL: &endpointUrl http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
+      endpointURL: &endpointUrl http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
         # Should mirror EXACTLY the value in ./objectbucketclaim.yaml
       destinationPath: &destinationPath s3://authentik-cnpg-backup-12e782ad-0ccc-4113-bc3b-64be8713a7d7/
       s3Credentials:
