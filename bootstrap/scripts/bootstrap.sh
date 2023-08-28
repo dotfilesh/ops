@@ -63,15 +63,15 @@ kubectl --kubeconfig "${KUBECONFIG}" apply --server-side --kustomize \
 
 
 # Decrypt and apply GitHub deploy key.
-sops --decrept \
-  ./k8s/clusters/"${CLUSTER_NAME}"/bootstrap/github-deploy-key.sops.yaml \
+sops --decrypt \
+  ./k8s/clusters/"${CLUSTER_NAME}"/bootstrap/github-token.sops.yaml \
   | kubectl apply -f -
 
 # Apply values for flux variable substitution
 kubectl apply -f ./k8s/global/config/global-config.yaml
 kubectl apply -f \
-  ./k8s/clusters/"${CLUSTER_NAME}"/flux/vars/cluser-config.yaml
-sops --decrypt ../k8s/global/config/global-secrets.sops.yaml |\
+  ./k8s/clusters/"${CLUSTER_NAME}"/flux/vars/cluster-config.yaml
+sops --decrypt ./k8s/global/config/global-secrets.sops.yaml |\
   kubectl apply -f -
 sops --decrypt \
   ./k8s/clusters/"${CLUSTER_NAME}"/flux/vars/cluster-secrets.sops.yaml |\
@@ -82,6 +82,6 @@ kubectl --kubeconfig "${KUBECONFIG}" apply --kustomize \
   k8s/clusters/"${CLUSTER_NAME}"/flux/config/
 
 echo "Please delete the log file, as it contains HIGHLY SENSITIVE INFORMATION."
-  
+
 # end of script. Therefore the only time failure should be untrapped.
 trap - EXIT
