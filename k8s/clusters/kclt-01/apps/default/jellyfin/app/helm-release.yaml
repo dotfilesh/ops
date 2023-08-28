@@ -42,6 +42,7 @@ spec:
     ingress:
       main:
         enabled: true
+        ingressClassName: "nginx"
         hosts:
           - host: *host
             paths:
