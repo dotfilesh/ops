@@ -44,6 +44,8 @@ spec:
       onlineMode: true
       memory: 4500M
       serviceType: LoadBalancer
+      # DEPRECIATED. USE io.cilium/lb-ipam-ips ANNOTATION
+      # https://docs.cilium.io/en/stable/network/lb-ipam/#requesting-ips
       loadBalancerIP: ${CILIUM_LB_MINECRAFTSURVIVAL_ADDR}
       rcon:
         enabled: true
