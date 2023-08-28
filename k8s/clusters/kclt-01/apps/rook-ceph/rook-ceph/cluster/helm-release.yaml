@@ -220,9 +220,14 @@ spec:
                 memory: 1Gi
               limits:
                 memory: 2Gi
+          healthCheck:
+            bucket:
+              interval: 60s
         storageClass:
           enabled: true
           name: ${CLUSTER_STORAGE_BUCKET}
           reclaimPolicy: Delete
           parameters:
             region: ${CLUSTER_NAME}
+    toolbox:
+      enabled: true
