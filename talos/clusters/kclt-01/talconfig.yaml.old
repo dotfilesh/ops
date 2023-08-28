@@ -60,7 +60,11 @@ nodes:
       - 9.9.9.9
       - 8.8.8.8
     networkInterfaces:
-      - interface: eno1
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+            - hardwareAddr: # Populate this
         dhcp: false
         mtu: 1500
         addresses:
@@ -84,7 +88,11 @@ nodes:
       - 9.9.9.9
       - 8.8.8.8
     networkInterfaces:
-      - interface: eno1
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+            - hardwareAddr: # Populate this
         dhcp: false
         mtu: 1500
         addresses:
@@ -108,7 +116,11 @@ nodes:
       - 9.9.9.9
       - 8.8.8.8
     networkInterfaces:
-      - interface: eno1
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+            - hardwareAddr: # Populate this
         dhcp: false
         mtu: 1500
         addresses:
@@ -128,7 +140,11 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: eno1
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+            - hardwareAddr: 'e0:07:1b:f4:c4:74'
         addresses:
           - 10.64.6.9/20
         routes:
@@ -149,7 +165,11 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: eno1
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+            - hardwareAddr: # Populate this
         addresses:
           - 10.64.6.10/20
         routes:
@@ -167,7 +187,11 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: eno1
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+            - hardwareAddr: '7c:d3:0a:b3:ae:*'
         addresses:
           - 10.64.6.11/20
         routes:
@@ -185,7 +209,12 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: eno1
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+              # This is a stab in the dark, but a confident one.
+            - hardwareAddr: 'b0:83:fe:d5:d5:*'
         addresses:
           - 10.64.6.12/20
         routes:
@@ -203,7 +232,12 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: eno1
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+              # This is a stab in the dark, but a confident one.
+            - hardwareAddr: '18:66:da:63:0e:*'
         addresses:
           - 10.64.6.13/20
         routes:
@@ -221,7 +255,11 @@ nodes:
       type: nvme
       size: <= 150GB
     networkInterfaces:
-      - interface: eno1
+      - interface: bond0
+        bond:
+          mode: 802.3ad
+          deviceSelectors:
+            - hardwareAddr: # Populate this.
         addresses:
           - 10.64.6.14/20
         routes:
