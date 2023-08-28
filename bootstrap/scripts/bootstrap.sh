@@ -45,7 +45,7 @@ cd "${ABS_DIR}"
 cd "$(git rev-parse --show-toplevel)"
 
 # Install flux
-kubectl --kubeconfig ${kubeconfig} apply --server-side --kustomize \
+kubectl --kubeconfig "${KUBECONFIG}" apply --server-side --kustomize \
   ./k8s/global/bootstrap/
 
 # This decrypts the sops-encrypted global and site age keys, 
@@ -54,34 +54,34 @@ kubectl --kubeconfig ${kubeconfig} apply --server-side --kustomize \
 # expected by flux.
 # Special thanks to Kay for helping me with this.
 { sops --config <(echo '') --decrypt \
-  ./k8s/clusters/${cluster_name}/bootstrap/site.agekey.dirtysops ; \
-sops --config <(echo '') --decrypt \ 
-  ./k8s/global/bootstrap/global.agekey.dirtysops } |
-kubectl create secret generic sops-age \
+  ./k8s/clusters/"${CLUSTER_NAME}"/bootstrap/site.agekey.dirtysops ; \
+  sops --config <(echo '') --decrypt \
+  ./k8s/global/bootstrap/global.agekey.dirtysops ; } | \
+  kubectl create secret generic sops-age \
   --namespace=flux-system \
   --from-file=age.agekey=/dev/stdin
 
 
 # Decrypt and apply GitHub deploy key.
-sops --decrept \
-  ./k8s/clusters/${cluster_name}/bootstrap/github-deploy-key.sops.yaml\
+sops --decrypt \
+  ./k8s/clusters/"${CLUSTER_NAME}"/bootstrap/github-token.sops.yaml \
   | kubectl apply -f -
 
 # Apply values for flux variable substitution
 kubectl apply -f ./k8s/global/config/global-config.yaml
 kubectl apply -f \
-  ./k8s/clusters/${cluster_name}/flux/vars/cluser-config.yaml
-sops --decrypt ../k8s/global/config/global-secrets.sops.yaml |\
+  ./k8s/clusters/"${CLUSTER_NAME}"/flux/vars/cluster-config.yaml
+sops --decrypt ./k8s/global/config/global-secrets.sops.yaml |\
   kubectl apply -f -
 sops --decrypt \
-  ./k8s/clusters/${cluster_name}/flux/vars/cluster-secrets.sops.yaml |\
+  ./k8s/clusters/"${CLUSTER_NAME}"/flux/vars/cluster-secrets.sops.yaml |\
   kubectl apply -f -
   
 # Begin reconciling flux repository.
-kubectl --kubeconfig ${kubeconfig} apply --kustomize \
-  k8s/clusters/${cluster_name}/flux/config/
+kubectl --kubeconfig "${KUBECONFIG}" apply --kustomize \
+  k8s/clusters/"${CLUSTER_NAME}"/flux/config/
 
 echo "Please delete the log file, as it contains HIGHLY SENSITIVE INFORMATION."
-  
+
 # end of script. Therefore the only time failure should be untrapped.
 trap - EXIT

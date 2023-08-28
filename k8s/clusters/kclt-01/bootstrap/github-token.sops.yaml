@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-    name: github-deploy-key
+    name: github-token
     namespace: flux-system
 stringData:
     identity: ENC[AES256_GCM,data:Gk6JoFfbYLUkDvfZ6I1HsGhHk6Y+akGnbTB0ciZJDkgFlYf14KR0vmgCX03MyMe8yhATuNpGgcQt/jAnv/+zUcomET3B/sQ5nSvDapuCme88xA8VJfntqAfKK/1sfpVOwF5Iuwgitgc0YU2qKacnFA3mbA1u/jKnUprfoG52Ek9eJIkVbuFNP04RF99u1EiCdOdM32CFS0aV5BJVu1RIyxdrxyhHyLkIsbFq1IsZL6eptPef67K78ZhCSQY8XbRdPirwSW2fTouy3h4b27DDaeZXAMZ8nlP/Gv1s0f6qk4cAzmAEbXLUXvucjtwnWLXIWQk+Eu6CghC61GmGNOUz5IoliNDj9xVv4dZvWKXb51J8nCRrayD69/BsUIN6ESohKxWoBdHYNi+djs2kgxCQOHt0w+FMxC/4n6f8AxJ7cXcOYe9IsB5KH4Or6YQHMl5MzsQ2tLNs+Q0O3HDjcuidZ3DTVAkRenAyI9bfSoxmJXpoquOqpbpyi5ZK8bQdvKUSzlo98hw594TqSTGOGieGmx4DMs/T/r9itZXN,iv:ETLdM9Jv3HrEdy86PLQ7UlPc1BRYRX0CNdZP4xFJrlQ=,tag:0ebIz57eYxWk6NdUW04FmQ==,type:str]
@@ -22,8 +22,8 @@ sops:
             ZThQajF2TTBjaXdycHhvbGNFdjl1ZHMK8lffZDF7IHvgKggGTkrWxAfyIEiqEzhi
             zlE1pdWKXVdaaKK8Tpt8zShSF6HdnagkES9tluAdKePenlGEaR8CVw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-08-15T23:26:35Z"
-    mac: ENC[AES256_GCM,data:Ob8nE3e8hDckRaZbhphq1TpRB715nqaaTIxy6m+n26exT/Xncpx0DcyUKPK4Z4uiEiKKMqyELUEl2n75ADcds2TRF6pwZ0S8fpyqwduLh8IGHPvJPMG41WGfvch0XEgw1ls6jfNoIr1NkcULu2gtr0EhBzLqejxbVa/R3rRaM+c=,iv:DdbmcGv2Xgj2kUPsRwqXJSkz/avmXkMFpZpGh2c962I=,tag:AhXJqFZF0C+gWXq/cY8ZpA==,type:str]
+    lastmodified: "2023-08-28T01:26:25Z"
+    mac: ENC[AES256_GCM,data:0OobY/xIHsE81U7KKN206YACyZpVdb1A7EEdYLst5zPktVUoCOgwd/435GO453ncYQYlXzBX3W9bProD2xoyjrLFXX4xyystmtghlmwmSw3adJPMRM96BnggoGnhlWvYaBiJ3NViqTuYtsXgAOW0R48wxpQvcZ3tGzWdiPZk6qs=,iv:kBRdnr9fRD1u6hPOe/ifNGM+V4cOMtA7dHyagbcNDfo=,tag:R7K1CAJC0GDdR9zQ1XWPUQ==,type:str]
     pgp:
         - created_at: "2023-08-15T23:14:30Z"
           enc: |

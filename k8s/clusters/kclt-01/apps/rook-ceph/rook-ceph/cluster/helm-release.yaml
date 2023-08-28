@@ -14,17 +14,15 @@ spec:
         kind: HelmRepository
         name: rook-ceph
         namespace: flux-system
+  maxHistory: 3
   install:
     createNamespace: true
     remediation:
       retries: 5
   upgrade:
+    cleanupOnFail: true
     remediation:
       retries: 5
-  # Depreciated way of doing this? now using fluxtomize for dep chains.
-  #dependsOn:
-  #  - name: rook-ceph-operator
-  #    namespace: rook-ceph
   values:
     operatorNamespace: rook-ceph
     monitoring:
