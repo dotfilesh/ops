@@ -80,16 +80,16 @@ spec:
               - name: "/dev/disk/by-id/wwn-0x50000396f8329825"
               - name: "/dev/disk/by-id/wwn-0x50000396f8325515"
           #- name: amdusias
-      placement:
-        mgr:
-          nodeAffinity: &nodeAffinity
-            requiredDuringSchedulingIgnoredDuringExecution:
-              nodeSelectorTerms:
-                - matchExpressions:
-                    - key: node-role.kubernetes.io/control-plane
-                      operator: Exists
-        mon:
-          nodeAffinity: *nodeAffinity
+      #placement:
+      #  mgr:
+      #    nodeAffinity: &nodeAffinity
+      #      requiredDuringSchedulingIgnoredDuringExecution:
+      #        nodeSelectorTerms:
+      #          - matchExpressions:
+      #              - key: node-role.kubernetes.io/control-plane
+      #                operator: Exists
+      #  mon:
+      #    nodeAffinity: *nodeAffinity
       resources:
         mgr:
           limits:
