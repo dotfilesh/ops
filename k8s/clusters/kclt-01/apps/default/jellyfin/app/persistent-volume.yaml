@@ -11,7 +11,7 @@ metadata:
   name: watch-media
   namespace: default
 spec:
-  storageClassName: $CLUSTER_STORAGE_FILESYSTEM}
+  storageClassName: ${CLUSTER_STORAGE_FILESYSTEM}
   accessModes:
     - ReadWriteMany
   volumeMode: Filesystem
