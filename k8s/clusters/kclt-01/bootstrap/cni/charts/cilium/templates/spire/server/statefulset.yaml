@@ -32,7 +32,7 @@ spec:
       {{- end }}
       containers:
       - name: cilium-init
-        image: docker.io/library/busybox:1.35.0@sha256:223ae047b1065bd069aac01ae3ac8088b3ca4a527827e283b85112f29385fb1b
+        image: docker.io/library/busybox:1.36.1@sha256:3fbc632167424a6d997e74f52b878d7cc478225cffac6bc977eedfe51c7f4e79
         command:
           - /bin/sh
           - -c
