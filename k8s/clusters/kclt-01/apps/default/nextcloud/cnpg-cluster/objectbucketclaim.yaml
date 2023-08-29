@@ -1,0 +1,16 @@
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: authentik-cnpg-backup
+  namespace: auth
+spec:
+    # HACK Ugly, but I'm too tired to be clever.
+    # I should be using `generateBucketName` to guarantee a unique 
+    # bucket name. However, it stores the name in a configmap which the
+    # cnpg ./cluster.yaml cannot parse. So I hard code it and hope 
+    # tacking on a UUIDv4 at the end does roughly the same thing.
+  bucketName: authentik-cnpg-backup-12e782ad-0ccc-4113-bc3b-64be8713a7d7
+  storageClassName: ${CLUSTER_STORAGE_BUCKET}
+  additionalConfig:
+    maxSize: 8Gi
