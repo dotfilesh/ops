@@ -70,7 +70,7 @@ spec:
       transcode:
         enabled: true
         type: emptyDir
-        mountPath: /transcode # This will need to be set
+        mountPath: /data/transcodes
         # Normally would be better on high speed storage (NVMe, SSD),
         # but the way rook-ceph is configured here, there's no
         # distinction between device classes.
