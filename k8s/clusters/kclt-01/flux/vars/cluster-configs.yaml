@@ -18,8 +18,18 @@ data:
   CILIUM_LB_INGRESS_ADDR: "10.64.3.2"
   CILIUM_LB_MINECRAFTSURVIVAL_ADDR: "10.64.3.3"
 
-  # storage
+  # storage (hybrid)
   CLUSTER_STORAGE_BLOCK: "ceph-block"
   CLUSTER_STORAGE_FILESYSTEM: "ceph-filesystem"
   CLUSTER_STORAGE_BUCKET: "ceph-bucket"
-  
+  # storage scheduled on specific device classes.
+  CLUSTER_STORAGE_BLOCK_HDD: "ceph-block-hdd"
+  CLUSTER_STORAGE_FILESYSTEM_HDD: "ceph-filesystem-hdd"
+  #CLUSTER_STORAGE_BUCKET_HDD: "ceph-bucket-hdd"
+  CLUSTER_STORAGE_BLOCK_SSD: "ceph-block-ssd"
+  CLUSTER_STORAGE_FILESYSTEM_SSD: "ceph-filesystem-ssd"
+  #CLUSTER_STORAGE_BUCKET_SSD: "ceph-bucket-ssd"
+  # Not yet available...
+  #CLUSTER_STORAGE_BLOCK_NVME: "ceph-block-nvme"
+  #CLUSTER_STORAGE_FILESYSTEM_NVME: "ceph-filesystem-nvme"
+  #CLUSTER_STORAGE_BUCKET_NVME: "ceph-bucket-nvme"
