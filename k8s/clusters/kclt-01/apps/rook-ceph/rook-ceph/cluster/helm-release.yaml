@@ -80,16 +80,6 @@ spec:
               - name: "/dev/disk/by-id/wwn-0x50000396f8329825"
               - name: "/dev/disk/by-id/wwn-0x50000396f8325515"
           #- name: amdusias
-      #placement:
-      #  mgr:
-      #    nodeAffinity: &nodeAffinity
-      #      requiredDuringSchedulingIgnoredDuringExecution:
-      #        nodeSelectorTerms:
-      #          - matchExpressions:
-      #              - key: node-role.kubernetes.io/control-plane
-      #                operator: Exists
-      #  mon:
-      #    nodeAffinity: *nodeAffinity
       resources:
         mgr:
           limits:
@@ -142,15 +132,59 @@ spec:
     cephBlockPools: 
       - name: ceph-blockpool
         spec:
-            failureDomain: host
-            replicated:
-              size: 3
-              hybridStorage:
-                primaryDeviceClass: ssd
-                secondaryDeviceClass: hdd
+          failureDomain: host
+          replicated:
+            size: 3
+            hybridStorage:
+              primaryDeviceClass: ssd
+              secondaryDeviceClass: hdd
         storageClass:
             enabled: true
             name: ${CLUSTER_STORAGE_BLOCK}
+            isDefault: true 
+            reclaimPolicy: Delete
+            allowVolumeExpansion: true
+            parameters:
+              imageFormat: "2"
+              imageFeatures: layering
+              csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+              csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+              csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+              csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+              csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+              csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+              csi.storage.k8s.io/fstype: ext4
+      - name: ceph-blockpool-hdd
+        spec:
+          failureDomain: host
+          replicated:
+            size: 3
+            deviceClass: hdd
+        storageClass:
+            enabled: true
+            name: ${CLUSTER_STORAGE_BLOCK_HDD}
+            isDefault: true 
+            reclaimPolicy: Delete
+            allowVolumeExpansion: true
+            parameters:
+              imageFormat: "2"
+              imageFeatures: layering
+              csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+              csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+              csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+              csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+              csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+              csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+              csi.storage.k8s.io/fstype: ext4
+      - name: ceph-blockpool-ssd
+        spec:
+          failureDomain: host
+          replicated:
+            size: 3
+            deviceClass: ssd
+        storageClass:
+            enabled: true
+            name: ${CLUSTER_STORAGE_BLOCK_SSD}
             isDefault: true 
             reclaimPolicy: Delete
             allowVolumeExpansion: true
@@ -168,10 +202,48 @@ spec:
       - name: ceph-filesystem
         spec:
           metadataPool:
+            failureDomain: host
+            deviceClass: ssd
             replicated:
               size: 3
           dataPools:
             - failureDomain: host
+              replicated:
+                size: 3
+                hybridStorage:
+                  primaryDeviceClass: ssd
+                  secondaryDeviceClass: hdd
+          metadataServer:
+            activeCount: 1
+            activeStandby: true
+            resources:
+              requests:
+                cpu: "35m"
+                memory: "64M"
+              limits:
+                memory: "144M"
+        storageClass:
+          enabled: true
+          name: ${CLUSTER_STORAGE_FILESYSTEM}
+          isDefault: false
+          parameters:
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+            csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+            csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+            csi.storage.k8s.io/fstype: ext4
+      - name: ceph-filesystem-hdd
+        spec:
+          metadataPool:
+            failureDomain: host
+            deviceClass: ssd
+            replicated:
+              size: 3
+          dataPools:
+            - failureDomain: host
+              deviceClass: hdd
               replicated:
                 size: 3
           metadataServer:
@@ -185,7 +257,40 @@ spec:
                 memory: "144M"
         storageClass:
           enabled: true
-          name: ${CLUSTER_STORAGE_FILESYSTEM}
+          name: ${CLUSTER_STORAGE_FILESYSTEM_HDD}
+          isDefault: false
+          parameters:
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-cephfs-provisioner
+            csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+            csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
+            csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+            csi.storage.k8s.io/fstype: ext4
+      - name: ceph-filesystem-ssd
+        spec:
+          metadataPool:
+            failureDomain: host
+            deviceClass: ssd
+            replicated:
+              size: 3
+          dataPools:
+            - failureDomain: host
+              deviceClass: ssd
+              replicated:
+                size: 3
+          metadataServer:
+            activeCount: 1
+            activeStandby: true
+            resources:
+              requests:
+                cpu: "35m"
+                memory: "64M"
+              limits:
+                memory: "144M"
+        storageClass:
+          enabled: true
+          name: ${CLUSTER_STORAGE_FILESYSTEM_SSD}
           isDefault: false
           parameters:
             csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
@@ -209,11 +314,8 @@ spec:
               codingChunks: 1
           gateway:
             port: 80
-            # TODO: why is this commented out?
-            #securePort: 443
             instances: 1
             type: s3
-            #sslCertificateRef: "s3-${CLUSTER_NAME}-api-${GLOBALSECRET__PUBLIC_DOMAIN}"
             resources:
               requests:
                 cpu: 500m
