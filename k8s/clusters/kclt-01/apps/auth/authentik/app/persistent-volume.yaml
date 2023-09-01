@@ -4,7 +4,7 @@ metadata:
   name: authentik-media
   namespace: auth
 spec:
-  storageClassName: ${CLUSTER_STORAGE_FILESYSTEM}
+  storageClassName: ${CLUSTER_STORAGE_FILESYSTEM_SSD}
   accessModes:
     - ReadWriteMany
   volumeMode: Filesystem

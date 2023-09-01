@@ -31,7 +31,7 @@ spec:
     controller:
       enabled: true
       type: statefulset
-      # jellyfin only allows for One container.
+      # jellyfin only allows for one container.
       replicas: 1
     env:
       TZ: ${TIMEZONE} 
@@ -63,19 +63,18 @@ spec:
         enabled: true
         type: pvc
         mountPath: /data
-        storageClass: ${CLUSTER_STORAGE_BLOCK}
+        storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
         accessMode: ReadWriteOnce
         size: 32Gi
         retain: false
       transcode:
         enabled: true
-        type: emptyDir
+        type: pvc
         mountPath: /data/transcodes
-        # Normally would be better on high speed storage (NVMe, SSD),
-        # but the way rook-ceph is configured here, there's no
-        # distinction between device classes.
-        medium: Memory
-        sizeLimit: 8192Mi
+        storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
+        accessMode: ReadWriteOnce
+        size: 32Gi
+        retain: false
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
@@ -120,6 +119,5 @@ spec:
         cpu: 10m
         memory: 512Mi
       limits:
-        # limits do not include the emptyDir
         memory: 2048Mi
     volumeClaimTemplates: []
