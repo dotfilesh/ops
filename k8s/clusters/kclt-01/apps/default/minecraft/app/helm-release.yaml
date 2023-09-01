@@ -33,7 +33,6 @@ spec:
       eula: "TRUE"
       version: "LATEST"
       type: "PAPER"
-      paperDownloadUrl: "https://api.papermc.io/v2/projects/paper/versions/1.19.2/builds/135/downloads/paper-1.19.2-135.jar"
       difficulty: normal
       icon: "https://cdn.discordapp.com/attachments/588168204635865119/844264371979157504/Tumblr_l_47563468744304.png"
       maxPlayers: 32
@@ -44,8 +43,6 @@ spec:
       onlineMode: true
       memory: 4500M
       serviceType: LoadBalancer
-      # DEPRECIATED. USE io.cilium/lb-ipam-ips ANNOTATION
-      # https://docs.cilium.io/en/stable/network/lb-ipam/#requesting-ips
       loadBalancerIP: ${CILIUM_LB_MINECRAFTSURVIVAL_ADDR}
       rcon:
         enabled: true

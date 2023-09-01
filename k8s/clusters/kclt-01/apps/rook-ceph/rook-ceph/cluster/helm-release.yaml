@@ -43,6 +43,10 @@ spec:
             - *host
             secretName: *host 
     cephClusterSpec:
+      monitoring:
+        # why are these like this.
+        enabled: true
+        metricsDisabled: false
       network:
         provider: host
       crashCollector:
