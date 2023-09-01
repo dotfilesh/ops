@@ -163,7 +163,7 @@ spec:
         storageClass:
             enabled: true
             name: ${CLUSTER_STORAGE_BLOCK_HDD}
-            isDefault: true 
+            isDefault: false 
             reclaimPolicy: Delete
             allowVolumeExpansion: true
             parameters:
@@ -185,7 +185,7 @@ spec:
         storageClass:
             enabled: true
             name: ${CLUSTER_STORAGE_BLOCK_SSD}
-            isDefault: true 
+            isDefault: false
             reclaimPolicy: Delete
             allowVolumeExpansion: true
             parameters:
