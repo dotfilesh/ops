@@ -15,6 +15,7 @@ resources:
   - ./ingress-nginx-charts.yaml
   - ./jetstack-charts.yaml
   - ./kyverno-charts.yaml
+  - ./mailu-charts.yaml
   - ./metallb-charts.yaml
   # Not ready, see comment in ocis/helm-release.yaml.
   # - ./ocis-charts.yaml
