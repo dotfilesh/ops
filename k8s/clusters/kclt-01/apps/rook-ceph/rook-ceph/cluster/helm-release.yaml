@@ -51,11 +51,6 @@ spec:
     
 
     cephClusterSpec:
-      monitoring:
-        # why are these like this.
-        enabled: true
-        metricsDisabled: false
-      
       network:
         provider: host
       
@@ -183,7 +178,7 @@ spec:
         storageClass:
             enabled: true
             name: ${CLUSTER_STORAGE_BLOCK_HDD}
-            isDefault: true 
+            isDefault: false 
             reclaimPolicy: Delete
             allowVolumeExpansion: true
             parameters:
@@ -206,7 +201,7 @@ spec:
         storageClass:
             enabled: true
             name: ${CLUSTER_STORAGE_BLOCK_SSD}
-            isDefault: true 
+            isDefault: false
             reclaimPolicy: Delete
             allowVolumeExpansion: true
             parameters:
