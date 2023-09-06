@@ -1,0 +1,65 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: protonmail-bridge
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 1.5.1
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: flux-system
+      interval: 30m
+  maxHistory: 3
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 5
+  uninstall:
+    keepHistory: false
+  values:
+    controller:
+      type: statefulset
+    
+
+    image:
+      repository: ghcr.io/larivierec/protonmail-bridge-docker
+      tag: v3.3.2-1@sha256:7a22ee9061372c294ee46323353d8213803daac25d31455bfa1e8e3b48852c40
+    
+
+    env:
+      TZ: ${TIMEZONE}
+
+
+    service:
+      main:
+        enabled: false
+      
+      imap:
+        enabled: false
+       
+      smtp:
+        enabled: true
+        type: ClusterIP
+        ports:
+          smtp-tcp:
+            enabled: true
+            port: 1025
+    
+
+    persistence:
+      data:
+        enabled: true
+        type: pvc
+        accessMode: ReadWriteOnce
+        retain: false
+        size: 500Mi
+        storageClass: ${CLUSTER_STORAGE_BLOCK_SSD} 
