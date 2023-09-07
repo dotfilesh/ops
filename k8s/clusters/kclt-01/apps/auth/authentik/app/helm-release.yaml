@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: authentik
-      version: 2023.8.1
+      version: 2023.8.2
       sourceRef:
         kind: HelmRepository
         name: authentik
@@ -25,6 +25,13 @@ spec:
       retries: 5
   values:
     authentik:
+      email:
+        from: ${SECRET__PROTONMAIL_FROM}
+        host: ${SECRET__PRPTONMAIL_HOST}
+        port: ${SECRET__PROTONMAIL_PORT}
+        username: ${SECRET__PROTONMAIL_USER}
+        password: ${SECRET__PROTONMAIL_PASSWORD}
+        use_tls: true
       error_reporting:
         enabled: true
       postgresql:
