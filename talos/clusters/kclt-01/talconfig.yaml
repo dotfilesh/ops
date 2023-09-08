@@ -1,5 +1,5 @@
 clusterName: &clusterName kclt-01
-talosVersion: v1.5.1
+talosVersion: v1.5.2
 kubernetesVersion: v1.28.1
 endpoint: https://${clusterEndpointIP}:6443
 clusterPodNets:
