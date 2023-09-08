@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "${CLUSTER_NAME}-protonmail-bridge-internal"
+  namespace: cert-manager
+spec:
+  secretName: "${CLUSTER_NAME}-protonmail-bridge-internal"
+  issuerRef:
+    name: cluster-internal-ca 
+    kind: ClusterIssuer
+  commonName: "127.0.0.1"
+  dnsNames:
+  - "127.0.0.1"
+  - ${SECRET__PROTONMAIL_HOST}
