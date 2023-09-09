@@ -34,17 +34,13 @@ spec:
       # jellyfin only allows for one container.
       replicas: 1
     env:
-      TZ: ${TIMEZONE} 
-      JELLYFIN_DATA_DIR: /data
-      JELLYFIN_CONFIG_DIR: /data/config
-      JELLYFIN_CACHE_DIR: /cache
-      JELLYFIN_PublishedServerUrl: &host "watch.${SECRET__TERTIARY_DOMAIN}"
+      TZ: ${TIMEZONE}
     ingress:
       main:
         enabled: true
         ingressClassName: "nginx"
         hosts:
-          - host: *host
+          - host: &host watch.${SECRET__TERTIARY_DOMAIN}
             paths:
               - path: /
                 pathType: Prefix
@@ -59,36 +55,41 @@ spec:
         mountPath: /media
         existingClaim: watch-media
         retain: true
-      jellyfin-data:
+      data:
         enabled: true
         type: pvc
         mountPath: /data
         storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
         accessMode: ReadWriteOnce
-        size: 32Gi
+        size: 16Gi
         retain: false
-      transcode:
+      config:
         enabled: true
         type: pvc
-        mountPath: /data/transcodes
-        storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
+        mountPath: /config
+        storageClass: ceph-block-ssd
         accessMode: ReadWriteOnce
         size: 32Gi
         retain: false
+      cache:
+        enabled: true
+        type: emptyDir
+        mountPath: /cache
     podSecurityContext:
       runAsUser: 568
       runAsGroup: 568
       fsGroup: 568
+      fsGroupChangePolicy: OnRootMismatch
       # Setting this expands which group ID can be assigned to
-      # a process. 44, 100, and 109 are related to hardware rendering,
+      # a process. 44 and 109 are related to hardware encoding,
       # which at this time is not available.
-      #supplementalGroups:
-      #  - 44
-      #  - 100
-      #  - 109
+      supplementalGroups:
+        - 44
+       #- 109
     probes:
       liveness:
-        enabled: true
+        # Jellyfin is PAINFULLY slow.
+        enabled: false
         custom: true
         spec:
           httpGet:
@@ -99,7 +100,7 @@ spec:
           timeoutSeconds: 2
           failureThreshold: 3
       readiness:
-        enabled: true
+        enabled: false
         custom: true
         spec:
           httpGet:
@@ -120,4 +121,3 @@ spec:
         memory: 512Mi
       limits:
         memory: 2048Mi
-    volumeClaimTemplates: []
