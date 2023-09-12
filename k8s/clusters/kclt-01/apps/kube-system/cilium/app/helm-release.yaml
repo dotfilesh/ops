@@ -52,6 +52,44 @@ spec:
       integration: containerd
     enableIPv4BIGTCP: true
     # enableIPv6BIGTCP: true
+    hubble:
+      enabled: true
+      metrics:
+        enabled:
+          - dns:query
+          - drop
+          - tcp
+          - flow
+          - port-distribution
+          - icmp
+          - http
+        serviceMonitor:
+          enabled: false
+        dashboards:
+          enabled: false
+          label: grafana_dashboard
+          namespace: monitoring
+          labelValue: "1"
+          annotations: { }
+      relay:
+        enabled: true
+        rollOutPods: true
+        prometheus:
+          enabled: true
+      ui:
+        enabled: true
+        rollOutPods: true
+        ingress:
+          enabled: true
+          annotations:
+            cert-manager.io/cluster-issuer: cluster-internal-ca
+            kubernetes.io/ingress.class: nginx
+        hosts:
+          - &host "hubble.k8s.localdomain"
+        tls:
+          - secretName: *host
+            hosts:
+              - *host
     ipam:
       mode: "kubernetes"
     # one day... (I <3 IPv6) :(

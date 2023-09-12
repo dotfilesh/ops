@@ -25,6 +25,9 @@ containerRuntime:
   integration: containerd
 enableIPv4BIGTCP: true
 # enableIPv6BIGTCP: true
+# Hubble not here intentionally.
+# It is only going to be used with a fully running cluster. This
+# values file is only for bootstrapping.
 ipam:
   mode: "kubernetes"
 # one day... (I <3 IPv6) :(
