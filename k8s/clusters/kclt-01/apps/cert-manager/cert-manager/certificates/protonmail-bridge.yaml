@@ -10,6 +10,7 @@ spec:
     name: cluster-internal-ca 
     kind: ClusterIssuer
   commonName: "127.0.0.1"
+  #isCA: true
   dnsNames:
   - "127.0.0.1"
   - ${SECRET__PROTONMAIL_HOST}

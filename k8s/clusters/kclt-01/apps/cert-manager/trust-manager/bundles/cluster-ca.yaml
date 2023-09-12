@@ -2,7 +2,7 @@
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
-  name: cluster-internal-ca
+  name: cluster-ca
   namespace: cert-manager
 spec:
   sources:
