@@ -23,6 +23,8 @@ cni:
   exclusive: false
 containerRuntime:
   integration: containerd
+enableIPv4BIGTCP: true
+# enableIPv6BIGTCP: true
 ipam:
   mode: "kubernetes"
 # one day... (I <3 IPv6) :(
