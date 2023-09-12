@@ -1,5 +1,5 @@
 clusterName: &clusterName kclt-01
-talosVersion: v1.5.1
+talosVersion: v1.5.2
 kubernetesVersion: v1.28.1
 endpoint: https://${clusterEndpointIP}:6443
 clusterPodNets:
@@ -34,7 +34,7 @@ nodes:
           deviceSelectors:
             - hardwareAddr: '00:e0:4c:01:49:94'
         dhcp: false
-        mtu: 1500
+        mtu: 9000
         addresses:
           - 10.64.6.8/20
         routes:
@@ -61,7 +61,7 @@ nodes:
     networkInterfaces:
       - interface: eno1
         dhcp: false
-        mtu: 1500
+        mtu: 9000
         addresses:
           - 10.64.6.1/20
         routes:
@@ -85,7 +85,7 @@ nodes:
     networkInterfaces:
       - interface: eno1
         dhcp: false
-        mtu: 1500
+        mtu: 9000
         addresses:
           - 10.64.6.2/20
         routes:
@@ -109,7 +109,7 @@ nodes:
     networkInterfaces:
       - interface: eno1
         dhcp: false
-        mtu: 1500
+        mtu: 9000
         addresses:
           - 10.64.6.3/20
         routes:
@@ -133,7 +133,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 1500
+        mtu: 9000
         dhcp: false
     nodeLabels: &workerLabels
       node-role.kubernetes.io/worker: "worker"
@@ -154,7 +154,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 1500
+        mtu: 9000
         dhcp: false
     nodeLabels: *workerLabels
   
@@ -172,7 +172,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 1500
+        mtu: 9000
         dhcp: false
     nodeLabels: *workerLabels
   
@@ -190,7 +190,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 1500
+        mtu: 9000
         dhcp: false
     nodeLabels: *workerLabels
   
@@ -208,7 +208,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 1500
+        mtu: 9000
         dhcp: false
     nodeLabels: *workerLabels
   
@@ -226,7 +226,7 @@ nodes:
         routes:
           - network: 0.0.0.0/0
             gateway: 10.64.0.1
-        mtu: 1500
+        mtu: 9000
         dhcp: false
     nodeLabels: *workerLabels
 
