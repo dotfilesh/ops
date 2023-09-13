@@ -27,7 +27,7 @@ spec:
     authentik:
       email:
         from: ${SECRET__PROTONMAIL_FROM}
-        host: ${SECRET__PRPTONMAIL_HOST}
+        host: ${SECRET__PRPTONMAIL_STATICIP}
         port: ${SECRET__PROTONMAIL_PORT}
         username: ${SECRET__PROTONMAIL_USER}
         password: ${SECRET__PROTONMAIL_PASSWORD}
@@ -65,9 +65,25 @@ spec:
       - name: media
         persistentVolumeClaim:
           claimName: authentik-media
+      - name: cluster-internal-ca
+        configMap:
+          name: cluster-internal-ca
+      - name: protonmail-bridge-cert
+        configMap:
+          name: protonmail-bridge-cert
     volumeMounts:
-      - name: media
-        mountPath: /media
+      - mountPath: /media
+        name: media
+      - mountPath: /etc/ssl/certs/ca-certificates.crt
+        name: cluster-internal-ca
+        optional: true
+        readOnly: true
+        subPath: cluster-internal-ca.crt
+      - mountPath: /etc/ssl/certs/protonmail-bridge-cert.pem
+        name: protonmail-bridge-cert
+        optional: true
+        subPath: protonmail-bridge-cert.pem
+        readOnly: true
     worker:
       replicas: 3
       securityContext:
