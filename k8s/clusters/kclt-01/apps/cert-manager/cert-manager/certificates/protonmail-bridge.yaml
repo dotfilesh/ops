@@ -5,6 +5,8 @@ metadata:
   name: "${CLUSTER_NAME}-protonmail-bridge"
   namespace: cert-manager
 spec:
+  duration: 87600h # 10y
+  renewBefore: 360h # 15d
   secretName: "${CLUSTER_NAME}-protonmail-bridge"
   issuerRef:
     name: cluster-internal-ca
@@ -12,5 +14,7 @@ spec:
   commonName: ${SECRET__PROTONMAIL_HOST}
   isCA: true
   dnsNames:
-  - "127.0.0.1"
   - ${SECRET__PROTONMAIL_HOST}
+  ipAddresses:
+  - "127.0.0.1"
+  - ${SECRET__PROTONMAIL_STATICIP}
