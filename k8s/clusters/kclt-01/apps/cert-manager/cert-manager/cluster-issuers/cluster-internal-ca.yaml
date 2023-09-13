@@ -6,4 +6,4 @@ metadata:
   namespace: cert-manager
 spec:
   ca:
-    secretName: cluster-ca-key-pair
+    secretName: cluster-internal-ca-keys

@@ -2,16 +2,16 @@
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
-  name: protonmail-bridge-certs
+  name: protonmail-bridge-cert
   namespace: cert-manager
 spec:
   sources:
   - secret:
-      name: "${CLUSTER_NAME}-protonmail-bridge-internal"
+      name: "${CLUSTER_NAME}-protonmail-bridge"
       key: "tls.crt"
   target:
     configMap: 
-      key: "protonmail-bridge-certs.pem"
+      key: "protonmail-bridge-cert.pem"
     namespaceSelector: {}
       # Currently, empty syncs to all namespaces.
       # a future change will mean an empty naamespaceSelector will sync

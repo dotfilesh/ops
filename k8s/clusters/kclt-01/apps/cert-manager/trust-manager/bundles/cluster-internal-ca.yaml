@@ -2,16 +2,16 @@
 apiVersion: trust.cert-manager.io/v1alpha1
 kind: Bundle
 metadata:
-  name: cluster-ca
+  name: cluster-internal-ca
   namespace: cert-manager
 spec:
   sources:
   - secret:
-      name: "cluster-ca-key-pair"
+      name: "cluster-internal-ca-keys"
       key: "tls.crt"
   target:
     configMap: 
-      key: "cluster-ca.pem"
+      key: "cluster-internal-ca.pem"
     namespaceSelector: {}
       # Currently, empty syncs to all namespaces.
       # a future change will mean an empty naamespaceSelector will sync

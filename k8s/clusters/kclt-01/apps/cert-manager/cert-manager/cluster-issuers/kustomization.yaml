@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
   - ./cloudflare-token.sops.yaml
-  - ./cluster-ca-issuer.yaml
-  - ./cluster-ca.sops.yaml
+  - ./cluster-internal-ca-keys.sops.yaml
+  - ./cluster-internal-ca.yaml
   - ./letsencrypt-production.yaml
   - ./letsencrypt-staging.yaml
