@@ -78,7 +78,7 @@ spec:
         name: cluster-internal-ca
         optional: true
         readOnly: true
-        subPath: cluster-internal-ca.crt
+        subPath: cluster-internal-ca.pem
       - mountPath: /etc/ssl/certs/protonmail-bridge-cert.pem
         name: protonmail-bridge-cert
         optional: true
