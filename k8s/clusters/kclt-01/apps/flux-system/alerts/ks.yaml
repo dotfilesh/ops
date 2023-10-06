@@ -1,0 +1,18 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: flux-notification-alert-discord
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: flux-notification-provider-discord
+  path: ./k8s/clusters/${CLUSTER_NAME}/apps/flux-system/alerts/discord/
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: ops
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m

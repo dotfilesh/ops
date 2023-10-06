@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: provider-webhook-private-discord
+    namespace: flux-system
+stringData:
+    address: ENC[AES256_GCM,data:tfkbVsiD8XbdPU1C0sIsREGBuNwKjtuZ5DZyGhqG3OnZK1b5aGwmYSU0opS+QRu+t4CeDRDVShsQnydj0bjzrlYtl+I0cbfpqZBoX78XtWRF7poL012QK2daKkDOy+1a5AFBr70/sF/rgQAoYGEjOqZ4E70pQBHyUQ==,iv:2kOCgTt82XT6+WmxaDotZAEWjchvRyARA1m+on0+NqE=,tag:8ObCr2uPhZBV+AgN0NaI5w==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB4NVJ4VXk4YWQ2bm1Mek9W
+            WkR2c1VDZ0JpZDd6MExhZjZWWDE4R1hLbmx3CjVHaHc2UmU4RGI4SFZrME5pVnJL
+            R3RBRE90YisxRk54N3hNOFBXclIrVU0KLS0tIFc1Nm5EM01PVGE2NHVkWTNyaDRv
+            enBONmR0dWZqOHdYQjRYMFovdkxhMkUKDf2+IT67TTr2Q5IdeOUzbln8h96RKvC8
+            iukIx4bOXuXJJxN8snMuqgxOVO/fbrYRw8P2H7kfLZlimqREQNy2eg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2023-10-04T22:33:12Z"
+    mac: ENC[AES256_GCM,data:V65fizIEc1IpBZ05I7Tcc4UmEKJEbJKoxYfQEsb1/3fjeKUawh6vdD2FuSL5KyoXvvtYr2CgbBE9xaiU1fiNhqy4AfzEggGOXm2FRu1SlED13iyt19QYjvrVQEw/uFyktHAGvn3FzCZlKiab+k0MZsZsdPG3q0Flrn04iULHmh4=,iv:8i6NI+8ti9HN8ej84pEm5Hh+2V/fi2zdaevZCX1+Y6M=,tag:FgQwFa5E2jwRAkxiMM6Rrw==,type:str]
+    pgp:
+        - created_at: "2023-10-04T22:33:07Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hF4DaZXJ7CKj2AMSAQdAzE4A+VjVo9fB+Bmtr4wxb2vPXFZKBntYep9dq8qG00kw
+            GeRJoLtk2vZP/w3EM9ts4mbTh7yUgS0i8VYeE0HfFiuCG0SGoY6k/dFCUPonAmmH
+            0l4BzAvwrXcp7TlmF9qf0033haESBHb0mM3TnrZ+/oyVchaZ15GO5E4rpWi3cSB8
+            Mo4qjhMej49Okx1Baa7T7J3/UzbgiEynRNgb55wVbZJbUbqSPQhGXG6dv+w9lUj/
+            =ZtkP
+            -----END PGP MESSAGE-----
+          fp: 2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB
+        - created_at: "2023-10-04T22:33:07Z"
+          enc: |-
+            -----BEGIN PGP MESSAGE-----
+
+            hF4DDA4n4RUgVFISAQdAhV3wZTeJUTwxAM9h67W1tK8lMVmUtedL86rM++OWgCIw
+            ls6eqUIH9kdRGr4wCFhhXH2PGp1iYV16CN1ydENMuC/V2vLA88hODPSmfooP5piA
+            0l4BZ/wXV7lQy/LHbjgtLVY/EmePZd3ppEtedBJ9lU6egqr+AoHIt6HJYgdbl0QI
+            YhZJSw2QQNUwz+edYN2lYo3DLalUEYREMCRpEXoHOI+ZK5Y+NYG3g5Jwg2nQxjqa
+            =CMCv
+            -----END PGP MESSAGE-----
+          fp: 9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
+    encrypted_regex: ((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))
+    version: 3.8.0
