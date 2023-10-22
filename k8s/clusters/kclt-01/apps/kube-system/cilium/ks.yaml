@@ -1,20 +1,22 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: cluster-apps-cilium
   namespace: flux-system
 spec:
-  path: ./k8s/clusters/${CLUSTER_NAME}/apps/kube-system/cilium/app
+  path: ${CLUSTER_PATH}/apps/kube-system/cilium/app
   prune: false # never should be deleted
   sourceRef:
     kind: GitRepository
     name: ops
-  wait: true
+  wait: false
   interval: 30m
   retryInterval: 1m
   timeout: 5m
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -23,7 +25,7 @@ metadata:
 spec:
   dependsOn:
     - name: cluster-apps-cilium
-  path: ./k8s/clusters/${CLUSTER_NAME}/apps/kube-system/cilium/configs
+  path: ${CLUSTER_PATH}/apps/kube-system/cilium/configs
   prune: true
   sourceRef:
     kind: GitRepository
