@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 1.5.1
+      version: 2.0.3
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -24,100 +24,113 @@ spec:
     remediation:
       retries: 5
   values:
-    image:
-      repository: jellyfin/jellyfin
-      pullPolicy: IfNotPresent
-      tag: 10.8.11
-    controller:
-      enabled: true
-      type: statefulset
-      # jellyfin only allows for one container.
-      replicas: 1
-    env:
-      TZ: ${TIMEZONE}
+    controllers:
+      main:
+        type: statefulset
+        # jellyfin only allows for one container.
+        replicas: 1
+        containers:
+          main:
+            env:
+              DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
+              JELLYFIN_FFmpeg__probesize: 50000000
+              JELLYFIN_FFmpeg__analyzeduration: 50000000
+              JELLYFIN_PublishedServerUrl: &host watch.${SECRET__TERTIARY_DOMAIN}
+              TZ: ${TIMEZONE}
+            image:
+              repository: repository: ghcr.io/onedr0p/jellyfin
+              tag: 10.8.11@@sha256:041977cb09d964ed4e00dec2bd0af3208f0121b8385a69617d30657596ffa292
+            probes:
+              liveness: &probes
+                # Jellyfin is PAINFULLY slow.
+                enabled: false
+                custom: true
+                spec:
+                  httpGet:
+                    path: /health
+                    port: &port 8096
+                  initialDelaySeconds: 120
+                  periodSeconds: 10
+                  timeoutSeconds: 2
+                  failureThreshold: 3
+              readiness: *probes
+              startup:
+                enabled: false
+            resources:
+              requests:
+                cpu: 10m
+                memory: 512Mi
+              limits:
+                memory: 2048Mi
+
+
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        # Setting this expands which group ID can be assigned to
+        # a process. 44 and 109 are related to hardware encoding,
+        # which at this time is not available.
+        supplementalGroups:
+          - 44
+        #- 109
+    
+
     ingress:
       main:
-        enabled: true
-        ingressClassName: "nginx"
+        className: "nginx"
         hosts:
-          - host: &host watch.${SECRET__TERTIARY_DOMAIN}
+          - host: *host
             paths:
               - path: /
-                pathType: Prefix
+                service:
+                  name: main
+                  port: *port
         tls:
           - hosts:
               - *host
             secretName: *host
+    
+
     persistence:
       media:
-        enabled: true
-        type: pvc
-        mountPath: /media
+        globalMounts:
+          - path: /media
         existingClaim: watch-media
         retain: true
+      
       data:
-        enabled: true
-        type: pvc
-        mountPath: /data
+        type: persistentVolumeClaim
+        globalMounts:
+          - path: /data
         storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
         accessMode: ReadWriteOnce
         size: 16Gi
         retain: false
+      
       config:
-        enabled: true
-        type: pvc
-        mountPath: /config
+        type: persistentVolumeClaim
+        globalMounts:
+          - path: /config
         storageClass: ceph-block-ssd
         accessMode: ReadWriteOnce
         size: 32Gi
         retain: false
+      
       cache:
-        enabled: true
         type: emptyDir
-        mountPath: /cache
-    podSecurityContext:
-      runAsUser: 568
-      runAsGroup: 568
-      fsGroup: 568
-      fsGroupChangePolicy: OnRootMismatch
-      # Setting this expands which group ID can be assigned to
-      # a process. 44 and 109 are related to hardware encoding,
-      # which at this time is not available.
-      supplementalGroups:
-        - 44
-       #- 109
-    probes:
-      liveness:
-        # Jellyfin is PAINFULLY slow.
-        enabled: false
-        custom: true
-        spec:
-          httpGet:
-            path: /health
-            port: &port 8096
-          initialDelaySeconds: 120
-          periodSeconds: 10
-          timeoutSeconds: 2
-          failureThreshold: 3
-      readiness:
-        enabled: false
-        custom: true
-        spec:
-          httpGet:
-            path: /health
-            port: *port
-          initialDelaySeconds: 120
-          periodSeconds: 10
-          timeoutSeconds: 2
-          failureThreshold: 3
+        globalMounts:
+          - path: /cache
+    
+
     service:
       main:
+        type: LoadBalancer
+        annotations:
+          io.cilium/lb-ipam-ips: ${CILIUM_LB_JELLYFIN_ADDR}
+        externalTrafficPolicy: Cluster
         ports:
           http:
             port: *port 
-    resources:
-      requests:
-        cpu: 10m
-        memory: 512Mi
-      limits:
-        memory: 2048Mi
