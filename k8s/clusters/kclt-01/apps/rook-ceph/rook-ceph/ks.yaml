@@ -1,20 +1,22 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: cluster-apps-rook-ceph-operator
   namespace: flux-system
 spec:
-  path: ./k8s/clusters/${CLUSTER_NAME}/apps/rook-ceph/rook-ceph/app
+  path: ${CLUSTER_PATH}/apps/rook-ceph/rook-ceph/app
   prune: true
   sourceRef:
     kind: GitRepository
     name: ops
-  wait: true
+  wait: false
   interval: 30m
   retryInterval: 1m
   timeout: 15m
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -23,7 +25,7 @@ metadata:
 spec:
   dependsOn:
     - name: cluster-apps-rook-ceph-operator
-  path: ./k8s/clusters/${CLUSTER_NAME}/apps/rook-ceph/rook-ceph/cluster
+  path: ${CLUSTER_PATH}/apps/rook-ceph/rook-ceph/cluster
   prune: true
   sourceRef:
     kind: GitRepository
@@ -33,6 +35,7 @@ spec:
   retryInterval: 1m
   timeout: 15m
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -44,7 +47,7 @@ spec:
     - name: cluster-apps-rook-ceph-cluster
     - name: cluster-apps-cert-manager
     - name: cluster-apps-cert-manager-issuers
-  path: ./k8s/clusters/${CLUSTER_NAME}/apps/rook-ceph/rook-ceph/certificates
+  path: ${CLUSTER_PATH}/apps/rook-ceph/rook-ceph/certificates
   prune: true
   sourceRef:
     kind: GitRepository
@@ -54,6 +57,7 @@ spec:
   retryInterval: 1m
   timeout: 15m
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -63,7 +67,7 @@ spec:
   dependsOn:
     - name: cluster-apps-rook-ceph-operator
     - name: cluster-apps-rook-ceph-cluster
-  path: ./k8s/clusters/${CLUSTER_NAME}/apps/rook-ceph/rook-ceph/rook-direct-mount
+  path: ${CLUSTER_PATH}/apps/rook-ceph/rook-ceph/rook-direct-mount
   prune: true
   sourceRef:
     kind: GitRepository

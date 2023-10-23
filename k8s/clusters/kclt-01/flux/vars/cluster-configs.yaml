@@ -6,6 +6,7 @@ metadata:
   name: cluster-configs
 data:
   CLUSTER_NAME: "kclt-01"
+  CLUSTER_PATH: "./k8s/clusters/kclt-01"
 
   TIMEZONE: "America/New_York"
   # cert-manager
