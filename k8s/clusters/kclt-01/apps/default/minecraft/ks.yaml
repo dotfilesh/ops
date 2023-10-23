@@ -8,7 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: cluster-apps-rook-ceph-cluster
-  path: ${CLUSTER_PATH}/apps/default/minecraft
+  path: ${CLUSTER_PATH}/apps/default/minecraft/app
   prune: true
   sourceRef:
     kind: GitRepository
