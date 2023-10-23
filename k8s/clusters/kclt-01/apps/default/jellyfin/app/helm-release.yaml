@@ -114,7 +114,7 @@ spec:
         type: persistentVolumeClaim
         globalMounts:
           - path: /config
-        storageClass: ceph-block-ssd
+        storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
         accessMode: ReadWriteOnce
         size: 32Gi
         retain: false
