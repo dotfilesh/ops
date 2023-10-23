@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -7,7 +8,7 @@ metadata:
 spec:
   dependsOn:
     - name: cluster-apps-ingress-nginx-certificates
-  path: ./k8s/clusters/${CLUSTER_NAME}/apps/networking/ingress-nginx/app
+  path: ${CLUSTER_PATH}/apps/networking/ingress-nginx/app
   prune: true
   sourceRef:
     kind: GitRepository
@@ -17,6 +18,7 @@ spec:
   retryInterval: 1m
   timeout: 5m
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -25,7 +27,7 @@ metadata:
 spec:
   dependsOn:
     - name: cluster-apps-cert-manager-issuers
-  path: ./k8s/clusters/${CLUSTER_NAME}/apps/networking/ingress-nginx/certificates
+  path: ${CLUSTER_PATH}/apps/networking/ingress-nginx/certificates
   prune: true
   sourceRef:
     kind: GitRepository
