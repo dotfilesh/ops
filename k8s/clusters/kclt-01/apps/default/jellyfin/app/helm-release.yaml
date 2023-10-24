@@ -90,6 +90,7 @@ spec:
 
     ingress:
       main:
+        enabled: true
         className: "nginx"
         hosts:
           - host: *host
@@ -97,7 +98,7 @@ spec:
               - path: /
                 service:
                   name: main
-                  port: *port
+                  port: http
         tls:
           - hosts:
               - *host
