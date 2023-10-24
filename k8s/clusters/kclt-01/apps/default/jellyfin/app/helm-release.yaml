@@ -60,31 +60,31 @@ spec:
                 memory: 512Mi
               limits:
                 memory: 2048Mi
-            pod:
-              enableServiceLinks: false
-              #nodeSelector:
-                #gpulabel: "true"
-              securityContext:
-                runAsUser: 568
-                runAsGroup: 568
-                fsGroup: 568
-                fsGroupChangePolicy: OnRootMismatch
-                # Setting this expands which group ID can be assigned to
-                # a process. 44 and 109 are related to hardware encoding,
-                # which at this time is not available.
-                supplementalGroups:
-                  - 44
-                  #- 105
-                  #- 109
-            # jellyfin only allows for one container.
-            replicas: 1
-            statefulset:
-              volumeClaimTemplates:
-                - name: config
-                  accessMode: ReadWriteOnce
-                  size: 32Gi
-                  storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
-                  mountPath: /config
+        pod:
+          enableServiceLinks: false
+          #nodeSelector:
+            #gpulabel: "true"
+          securityContext:
+            runAsUser: 568
+            runAsGroup: 568
+            fsGroup: 568
+            fsGroupChangePolicy: OnRootMismatch
+            # Setting this expands which group ID can be assigned to
+            # a process. 44 and 109 are related to hardware encoding,
+            # which at this time is not available.
+            supplementalGroups:
+              - 44
+              #- 105
+              #- 109
+        # jellyfin only allows for one container.
+        replicas: 1
+        statefulset:
+          volumeClaimTemplates:
+            - name: config
+              accessMode: ReadWriteOnce
+              size: 32Gi
+              storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
+              mountPath: /config
 
 
     ingress:
