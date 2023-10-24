@@ -15,13 +15,16 @@ spec:
         name: fairwinds
         namespace: flux-system
       interval: 30m
+  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
       retries: 5
   upgrade:
+    cleanupOnFail: true
     remediation:
       retries: 5
+  uninsatall:
+    keepHistory: false
   values:
     controller:
       resources:
