@@ -84,8 +84,7 @@ spec:
                   accessMode: ReadWriteOnce
                   size: 32Gi
                   storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
-                  globalMounts:
-                    - path: /config
+                  mountPath: /config
 
 
     ingress:
