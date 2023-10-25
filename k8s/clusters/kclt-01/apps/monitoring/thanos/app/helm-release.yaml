@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: thanos
-  namespace: metrics
+  namespace: monitoring 
 spec:
   interval: 30m
   chart:
@@ -22,9 +22,6 @@ spec:
   upgrade:
     remediation:
       retries: 5
-  dependsOn:
-    - name: kube-prometheus-stack
-      namespace: metrics
   values:
     # NOTE: do not be illiterate. this does *not* say `objectstoreConfig`.
     # This says `objstoreConfig`, which is what the helm chart
@@ -39,13 +36,11 @@ spec:
     query:
       enabled: true
       replicaCount: 3
-      replicaLabel:
+      replicaLabels:
         - "__replica__"
       dnsDiscovery:
         sidecarsService: kube-prometheus-stack-thanos-discovery
-        sidecarsNamespace: metrics
-        stores:
-          - "dnssrv+_grpc._tcp.kube-prometheus-stack-thanos-discovery.metrics.svc.cluster.local"
+        sidecarsNamespace: monitoring
       ingress:
         enabled: true
         # NOTE: why isn't this using the standard hots[] setup?
