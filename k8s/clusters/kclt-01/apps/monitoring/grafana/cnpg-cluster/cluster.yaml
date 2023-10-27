@@ -1,0 +1,44 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: grafana-cnpg
+  namespace: monitoring
+spec:
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore: &objStore
+      wal:
+        compression: bzip2
+        maxParallel: 8
+      endpointURL: http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
+      destinationPath: s3://grafana-cnpg-backup-f6e30f9d-ca50-4220-8825-acb69bd092b2/
+      s3Credentials:
+        accessKeyId:
+          name: grafana-cnpg-backup
+          key: AWS_ACCESS_KEY_ID
+        secretAccessKey:
+          name: grafana-cnpg-backup
+          key: AWS_SECRET_ACCESS_KEY_ID
+  bootstrap:
+    initdb:
+      database: 
+      owner: grafana
+      secret:
+        name: grafana-cnpg-user-grafana
+  description: "Grafana CNPG database"
+  enableSuperuserAccess: true
+  externalClusters:
+    - name: grafana-cnpg-backup
+      barmanObjectStore: *objStore
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.0-8@sha256:6a03b05a9f860b79564e5a991ba14e3123c3d34d0bedd14818621eb9b777bbd9
+  imagePullPolicy: IfNotPresent
+  instances: 3
+  monitoring:
+    enablePodMonitor: true
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 5Gi
+    storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
+  superuserSecret:
+    name: grafana-cnpg-user-superuser

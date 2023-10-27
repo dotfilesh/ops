@@ -1,0 +1,215 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: grafana
+      version: 6.61.1
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+        namespace: flux-system
+      interval: 30m
+  maxHistory: 3
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 5
+  uninstall:
+    keepHistory: false
+  values:
+    env:
+      GF_DATABASE_NAME: &dbName "grafana"
+      GF_DATABASE_HOST: "grafana-cnpg-rw.monitoring.svc.cluster.local:5432"
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_SSL_MODE: disable
+      INIT_POSTGRES_DBNAME: *dbName
+      INIT_POSTGRES_HOST: "grafana-cnpg-rw.monitoring.svc.cluster.local"
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - name: default
+            disableDeletion: false
+            editable: true
+            folder: ""
+            options:
+              path: /var/lib/grafana/dashboards/default
+            orgId: 1
+            type: file
+          - name: node-exporter
+            disableDeletion: false
+            editable: true
+            folder: "node-exporter"
+            options:
+              path: /var/lib/grafana/dashboards/node-exporter
+            orgId: 1
+            type: file
+          - name: unpoller
+            disableDeletion: false
+            editable: true
+            folder: "UniFi Poller"
+            options:
+              path: /var/lib/grafana/dashboards/unpoller
+            orgId: 1
+            type: file
+    
+
+    dashboards:
+      default:
+        kubernetes-api-server:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-api-server.json
+          datasource: Prometheus
+        kubernetes-coredns:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-coredns.json
+          datasource: Prometheus
+        kubernetes-global:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-global.json
+          datasource: Prometheus
+        kubernetes-namespaces:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-namespaces.json
+          datasource: Prometheus
+        kubernetes-nodes:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-nodes.json
+          datasource: Prometheus
+        kubernetes-pods:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
+          datasource: Prometheus
+      
+      infrastructure:
+        cert-manager:
+          url: https://raw.githubusercontent.com/monitoring-mixins/website/master/assets/cert-manager/dashboards/cert-manager.json
+          datasource: Prometheus
+        ceph-cluster:
+          gnetId: 2842 # https://grafana.com/grafana/dashboards/2842-ceph-cluster/
+          revision: 17
+          datasource: Prometheus
+        ceph-pools:
+          gnetId: 5342 # https://grafana.com/grafana/dashboards/5342?tab=revisions
+          revision: 9
+          datasource: Prometheus
+        ceph-osd:
+          gnetId: 5336 # https://grafana.com/grafana/dashboards/5336?tab=revisions
+          revision: 9
+          datasource: Prometheus
+        flux-cluster:
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/cluster.json
+          datasource: Prometheus
+        flux-control-plane:
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/control-plane.json
+          datasource: Prometheus
+        flux-logs:
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/logs.json
+          datasource: Prometheus
+
+
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - access: proxy
+            isDefault: true
+            name: Prometheus
+            type: prometheus
+            url: http://thanos-query-frontend.monitoring.svc.cluster.local:9090
+            jsonData:
+              prometheusType: thanos
+          - name: Alertmanager
+            type: alertmanager
+            uid: alertmanager
+            access: proxy
+            url: http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
+            jsonData:
+              implementation: prometheus
+    deploymentStrategy:
+      type: Recreate
+    
+
+    grafana.ini:
+      auth:
+        signout_redirect_url: "https://auth.${GLOBALSECRET__PUBLIC_DOMAIN}/o/grafana/end-session/"
+        oauth_auto_login: true
+      
+      auth.generic_oauth:
+        name: "Auth@Dotfile"
+        enabled: true
+        scopes: "openid profile email"
+        auth_url: "https://auth.${GLOBALSECRET__PUBLIC_DOMAIN}/application/o/authorize/"
+        token_url: "https://auth.${GLOBALSECRET__PUBLIC_DOMAIN}/application/o/token/"
+        api_url: "https://auth.${GLOBALSECRET__PUBLIC_DOMAIN}/application/o/userinfo"
+      
+      server:
+        domain: &host grafana.global.sys.${GLOBALSECRET__PUBLIC_DOMAIN}
+        root_url: "%(protocol)s://%(domain)s/"
+    
+
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: "nginx"
+      
+      hosts:
+        - *host
+      
+      tls:
+        - hosts:
+          - *host
+    
+
+    plugins:
+    - grafana-clock-panel
+    - natel-discrete-panel
+    - pr0ps-trackmap-panel
+    
+
+    rbac:
+      pspEnabled: false
+    
+
+    serviceAccount:
+      autoMount: true
+    
+
+    serviceMonitor:
+      enabled: true
+  valuesFrom:
+    - targetPath: env.GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+      kind: Secret
+      name: grafana-secrets
+      valuesKey: authentik-client_id
+    - targetPath: env.GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET 
+      kind: Secret
+      name: grafana-secrets
+      valuesKey: authentik-client_secret
+    - targetPath: env.GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH
+      kind: Secret
+      name: grafana-secrets
+      valuesKey: authentik-roles
+    - targetPath: env.GF_DATABASE_USER
+      kind: Secret
+      name: grafana-cnpg-user-grafana
+      valuesKey: password
+    - targetPath: env.GF_DATABASE_PASSWORD
+      kind: Secret
+      name: grafana-cnpg-user-grafana
+      valuesKey: password
+    - targetPath: env.INIT_POSTGRES_USER
+      kind: Secret
+      name: grafana-cnpg-user-grafana
+      valuesKey: password
+    - targetPath: env.INIT_POSTGRES_PASS
+      kind: Secret
+      name: grafana-cnpg-user-grafana
+      valuesKey: password
+    - targetPath: env.INIT_POSTGRES_SUPER_PASS
+      kind: Secret
+      name: grafana-cnpg-user-superuser
+      valuesKey: password
