@@ -8,8 +8,8 @@ metadata:
 spec:
   path: ${CLUSTER_PATH}/apps/monitoring/grafana/app
   dependsOn:
-    - name: cluster-apps-grafana-cnpg-cluster
     - name: cluster-apps-cert-manager-issuers
+    - name: cluster-apps-grafana-cnpg-cluster
   prune: true
   sourceRef:
     kind: GitRepository
@@ -28,7 +28,6 @@ metadata:
 spec:
   path: ${CLUSTER_PATH}/apps/monitoring/grafana/cnpg-cluster
   dependsOn:
-    - name: cluster-apps-cloudnative-pg
     - name: cluster-apps-rook-ceph-cluster
   prune: true
   sourceRef:

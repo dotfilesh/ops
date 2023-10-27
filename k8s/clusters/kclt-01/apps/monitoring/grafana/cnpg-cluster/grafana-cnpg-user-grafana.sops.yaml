@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Secret
 type: kubernetes.io/basic-auth
 metadata:
-    name: authentik-cnpg-user-authentik
-    namespace: auth
+    name: grafana-cnpg-user-grafana
+    namespace: monitoring
 stringData:
-    username: ENC[AES256_GCM,data:RHTHGT2gf5vb,iv:zy3GmQ9PTwpvv5hWDjXX5AJkhWbkzeahHzi1YUVaunI=,tag:nXH6NyzS1TGPLIrc6KnK/g==,type:str]
-    password: ENC[AES256_GCM,data:48Xaq1SQBwonyS5l8GTjlu3fZ/asXKF3KSRfaEPgPiwAdmRZ0G1lX3LFl7ay9CVzasHTL7hRYUkvwbBPp2xO0+FunDnxFvw/,iv:FF4AVgzCiA+yJkwFd/7R6PnMYfwXdorpD6YQd6tP7vg=,tag:jSpsvfCqMhEdP2CjyqNVBA==,type:str]
+    username: ENC[AES256_GCM,data:2ygqvmCvCQ==,iv:KShf5Yf7nQSRd5MsmSQVzEISkbtvWGTl7ZNOms8pqbw=,tag:NCZeq08f+SSqnbiq2sp9yA==,type:str]
+    password: ENC[AES256_GCM,data:CILuFqxQDALr2Ii2QY/vrvA721w5Uj5F9k22O4ctJXc5g3dUPrZUWY1OTqNLBcBMm8dw7/nUlpfcSDde0uFHhi5qls16T+P1,iv:HH6RXrPneXwDuWn8XPJcIN5dKRBZEjrAcE+MI1OgY6U=,tag:pAeWb+16dbwXnObxyCCh1Q==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -22,8 +22,8 @@ sops:
             UW5XeC9GVmt5SC9JTDJDa0Vxak5SKzAKOXhqI9TAW1O7JeRBfvh8ebaLHRiSWX12
             lOACjIuIzYtbjdI3lkag3JWhHftlJx3DIDWyL8TifHC0dYorw8/msQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-01-06T20:14:59Z"
-    mac: ENC[AES256_GCM,data:R/CCSHk/hdWzRtzwIcBay2FCzWFowxkFiwxcFoAUr0ZpDtoWRs+a9ihQDHBoaP+UPdO+D1QZeNFtB0ZdguYFrKfHedoUjU3prepkTQDy7OfEW6ci+qXXdfNZbbFH8m81azxzA1k+lnc9Dwg8EYbraxJXp4vBQtkkTat082LP1A8=,iv:l4s4gFTolfNubZ6DIGBXoMO/0doxKxfpw/8J2rOX5SA=,tag:WfRgMKf9vfYi8XN96nEmIg==,type:str]
+    lastmodified: "2023-10-27T00:02:15Z"
+    mac: ENC[AES256_GCM,data:Ze4KBrlBlOaLKFwt1HrHHWx9nHr7sGoDNr43YFNesvpgmhnAIAXxj/Fc+RBWa20je+rpoFOa64ujJ4/gnUqa9m+/MaucMTrIFAiUXBv9D88TvgAQ7QKT/+UD/65J+2Zmb+xODdPmI6ZyJa0XFotpN3+MjwiGlYckhUVvyg1xyeQ=,iv:4QwhzubfxnjvGyhXA+Yc8AZDEFo78ny65N/oSSoBr1c=,tag:yAax7Aqg+U48T7ZuOIVsfg==,type:str]
     pgp:
         - created_at: "2023-01-06T20:14:16Z"
           enc: |
@@ -37,4 +37,4 @@ sops:
             -----END PGP MESSAGE-----
           fp: 2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB
     encrypted_regex: ((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))
-    version: 3.7.3
+    version: 3.8.1

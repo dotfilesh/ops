@@ -26,6 +26,13 @@ spec:
   uninstall:
     keepHistory: false
   values:
+    env:
+      GF_DATABASE_NAME: &dbName "grafana"
+      GF_DATABASE_HOST: "grafana-cnpg-rw.monitoring.svc.cluster.local:5432"
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_SSL_MODE: disable
+      INIT_POSTGRES_DBNAME: *dbName
+      INIT_POSTGRES_HOST: "grafana-cnpg-rw.monitoring.svc.cluster.local"
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -58,13 +65,50 @@ spec:
 
     dashboards:
       default:
+        kubernetes-api-server:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-api-server.json
+          datasource: Prometheus
+        kubernetes-coredns:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-coredns.json
+          datasource: Prometheus
+        kubernetes-global:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-global.json
+          datasource: Prometheus
+        kubernetes-namespaces:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-namespaces.json
+          datasource: Prometheus
+        kubernetes-nodes:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-nodes.json
+          datasource: Prometheus
+        kubernetes-pods:
+          url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
+          datasource: Prometheus
       
-      rook-ceph:
-        # Ref: https://grafana.com/grafana/dashboards/2842-ceph-cluster/
+      infrastructure:
+        cert-manager:
+          url: https://raw.githubusercontent.com/monitoring-mixins/website/master/assets/cert-manager/dashboards/cert-manager.json
+          datasource: Prometheus
         ceph-cluster:
-          gnetId: 2842
+          gnetId: 2842 # https://grafana.com/grafana/dashboards/2842-ceph-cluster/
           revision: 17
-          datasource: {}
+          datasource: Prometheus
+        ceph-pools:
+          gnetId: 5342 # https://grafana.com/grafana/dashboards/5342?tab=revisions
+          revision: 9
+          datasource: Prometheus
+        ceph-osd:
+          gnetId: 5336 # https://grafana.com/grafana/dashboards/5336?tab=revisions
+          revision: 9
+          datasource: Prometheus
+        flux-cluster:
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/cluster.json
+          datasource: Prometheus
+        flux-control-plane:
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/control-plane.json
+          datasource: Prometheus
+        flux-logs:
+          url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/logs.json
+          datasource: Prometheus
 
 
     datasources:
@@ -75,6 +119,16 @@ spec:
             isDefault: true
             name: Prometheus
             type: prometheus
+            url: http://thanos-query-frontend.monitoring.svc.cluster.local:9090
+            jsonData:
+              prometheusType: thanos
+          - name: Alertmanager
+            type: alertmanager
+            uid: alertmanager
+            access: proxy
+            url: http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
+            jsonData:
+              implementation: prometheus
     deploymentStrategy:
       type: Recreate
     
@@ -139,3 +193,23 @@ spec:
       kind: Secret
       name: grafana-secrets
       valuesKey: authentik-roles
+    - targetPath: env.GF_DATABASE_USER
+      kind: Secret
+      name: grafana-cnpg-user-grafana
+      valuesKey: password
+    - targetPath: env.GF_DATABASE_PASSWORD
+      kind: Secret
+      name: grafana-cnpg-user-grafana
+      valuesKey: password
+    - targetPath: env.INIT_POSTGRES_USER
+      kind: Secret
+      name: grafana-cnpg-user-grafana
+      valuesKey: password
+    - targetPath: env.INIT_POSTGRES_PASS
+      kind: Secret
+      name: grafana-cnpg-user-grafana
+      valuesKey: password
+    - targetPath: env.INIT_POSTGRES_SUPER_PASS
+      kind: Secret
+      name: grafana-cnpg-user-superuser
+      valuesKey: password

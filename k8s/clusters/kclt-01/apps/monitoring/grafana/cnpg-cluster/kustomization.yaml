@@ -2,8 +2,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  # do we really need backups for... metrics?
-  # - backup.yaml
+  - backup.yaml
   - cluster.yaml
   - grafana-cnpg-user-grafana.sops.yaml
+  - grafana-cnpg-user-superuser.sops.yaml
   - objectbucketclaim.yaml
