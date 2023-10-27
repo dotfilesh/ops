@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "grafana-global-sys-${GLOBALSECRET__PUBLIC_DOMAIN/./-}"
+  namespace: monitoring
+spec:
+  secretName: "grafana.global.sys.${GLOBALSECRET__PUBLIC_DOMAIN}"
+  issuerRef:
+    name: "${CERT_DEFAULT_CLUSTERISSUER}"
+    kind: ClusterIssuer
+  commonName: "grafana.global.sys.${GLOBALSECRET__PUBLIC_DOMAIN}"
+  dnsNames:
+  - "grafana.global.sys.${GLOBALSECRET__PUBLIC_DOMAIN}"
+  - "*.grafana.global.sys.${GLOBALSECRET__PUBLIC_DOMAIN}"
