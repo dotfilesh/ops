@@ -1,0 +1,16 @@
+---
+apiVersion: objectbucket.io/v1alpha1
+kind: ObjectBucketClaim
+metadata:
+  name: grafana-cnpg-backup
+  namespace: monitoring
+spec:
+    # HACK Ugly, but I'm too tired to be clever.
+    # I should be using `generateBucketName` to guarantee a unique 
+    # bucket name. However, it stores the name in a configmap which the
+    # cnpg ./cluster.yaml cannot parse. So I hard code it and hope 
+    # tacking on a UUIDv4 at the end does roughly the same thing.
+  bucketName: grafana-cnpg-backup-f6e30f9d-ca50-4220-8825-acb69bd092b2
+  storageClassName: ${CLUSTER_STORAGE_BUCKET}
+  additionalConfig:
+    maxSize: 8Gi

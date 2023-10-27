@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: thanos
-  namespace: metrics
+  namespace: monitoring 
 spec:
   interval: 30m
   chart:
@@ -15,16 +15,16 @@ spec:
         name: bitnami
         namespace: flux-system
       interval: 30m
+  maxHistory: 3
   install:
-    createNamespace: true
     remediation:
       retries: 5
   upgrade:
+    cleanupOnFail: true
     remediation:
       retries: 5
-  dependsOn:
-    - name: kube-prometheus-stack
-      namespace: metrics
+  uninstall:
+    keepHistory: false
   values:
     # NOTE: do not be illiterate. this does *not* say `objectstoreConfig`.
     # This says `objstoreConfig`, which is what the helm chart
@@ -36,16 +36,15 @@ spec:
         # URL, access from external to the cluster still requires
         # HTTPS.
         insecure: true
+
+
     query:
-      enabled: true
-      replicaCount: 3
-      replicaLabel:
-        - "__replica__"
       dnsDiscovery:
         sidecarsService: kube-prometheus-stack-thanos-discovery
-        sidecarsNamespace: metrics
-        stores:
-          - "dnssrv+_grpc._tcp.kube-prometheus-stack-thanos-discovery.metrics.svc.cluster.local"
+        sidecarsNamespace: monitoring
+      
+      enabled: true
+      
       ingress:
         enabled: true
         # NOTE: why isn't this using the standard hots[] setup?
@@ -56,8 +55,16 @@ spec:
           - hosts:
             - *host
             secretName: &thanosWebSecret thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}
+      
+      replicaCount: 3
+      replicaLabels:
+        - "__replica__"
+    
+
     queryFrontend:
       enabled: false
+    
+
     bucketweb:
       enabled: true
       replicaCount: 3
@@ -66,6 +73,7 @@ spec:
         rollingUpdate:
           maxUnavailable: 1
           maxSurge: 1
+      
       podAntiAffinityPreset: hard
       ingress:
         enabled: true
@@ -76,11 +84,14 @@ spec:
           - hosts:
             - *host
             secretName: *thanosWebSecret
+    
+
     compactor:
       enabled: true
       extraFlags:
-        - "--compact.concurrency"
-        - "4"
+        - "--compact.concurrency=4"
+        - --delete-delay=30m
+      
       retentionResolutionRaw: 14d
       retentionResolution5m: 14d
       retentionResolution1h: 14d
@@ -93,44 +104,54 @@ spec:
           - hosts:
             - *host
             secretName: *thanosWebSecret
+      
       persistence:
         enabled: true
         storageClass: "ceph-block"
         size: 50Gi
+    
+
     storegateway:
       enabled: true
       replicaCount: 3
       podAntiAffinityPreset: hard
       ingress:
         enabled: true
-        hostname: &host "storagegateway.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+        hostname: &host "storegateway.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
           - hosts:
             - *host
             secretName: *thanosWebSecret
+      
       persistence:
         enabled: true
         storageClass: "ceph-block"
         size: 20Gi
+    
+
     ruler:
       enabled: true
       replicaCount: 3
       podAntiAffinityPreset: hard
       dnsDiscovery:
         enabled: true
+      
       alertmanagers:
         - http://kube-prometheus-stack-alertmanager.metrics:9093
+      
       clusterName: ${CLUSTER_NAME}
       extraFlags:
         - "--web.prefix-header=X-Forwarded-Prefix"
+      
       config: |-
         groups:
           - name: "PrometheusWatcher"
             rules:
               - alert: "PrometheusDown"
                 expr: absent(up{job="kube-prometheus-stack-prometheus"})
+      
       ingress:
         enabled: true
         hostname: &host "ruler.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
@@ -140,10 +161,13 @@ spec:
           - hosts:
             - *host
             secretName: *thanosWebSecret
+      
       persistence:
         enabled: true
         storageClass: "ceph-block"
         size: 20Gi
+    
+
     metrics:
       enabled: true
       serviceMonitor:

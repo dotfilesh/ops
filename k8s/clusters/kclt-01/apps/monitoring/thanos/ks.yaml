@@ -3,12 +3,12 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: # cluster-apps-exampleApp
+  name: cluster-apps-thanos
   namespace: flux-system
 spec:
+  path: ${CLUSTER_PATH}/apps/monitoring/thanos/app
   dependsOn:
-    - name: # cluster-apps-otherExampleApp
-  path: # ${CLUSTER_PATH}/apps/exampleNamespace/exampleApp/app
+    - name: cluster-apps-rook-ceph-cluster
   prune: true
   sourceRef:
     kind: GitRepository

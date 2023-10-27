@@ -3,12 +3,10 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: # cluster-apps-exampleApp
+  name: cluster-apps-goldilocks
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: # cluster-apps-otherExampleApp
-  path: # ${CLUSTER_PATH}/apps/exampleNamespace/exampleApp/app
+  path: ${CLUSTER_PATH}/apps/monitoring/goldilocks/app
   prune: true
   sourceRef:
     kind: GitRepository
