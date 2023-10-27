@@ -23,7 +23,7 @@ spec:
     cleanupOnFail: true
     remediation:
       retries: 5
-  uninsatall:
+  uninstall:
     keepHistory: false
   values:
     controller:
