@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "alertmanager.${CLUSTER_NAME}-api-${GLOBALSECRET__PUBLIC_DOMAIN/./-}"
+  namespace: monitoring
+spec:
+  secretName: "alertmanager.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+  issuerRef:
+    name: "${CERT_DEFAULT_CLUSTERISSUER}"
+    kind: ClusterIssuer
+  commonName: "alertmanager.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+  dnsNames:
+  - "alertmanager.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+  - "*.alertmanager.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"

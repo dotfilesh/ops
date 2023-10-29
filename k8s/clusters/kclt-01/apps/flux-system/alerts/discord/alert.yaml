@@ -4,7 +4,7 @@ metadata:
   name: discord
   namespace: flux-system
 spec:
-  summary: "Cluster addons"
+  summary: "[KCLT-01] B@D Cluster addons"
   eventSeverity: "info"
   providerRef:
     name: discord
