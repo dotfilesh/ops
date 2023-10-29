@@ -33,6 +33,9 @@ spec:
       GF_DATABASE_SSL_MODE: disable
       INIT_POSTGRES_DBNAME: *dbName
       INIT_POSTGRES_HOST: "grafana-cnpg-rw.monitoring.svc.cluster.local"
+
+
+    envFromSecret: grafana-secret
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
@@ -53,12 +56,12 @@ spec:
               path: /var/lib/grafana/dashboards/node-exporter
             orgId: 1
             type: file
-          - name: unpoller
+          - name: infrastructure
             disableDeletion: false
             editable: true
-            folder: "UniFi Poller"
+            folder: "Cluster infrastructure"
             options:
-              path: /var/lib/grafana/dashboards/unpoller
+              path: /var/lib/grafana/dashboards/infrastructure
             orgId: 1
             type: file
     
@@ -84,7 +87,7 @@ spec:
           url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
           datasource: Prometheus
       
-      infrastructure:
+      software:
         cert-manager:
           url: https://raw.githubusercontent.com/monitoring-mixins/website/master/assets/cert-manager/dashboards/cert-manager.json
           datasource: Prometheus
@@ -110,6 +113,29 @@ spec:
           url: https://raw.githubusercontent.com/fluxcd/flux2/main/manifests/monitoring/monitoring-config/dashboards/logs.json
           datasource: Prometheus
 
+      hardware:
+        unpoller-clients:
+          gnetId: 11315 # https://grafana.com/grafana/dashboards/11315
+          revision: 9
+          datasource:
+            - name: "DS_PROMETHEUS"
+              value: Prometheus
+        unpoller-usw:
+          gnetId: 11312 # https://grafana.com/grafana/dashboards/11312
+          revision: 9
+          datasource:
+            - name: "DS_PROMETHEUS"
+              value: Prometheus
+        unpoller-uap:
+          gnetId: 11314 # https://grafana.com/grafana/dashboards/11314
+          revision: 10
+          datasource:
+            - name: "DS_PROMETHEUS"
+              value: Prometheus
+        node-exporter: # https://grafana.com/grafana/dashboards/1860-node-exporter-full/
+          gnetId: 1860
+          revision: 29
+          datasource: Prometheus
 
     datasources:
       datasources.yaml:
@@ -126,7 +152,7 @@ spec:
             type: alertmanager
             uid: alertmanager
             access: proxy
-            url: http://kube-prometheus-stack-alertmanager.monitoring.svc.cluster.local:9093
+            url: http://alertmanager.monitoring.svc.cluster.local:9093
             jsonData:
               implementation: prometheus
     deploymentStrategy:
@@ -181,18 +207,6 @@ spec:
     serviceMonitor:
       enabled: true
   valuesFrom:
-    - targetPath: env.GF_AUTH_GENERIC_OAUTH_CLIENT_ID
-      kind: Secret
-      name: grafana-secrets
-      valuesKey: authentik-client_id
-    - targetPath: env.GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET 
-      kind: Secret
-      name: grafana-secrets
-      valuesKey: authentik-client_secret
-    - targetPath: env.GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH
-      kind: Secret
-      name: grafana-secrets
-      valuesKey: authentik-roles
     - targetPath: env.GF_DATABASE_USER
       kind: Secret
       name: grafana-cnpg-user-grafana
