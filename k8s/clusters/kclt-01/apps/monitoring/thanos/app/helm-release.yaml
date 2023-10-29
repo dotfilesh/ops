@@ -139,7 +139,7 @@ spec:
         enabled: true
       
       alertmanagers:
-        - http://kube-prometheus-stack-alertmanager.metrics:9093
+        - http://kube-prometheus-stack-alertmanager.monitoring:9093
       
       clusterName: ${CLUSTER_NAME}
       extraFlags:

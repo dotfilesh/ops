@@ -27,6 +27,7 @@ spec:
   values:
     crds:
       enabled: true
+    cleanPrometheusOperatorObjectNames: true
 
 
     ###
@@ -175,13 +176,13 @@ spec:
                 - 10.64.6.12
                 - 10.64.6.13
                 - 10.64.6.14
-          - job_name: speedtest-exporter
-            scrape_interval: 60m
-            scrape_timeout: 60s
-            honor_timestamps: true
-            static_configs:
-              - targets:
-                - ???
+          #- job_name: speedtest-exporter
+          #  scrape_interval: 60m
+          #  scrape_timeout: 60s
+          #  honor_timestamps: true
+          #  static_configs:
+          #    - targets:
+          #      - ???
         enableAdminAPI: true
         externalLabels:
           cluster: ${CLUSTER_NAME}
