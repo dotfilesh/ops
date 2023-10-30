@@ -36,7 +36,7 @@ spec:
       INIT_POSTGRES_HOST: "grafana-cnpg-rw.monitoring.svc.cluster.local"
 
 
-    envFromSecret: grafana-secret
+    envFromSecret: grafana-secrets
     dashboardProviders:
       dashboardproviders.yaml:
         apiVersion: 1
