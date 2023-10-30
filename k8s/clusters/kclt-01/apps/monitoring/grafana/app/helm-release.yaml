@@ -31,6 +31,7 @@ spec:
       GF_DATABASE_HOST: "grafana-cnpg-rw.monitoring.svc.cluster.local:5432"
       GF_DATABASE_TYPE: postgres
       GF_DATABASE_SSL_MODE: disable
+      GF_DATE_FORMATS_FULL_DATE: "YYYY-MM-DD hh:mm:ss"
       INIT_POSTGRES_DBNAME: *dbName
       INIT_POSTGRES_HOST: "grafana-cnpg-rw.monitoring.svc.cluster.local"
 
@@ -51,7 +52,7 @@ spec:
           - name: hardware
             disableDeletion: false
             editable: true
-            folder: "node-exporter"
+            folder: "hardware"
             options:
               path: /var/lib/grafana/dashboards/hardware
             orgId: 1
@@ -59,7 +60,7 @@ spec:
           - name: software
             disableDeletion: false
             editable: true
-            folder: "Cluster infrastructure"
+            folder: "software"
             options:
               path: /var/lib/grafana/dashboards/software
             orgId: 1
@@ -206,6 +207,15 @@ spec:
 
     serviceMonitor:
       enabled: true
+
+
+    sidecar:
+      dashboards:
+        enabled: true
+        searchNamespace: ALL
+      datasources:
+        enabled: true
+        searchNamespace: ALL
   valuesFrom:
     - targetPath: env.GF_DATABASE_USER
       kind: Secret
