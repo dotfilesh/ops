@@ -54,7 +54,7 @@ spec:
                 memory: 100M
     
     
-    services:
+    service:
       main:
         ports:
           http:
