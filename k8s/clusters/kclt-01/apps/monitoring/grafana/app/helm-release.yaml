@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: grafana
-      version: 6.61.1
+      version: 6.61.2
       sourceRef:
         kind: HelmRepository
         name: grafana
@@ -48,20 +48,20 @@ spec:
               path: /var/lib/grafana/dashboards/default
             orgId: 1
             type: file
-          - name: node-exporter
+          - name: hardware
             disableDeletion: false
             editable: true
             folder: "node-exporter"
             options:
-              path: /var/lib/grafana/dashboards/node-exporter
+              path: /var/lib/grafana/dashboards/hardware
             orgId: 1
             type: file
-          - name: infrastructure
+          - name: software
             disableDeletion: false
             editable: true
             folder: "Cluster infrastructure"
             options:
-              path: /var/lib/grafana/dashboards/infrastructure
+              path: /var/lib/grafana/dashboards/software
             orgId: 1
             type: file
     
