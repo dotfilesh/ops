@@ -171,7 +171,7 @@ spec:
         scopes: "openid profile email"
         auth_url: "https://auth.${GLOBALSECRET__PUBLIC_DOMAIN}/application/o/authorize/"
         token_url: "https://auth.${GLOBALSECRET__PUBLIC_DOMAIN}/application/o/token/"
-        api_url: "https://auth.${GLOBALSECRET__PUBLIC_DOMAIN}/application/o/userinfo"
+        api_url: "https://auth.${GLOBALSECRET__PUBLIC_DOMAIN}/application/o/userinfo/"
       
       server:
         domain: &host grafana.global.sys.${GLOBALSECRET__PUBLIC_DOMAIN}
@@ -183,12 +183,14 @@ spec:
       annotations:
         kubernetes.io/ingress.class: "nginx"
       
+      path: /
       hosts:
         - *host
-      
+
       tls:
-        - hosts:
-          - *host
+        - secretName: *host
+          hosts:
+            - *host
     
 
     plugins:
