@@ -8,11 +8,8 @@ spec:
   backup:
     retentionPolicy: 30d
     barmanObjectStore: &objStore
-      wal:
-        compression: bzip2
-        maxParallel: 8
-      endpointURL: http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
       destinationPath: s3://grafana-cnpg-backup-f6e30f9d-ca50-4220-8825-acb69bd092b2/
+      endpointURL: http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
       s3Credentials:
         accessKeyId:
           name: grafana-cnpg-backup
@@ -20,6 +17,10 @@ spec:
         secretAccessKey:
           name: grafana-cnpg-backup
           key: AWS_SECRET_ACCESS_KEY_ID
+      serverName: "grafana-cnpg-iter1"
+      wal:
+        compression: bzip2
+        maxParallel: 8
   bootstrap:
     initdb:
       database: grafana 
@@ -29,7 +30,7 @@ spec:
   description: "Grafana CNPG database"
   enableSuperuserAccess: true
   externalClusters:
-    - name: grafana-cnpg-backup
+    - name: grafana-cnpg-backup-iter1
       barmanObjectStore: *objStore
   imageName: ghcr.io/cloudnative-pg/postgresql:16.0-8@sha256:6a03b05a9f860b79564e5a991ba14e3123c3d34d0bedd14818621eb9b777bbd9
   imagePullPolicy: IfNotPresent

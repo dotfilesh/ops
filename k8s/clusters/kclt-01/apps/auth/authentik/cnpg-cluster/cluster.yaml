@@ -7,25 +7,26 @@ metadata:
 spec:
   backup:
     retentionPolicy: 30d
-    barmanObjectStore: &objStore
-      wal:
-        compression: bzip2
-          # TODO: Investigate viability of encrypted backups.
-        #encryption: AES256
-        maxParallel: 8
-      # endpointURL: &endpointUrl https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}/
-        # Using the internal service name WILL work, but is kinda ugly
-        # versus using the public URL. Kept for posterity.
-      endpointURL: &endpointUrl http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
-        # Should mirror EXACTLY the value in ./objectbucketclaim.yaml
+    barmanObjectStore: &backupObjStore
+      # Should mirror EXACTLY the value in ./objectbucketclaim.yaml
       destinationPath: &destinationPath s3://authentik-cnpg-backup-12e782ad-0ccc-4113-bc3b-64be8713a7d7/
-      s3Credentials:
+      # endpointURL: &endpointUrl https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}/
+      # Using the internal service name WILL work, but is kinda ugly
+      # versus using the public URL. Kept for posterity.
+      endpointURL: &endpointUrl http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
+      s3Credentials: &s3creds
         accessKeyId:
           name: authentik-cnpg-backup
           key: AWS_ACCESS_KEY_ID
         secretAccessKey:
           name: authentik-cnpg-backup
           key: AWS_SECRET_ACCESS_KEY
+      serverName: "authentik-cnpg-iter2"
+      wal: &wal
+        compression: bzip2
+          # TODO: Investigate viability of encrypted backups.
+        #encryption: AES256
+        maxParallel: 8
   # NOTE: Only possible given there already exists backups for the db.
   #       otherwise set bootstrap to use an initdb object.
   bootstrap:
@@ -35,12 +36,22 @@ spec:
                           # HR values.authentik.postgresql.name
       secret:
         name: authentik-cnpg-user-authentik
-      source: authentik-cnpg-backup
+      source: authentik-cnpg-backup-iter1
   description: "authentik CNPG database"
   enableSuperuserAccess: false
   externalClusters:
-    - name: authentik-cnpg-backup
-      barmanObjectStore: *objStore
+      # Previous cluster to restore backup from
+    - name: authentik-cnpg-backup-iter1
+      barmanObjectStore: 
+        destinationPath: *destinationPath
+        endpointURL: *endpointUrl
+        s3Credentials: *s3creds
+        # Must match the original server name if restoring from backup.
+        serverName: authentik-cnpg
+        wal: *wal
+      # Current cluster to back up to
+    - name: authentik-cnpg-backup-iter2
+      barmanObjectStore: *backupObjStore
   imageName: ghcr.io/cloudnative-pg/postgresql:15.4-16@sha256:ead3daae8201cdf4a0c64ac04ce21cd8a6d5482b374267968f41b8f9179ac14f
   instances: 3
   monitoring:
