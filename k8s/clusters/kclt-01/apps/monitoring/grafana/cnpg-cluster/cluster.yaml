@@ -22,7 +22,7 @@ spec:
           key: AWS_SECRET_ACCESS_KEY_ID
   bootstrap:
     initdb:
-      database: 
+      database: grafana 
       owner: grafana
       secret:
         name: grafana-cnpg-user-grafana
