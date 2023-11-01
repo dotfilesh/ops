@@ -25,13 +25,19 @@ spec:
       retries: 5
   values:
     operatorNamespace: rook-ceph
+    
+
     monitoring:
       enabled: true
       createPrometheusRules: true
+    
+
     configOverride: |
       [global]
       bdev_enable_discard = true
       bdev_async_discard = true
+    
+
     ingress:
       dashboard:
         ingressClassName: "nginx"
@@ -42,15 +48,20 @@ spec:
           - hosts:
             - *host
             secretName: *host 
+    
+
     cephClusterSpec:
       network:
         provider: host
+      
       crashCollector:
         disable: false
+      
       dashboard:
         enabled: true
         urlPrefix: /
         ssl: false 
+      
       storage:
         # Set to false for safety, all nodes should be used though.
         useAllNodes: false
@@ -80,6 +91,7 @@ spec:
               - name: "/dev/disk/by-id/wwn-0x50000396f8329825"
               - name: "/dev/disk/by-id/wwn-0x50000396f8325515"
           #- name: amdusias
+      
       resources:
         mgr:
           limits:
@@ -129,7 +141,9 @@ spec:
           requests:
             cpu: "500m"
             memory: "100Mi"
-    cephBlockPools: 
+    
+
+    cephBlockPools:
       - name: ceph-blockpool
         spec:
           failureDomain: host
@@ -154,6 +168,7 @@ spec:
               csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
               csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
               csi.storage.k8s.io/fstype: ext4
+      
       - name: ceph-blockpool-hdd
         spec:
           failureDomain: host
@@ -176,6 +191,7 @@ spec:
               csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
               csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
               csi.storage.k8s.io/fstype: ext4
+      
       - name: ceph-blockpool-ssd
         spec:
           failureDomain: host
@@ -198,6 +214,12 @@ spec:
               csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
               csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
               csi.storage.k8s.io/fstype: ext4
+    
+
+    cephBlockPoolsVolumeSnapshotClass:
+      enabled: false
+
+
     cephFileSystems:
       - name: ceph-filesystem
         spec:
@@ -234,6 +256,7 @@ spec:
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
             csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
             csi.storage.k8s.io/fstype: ext4
+      
       - name: ceph-filesystem-hdd
         spec:
           metadataPool:
@@ -267,6 +290,7 @@ spec:
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
             csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
             csi.storage.k8s.io/fstype: ext4
+      
       - name: ceph-filesystem-ssd
         spec:
           metadataPool:
@@ -300,6 +324,8 @@ spec:
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
             csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
             csi.storage.k8s.io/fstype: ext4
+    
+
     cephObjectStores:
       - name: ceph-bucket
         spec:
@@ -331,5 +357,7 @@ spec:
           reclaimPolicy: Delete
           parameters:
             region: ${CLUSTER_NAME}
+    
+
     toolbox:
       enabled: true
