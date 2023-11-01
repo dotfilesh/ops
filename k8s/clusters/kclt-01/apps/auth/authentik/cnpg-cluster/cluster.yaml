@@ -5,61 +5,58 @@ metadata:
   name: authentik-cnpg
   namespace: auth
 spec:
-  instances: 3
-  imageName: ghcr.io/cloudnative-pg/postgresql:15.4-5
-  description: "authentik CNPG database"
-  primaryUpdateStrategy: unsupervised
-  storage:
-    size: 2Gi
-    storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
-  superuserSecret:
-    name: authentik-cnpg-user-superuser
-    # This is needed to initialize the database, however it means
-    # recovery is a process which requires this value to be CHANGED 
-    # from `initdb` to `recovery`. It has to be initdb the first time
-    # and should be recovery all subsequent times. There is no way to 
-    # intelligently do this.
-  bootstrap:
-    initdb:
-      database: authentik
-      owner: authentik
-      secret:
-        name: authentik-cnpg-user-authentik
-  monitoring:
-    enablePodMonitor: true
   backup:
     retentionPolicy: 30d
-    barmanObjectStore:
-      wal:
+    barmanObjectStore: &backupObjStore
+      # Should mirror EXACTLY the value in ./objectbucketclaim.yaml
+      destinationPath: &destinationPath s3://authentik-cnpg-backup-12e782ad-0ccc-4113-bc3b-64be8713a7d7/
+      # endpointURL: &endpointUrl https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}/
+      # Using the internal service name WILL work, but is kinda ugly
+      # versus using the public URL. Kept for posterity.
+      endpointURL: &endpointUrl http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
+      s3Credentials: &s3creds
+        accessKeyId:
+          name: authentik-cnpg-backup
+          key: AWS_ACCESS_KEY_ID
+        secretAccessKey:
+          name: authentik-cnpg-backup
+          key: AWS_SECRET_ACCESS_KEY
+      serverName: "authentik-cnpg-iter2"
+      wal: &wal
         compression: bzip2
           # TODO: Investigate viability of encrypted backups.
         #encryption: AES256
         maxParallel: 8
-      # endpointURL: &endpointUrl https://s3.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}/
-        # Using the internal service name WILL work, but is kinda ugly
-        # versus using the public URL. Kept for posterity.
-      endpointURL: &endpointUrl http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
-        # Should mirror EXACTLY the value in ./objectbucketclaim.yaml
-      destinationPath: &destinationPath s3://authentik-cnpg-backup-12e782ad-0ccc-4113-bc3b-64be8713a7d7/
-      s3Credentials:
-        accessKeyId:
-          name: authentik-cnpg-backup 
-          key: AWS_ACCESS_KEY_ID
-        secretAccessKey:
-          name: authentik-cnpg-backup 
-          key: AWS_SECRET_ACCESS_KEY
+  # NOTE: Only possible given there already exists backups for the db.
+  #       otherwise set bootstrap to use an initdb object.
+  bootstrap:
+    recovery:
+      # TODO: this shouldn't be a magic string.
+      database: authentik # name of db to restore. must match authentik
+                          # HR values.authentik.postgresql.name
+      secret:
+        name: authentik-cnpg-user-authentik
+      source: authentik-cnpg-backup-iter1
+  description: "authentik CNPG database"
+  enableSuperuserAccess: false
   externalClusters:
-    - name: authentik-cnpg-backup
-      barmanObjectStore:
-        wal:
-          compression: bzip2
-          maxParallel: 8
-        endpointURL: *endpointUrl
+      # Previous cluster to restore backup from
+    - name: authentik-cnpg-backup-iter1
+      barmanObjectStore: 
         destinationPath: *destinationPath
-        s3Credentials:
-          accessKeyId:
-            name: authentik-cnpg-backup 
-            key: AWS_ACCESS_KEY_ID 
-          secretAccessKey:
-            name: authentik-cnpg-backup 
-            key: AWS_SECRET_ACCESS_KEY
+        endpointURL: *endpointUrl
+        s3Credentials: *s3creds
+        # Must match the original server name if restoring from backup.
+        serverName: authentik-cnpg
+        wal: *wal
+      # Current cluster to back up to
+    - name: authentik-cnpg-backup-iter2
+      barmanObjectStore: *backupObjStore
+  imageName: ghcr.io/cloudnative-pg/postgresql:15.4-16@sha256:ead3daae8201cdf4a0c64ac04ce21cd8a6d5482b374267968f41b8f9179ac14f
+  instances: 3
+  monitoring:
+    enablePodMonitor: true
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 2Gi
+    storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
