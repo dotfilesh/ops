@@ -13,4 +13,4 @@ spec:
   bucketName: grafana-cnpg-backup-f6e30f9d-ca50-4220-8825-acb69bd092b2
   storageClassName: ${CLUSTER_STORAGE_BUCKET}
   additionalConfig:
-    maxSize: 8Gi
+    maxSize: 32Gi

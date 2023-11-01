@@ -39,7 +39,7 @@ spec:
     enablePodMonitor: true
   primaryUpdateStrategy: unsupervised
   storage:
-    size: 5Gi
+    size: 8Gi
     storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
   superuserSecret:
     name: grafana-cnpg-user-superuser
