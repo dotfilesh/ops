@@ -117,7 +117,7 @@ spec:
     - targetPath: env.DB_PASSWORD
       kind: Secret
       name: immich-cnpg-user-immich
-      valuesKey: username
+      valuesKey: password
     - targetPath: typesense.env.TYPESENSE_API_KEY
       kind: Secret
       name: immich-typesense-api-key
