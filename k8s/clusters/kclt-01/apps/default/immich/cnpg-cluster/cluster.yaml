@@ -1,0 +1,42 @@
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-cnpg
+  namespace: default
+spec:
+  backup:
+    retentionPolicy: 30d
+    barmanObjectStore: &objStore
+      destinationPath: s3://immich-cnpg-backup-cb7f0ed5-f50f-4571-b8e5-e3fd7f906dff/
+      endpointURL: http://rook-ceph-rgw-ceph-bucket.rook-ceph.svc/
+      s3Credentials:
+        accessKeyId:
+          name: immich-cnpg-backup
+          key: AWS_ACCESS_KEY_ID
+        secretAccessKey:
+          name: immich-cnpg-backup
+          key: AWS_SECRET_ACCESS_KEY_ID
+      serverName: "immich-cnpg-iter1"
+      wal:
+        compression: bzip2
+        maxParallel: 8
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      secret:
+        name: immich-cnpg-user-immich
+  description: "Immich CNPG database"
+  externalClusters:
+    - name: immich-cnpg-backup-iter1
+      barmanObjectStore: *objStore
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.1-4@sha256:c0f1750bac5e813c221279539d2fceac9ff6c6488667d2e39265e6a0c0e2f9dc
+  imagePullPolicy: IfNotPresent
+  instances: 3
+  monitoring:
+    enablePodMonitor: true
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 5Gi
+    storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}

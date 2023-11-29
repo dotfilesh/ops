@@ -1,0 +1,79 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-immich
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: cluster-apps-immich-cnpg-cluster
+    - name: cluster-apps-immich-redis
+      # Storage already relies on rook-ceph-cluster, and can thereby
+      # be safely ignored.
+    - name: cluster-apps-immich-storage
+  path: ${CLUSTER_PATH}/apps/default/immich/app
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: ops
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-immich-storage
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: cluster-apps-rook-ceph-cluster
+  path: ${CLUSTER_PATH}/apps/default/immich/storage
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: ops
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-immich-cnpg-cluster
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: cluster-apps-rook-ceph-cluster
+    - name: cluster-apps-cloudnative-pg
+  path: ${CLUSTER_PATH}/apps/default/immich/cnpg-cluster
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: ops
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/fluxcd-community/flux2-schemas/main/kustomization-kustomize-v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: cluster-apps-immich-redis-cluster
+  namespace: flux-system
+spec:
+  path: ${CLUSTER_PATH}/apps/default/immich/redis
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: ops
+  wait: true
+  interval: 30m
+  retryInterval: 1m
+  timeout: 5m

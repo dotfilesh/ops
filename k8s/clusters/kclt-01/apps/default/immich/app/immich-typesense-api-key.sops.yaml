@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+    name: immich-typesense-api-key
+    namespace: default
+stringData:
+    key: ENC[AES256_GCM,data:axLCkB/R8/rerwJX+1Lv+Ngfgdsmfsjk0GIsDWfz+hM2UTGCRqN5KZM4YiaVNAilKISId0SMhIjVR3AfPHd5DFiK+dC2i6G5,iv:izActrzsn+7l+Wh6pWhX4bq98f/b9NBxEqfDG0a4LVA=,tag:ReKyilYTNE+coQ6dNGsfgA==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBqdTkzc0xHbnZLWXlxb2lh
+            cDRzY0lvaFJ6V1Y2SXB2R25CYkpCZUpLL1N3CkNFQU1HWUFObjJSRm5PT2pDSFBk
+            NUFJeUNPeVR1ckhSUU4vMzdoMldGOHMKLS0tIGZHcmZWUGV2ZzI0WllRUWROOFQz
+            UW5XeC9GVmt5SC9JTDJDa0Vxak5SKzAKOXhqI9TAW1O7JeRBfvh8ebaLHRiSWX12
+            lOACjIuIzYtbjdI3lkag3JWhHftlJx3DIDWyL8TifHC0dYorw8/msQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2023-11-29T03:28:28Z"
+    mac: ENC[AES256_GCM,data:Tx2jAeDa23krianb4PlgiMB4IJ5zSVTeC8KiC9RDUqDdWkOPUpwNd5EJnQqjoKVmI+hebQpgTLBypU4JQLJqg96vwSet62yH378RcyZFp+Bj9y1DcXoq+iapD1AVUDgOJPZVVsSGxpnkqtEBa7ndT8yaRNWL+ctRs4RHmm589u4=,iv:1n8Re5lonrRn9ZR/+97ID5XdlHG8G02CwpzzEOYMT1k=,tag:gYec/qSO7PhYQiyEGLtuIg==,type:str]
+    pgp:
+        - created_at: "2023-01-06T20:14:16Z"
+          enc: |
+            -----BEGIN PGP MESSAGE-----
+
+            hF4DaZXJ7CKj2AMSAQdAPM62hj1dAe7XVPzZ+r4UMJtCRQxxoGvaZ6a4HHpkhVYw
+            utFl3tnW2itBMap99XC0I/SFILJRD6FeTTd3nLUXuocyIwgKRYjaLdMIRhuV64rc
+            0l4BYTwhDo7lnU8eR7McE+36eR2OHec6ieOJ7RaCUoTGhiajaai/rksfx80C3sdg
+            Pqy2ltRdgvr+hDe22/gA/J8sZB+Bi5nIcclt4G868MWYA2gcluE0nDgK4k88PY8V
+            =TMum
+            -----END PGP MESSAGE-----
+          fp: 2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB
+    encrypted_regex: ((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))
+    version: 3.8.1
