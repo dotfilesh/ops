@@ -40,10 +40,10 @@ spec:
 
     
     machine-learning:
-      enabled: false
+      enabled: true
       image:
         repository: ghcr.io/immich-app/immich-machine-learning
-        tag: v1.88.2@sha256:134b6d16b76acd2b6a6ee43c6866668c1c00c33fb3c989bbae5ad867acc2f71b
+        tag: v1.89.0@sha256:e76febac59b0377cb08dbbd683bf147f9720bbf6f7da86f22b7cfbec91237a72
         pullPolicy: IfNotPresent
       env:
         TRANSFORMERS_CACHE: /cache
@@ -69,7 +69,7 @@ spec:
           storageClass: ${CLUSTER_STORAGE_FILESYSTEM_SSD}
         image: &serverImage
           repository: ghcr.io/immich-app/immich-server
-          tag: v1.88.2@sha256:ac214c6c4e7f6c2133b885d9e6ebc7696cbcf96a148c95746eef15eef0cea71a
+          tag: v1.89.0@sha256:b5aa4023c63b904136e859b4c3f4c1d34272b7c5f7ee65f50f12378d6039e9e7
           pullPolicy: IfNotPresent
 
 
@@ -101,7 +101,7 @@ spec:
         TYPESENSE_DATA_DIR: /tsdata
       image:
         repository: typesense/typesense
-        tag: 0.25.1
+        tag: 0.25.1@sha256:3724f68156097114d07790e1c8bfaaca13b12eaecd602776d30d9933029064c7
         pullPolicy: IfNotPresent
       persistence:
         tsdata:
