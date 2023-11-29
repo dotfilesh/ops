@@ -12,6 +12,7 @@ resources:
   - ./fairwinds-charts.yaml
   - ./gitlab-charts.yaml
   - ./grafana-charts.yaml
+  - ./immich-charts.yaml
   - ./ingress-nginx-charts.yaml
   - ./jetstack-charts.yaml
   - ./kyverno-charts.yaml

@@ -1,0 +1,123 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: immich
+  namespace: default
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: immich
+      version: 0.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: immich-charts
+        namespace: flux-system
+      interval: 30m
+  maxHistory: 3
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 5
+  uninstall:
+    keepHistory: false
+  values:
+    env:
+      DB_HOSTNAME: "immich-cnpg-rw.default.svc.cluster.local:5432"
+      DB_DATABASE_NAME: "immich"
+      REDIS_HOSTNAME: "immich-redis.default.svc.cluster.local"
+
+
+    immich:
+      persistence:
+        library:
+          existingClaim: immich-media
+
+    
+    machine-learning:
+      enabled: false
+      image:
+        repository: ghcr.io/immich-app/immich-machine-learning
+        tag: v1.88.2@sha256:134b6d16b76acd2b6a6ee43c6866668c1c00c33fb3c989bbae5ad867acc2f71b
+        pullPolicy: IfNotPresent
+      env:
+        TRANSFORMERS_CACHE: /cache
+      persistence:
+        cache:
+          enabled: true
+          size: 16Gi
+          type: persistentVolumeClaim
+          accessMode: ReadWriteMany
+          storageClass: ${CLUSTER_STORAGE_FILESYSTEM_SSD}
+
+
+    microservices:
+      enabled: true
+      env:
+        REVERSE_GEOCODING_DUMP_DIRECTORY: /geodata-cache
+      persistence:
+        geodata-cache:
+          enabled: true
+          size: 1Gi
+          type: persistentVolumeClaim
+          accessMode: ReadWriteMany
+          storageClass: ${CLUSTER_STORAGE_FILESYSTEM_SSD}
+        image: &serverImage
+          repository: ghcr.io/immich-app/immich-server
+          tag: v1.88.2@sha256:ac214c6c4e7f6c2133b885d9e6ebc7696cbcf96a148c95746eef15eef0cea71a
+          pullPolicy: IfNotPresent
+
+
+    server:
+      enabled: true
+      image: *serverImage
+
+      ingress:
+        main:
+          enabled: true
+          ingressClassName: "nginx"
+          annotations:
+            # proxy-body-size is set to 0 to remove the body limit on file uploads
+            nginx.ingress.kubernetes.io/proxy-body-size: "0"
+          hosts:
+            - host: &host immich.${GLOBALSECRET__PUBLIC_DOMAIN}
+              paths:
+                - path: "/"
+                  type: Prefix
+          tls:
+            - hosts:
+                - *host
+              secretName: *host
+
+
+    typesense:
+      enabled: true
+      env:
+        TYPESENSE_DATA_DIR: /tsdata
+      image:
+        repository: typesense/typesense
+        tag: 0.25.1
+        pullPolicy: IfNotPresent
+      persistence:
+        tsdata:
+          enabled: true
+          accessMode: ReadWriteOnce
+          size: 2Gi
+          storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
+  valuesFrom:
+    - targetPath: env.DB_USERNAME
+      kind: Secret
+      name: immich-cnpg-user-grafana
+      valuesKey: username
+    - targetPath: env.DB_PASSWORD
+      kind: Secret
+      name: immich-cnpg-user-grafana
+      valuesKey: username
+    - targetPath: typesense.env.TYPESENSE_API_KEY
+      kind: Secret
+      name: immich-typesense-api-key
+      valuesKey: key

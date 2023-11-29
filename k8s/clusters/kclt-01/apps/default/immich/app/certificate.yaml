@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "immich-${GLOBALSECRET__PUBLIC_DOMAIN/./-}"
+  namespace: default
+spec:
+  secretName: &host "immich.${GLOBALSECRET__PUBLIC_DOMAIN}"
+  issuerRef:
+    name: "${CERT_DEFAULT_CLUSTERISSUER}"
+    kind: ClusterIssuer
+  commonName: *host
+  dnsNames:
+  - *host 
