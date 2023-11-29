@@ -12,7 +12,7 @@ spec:
       version: 0.2.0
       sourceRef:
         kind: HelmRepository
-        name: immich-charts
+        name: immich
         namespace: flux-system
       interval: 30m
   maxHistory: 3
