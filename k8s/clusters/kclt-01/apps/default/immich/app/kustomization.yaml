@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - ./certificate.yaml
   - ./helm-release.yaml
+  - ./immich-typesense-api-key.sops.yaml
