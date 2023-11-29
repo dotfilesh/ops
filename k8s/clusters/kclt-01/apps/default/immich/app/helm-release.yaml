@@ -50,7 +50,7 @@ spec:
         cache:
           enabled: true
           size: 16Gi
-          type: persistentVolumeClaim
+          type: pvc
           accessMode: ReadWriteMany
           storageClass: ${CLUSTER_STORAGE_FILESYSTEM_SSD}
 
@@ -63,7 +63,7 @@ spec:
         geodata-cache:
           enabled: true
           size: 1Gi
-          type: persistentVolumeClaim
+          type: pvc
           accessMode: ReadWriteMany
           storageClass: ${CLUSTER_STORAGE_FILESYSTEM_SSD}
         image: &serverImage
