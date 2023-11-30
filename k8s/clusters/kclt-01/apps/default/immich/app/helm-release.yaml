@@ -114,11 +114,11 @@ spec:
   valuesFrom:
     - targetPath: env.DB_USERNAME
       kind: Secret
-      name: immich-cnpg-user-immich
+      name: immich-cnpg-user-superuser
       valuesKey: username
     - targetPath: env.DB_PASSWORD
       kind: Secret
-      name: immich-cnpg-user-immich
+      name: immich-cnpg-user-superuser
       valuesKey: password
     - targetPath: typesense.env.TYPESENSE_API_KEY
       kind: Secret
