@@ -35,6 +35,10 @@ spec:
       IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning.svc.cluster.local:3003"
 
 
+    image:
+      tag: v1.89.0
+
+
     immich:
       persistence:
         library:
@@ -47,8 +51,10 @@ spec:
         repository: ghcr.io/immich-app/immich-machine-learning
         tag: v1.89.0@sha256:e76febac59b0377cb08dbbd683bf147f9720bbf6f7da86f22b7cfbec91237a72
         pullPolicy: IfNotPresent
+      
       env:
         TRANSFORMERS_CACHE: /cache
+      
       persistence:
         cache:
           enabled: true
@@ -62,6 +68,7 @@ spec:
       enabled: true
       env:
         REVERSE_GEOCODING_DUMP_DIRECTORY: /geodata-cache
+      
       persistence:
         geodata-cache:
           enabled: true
@@ -101,10 +108,12 @@ spec:
       enabled: true
       env:
         TYPESENSE_DATA_DIR: /tsdata
+      
       image:
         repository: typesense/typesense
         tag: 0.25.1@sha256:035ccfbc3fd8fb9085ea205fdcb62de63eaefdbebd710e88e57f978a30f2090d
         pullPolicy: IfNotPresent
+      
       persistence:
         tsdata:
           enabled: true
