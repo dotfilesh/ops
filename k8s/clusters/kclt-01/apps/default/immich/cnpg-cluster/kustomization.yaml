@@ -5,4 +5,5 @@ resources:
   - ./backup.yaml
   - ./cluster.yaml
   - ./immich-cnpg-user-immich.sops.yaml
+  - ./immich-cnpg-user-superuser.sops.yaml
   - ./objectbucketclaim.yaml

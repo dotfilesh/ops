@@ -28,6 +28,7 @@ spec:
       secret:
         name: immich-cnpg-user-immich
   description: "Immich CNPG database"
+  enableSuperuserAccess: true
   externalClusters:
     - name: immich-cnpg-backup-iter1
       barmanObjectStore: *objStore
@@ -37,6 +38,8 @@ spec:
   monitoring:
     enablePodMonitor: true
   primaryUpdateStrategy: unsupervised
+  superuserSecret:
+    name: immich-cnpg-user-superuser
   storage:
     size: 5Gi
     storageClass: ${CLUSTER_STORAGE_BLOCK_SSD}
