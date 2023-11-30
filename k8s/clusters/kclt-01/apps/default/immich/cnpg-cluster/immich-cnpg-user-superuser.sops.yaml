@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 type: kubernetes.io/basic-auth
 metadata:
-    name: immich-cnpg-user-immich
+    name: immich-cnpg-user-superuser
     namespace: default
 stringData:
     username: ENC[AES256_GCM,data:bVIfUTYQ/98=,iv:v4zBKSkjy/L/NuHeIpippdgycDN2D9gKYyEFXSfSZ3Q=,tag:GZ3gr3qd9tqF/PuasIBH+A==,type:str]
@@ -22,8 +22,8 @@ sops:
             emxTdzM1VUdVc1I1QjNNVExFa05KdjAKgXCR8LUa5R9yi4smOsVVhKAZ1HsxrXdS
             qsqpPA9PRreD4ADrkeelJFHMn/YmwjbBgrIpsPgLk7Fm6EqNUhWBfg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2023-11-30T01:53:30Z"
-    mac: ENC[AES256_GCM,data:t9vC9GYaRW8tDFuRQU9TXl4LFBj6WJ4cFUottRQ5YTJ5q38jLO607XR2tH1t/gl9MrYYSoDAD5WnsjcTWDuOcuG7P4GsnoU6CxPVEydoJXXOwuf5omqZNxjunAHg1NTDvgn1Z3FP8qv7ZRUfIRElXGFo8fzDyxpjI4DDy3DK6LM=,iv:rbzjmXz5iMpCE22YFOphesjk1rBKmIVCqARKEwoeQIo=,tag:3C/8UymbWFFmr0GFaG7Gqw==,type:str]
+    lastmodified: "2023-11-30T23:10:31Z"
+    mac: ENC[AES256_GCM,data:WNNO0p3f7Zvb5hFnABRAGuXE2SI4PWCIETMe16IXNp+eGw1M1IfBBgDejbP+/W33x/frVo9VqmYtNDKjftNQ6jkEvPQ3Unhf7GB4LqrEQtnhtDUYTafTv9NOxpKUdPfHf95in5o+MT0UefRdM06yNBBmLSQ+bm8CAb+S5todTB0=,iv:UqIXQbyxiLoOiPzCteAKBKt9lIW7B0ZKDq81pShqnkc=,tag:HnYRMCaYhH7fjruq1t5VqA==,type:str]
     pgp:
         - created_at: "2023-01-06T19:20:34Z"
           enc: |
