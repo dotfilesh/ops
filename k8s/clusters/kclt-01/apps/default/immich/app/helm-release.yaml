@@ -31,6 +31,8 @@ spec:
       DB_PORT: "5432"
       DB_DATABASE_NAME: "immich"
       REDIS_HOSTNAME: "immich-redis.default.svc.cluster.local"
+      TYPESENSE_HOST: "immich-typesense.default.svc.cluster.local"
+      IMMICH_MACHINE_LEARNING_URL: "http://immich-machine-learning.svc.cluster.local:3003"
 
 
     immich:
