@@ -24,14 +24,12 @@ spec:
   
 
   bootstrap:
-    recovery:
-      # TODO: this shouldn't be a magic string.
+    initdb:
       database: immich
+      owner: immich
       secret:
         name: immich-cnpg-user-immich
-      
-      source: immich-cnpg-backup-iter1
-  
+
 
   description: "Immich CNPG database"
   enableSuperuserAccess: true
