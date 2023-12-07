@@ -78,7 +78,7 @@ spec:
           storageClass: ${CLUSTER_STORAGE_FILESYSTEM_SSD}
         image: &serverImage
           repository: ghcr.io/immich-app/immich-server
-          tag: v1.89.0@sha256:b5aa4023c63b904136e859b4c3f4c1d34272b7c5f7ee65f50f12378d6039e9e7
+          tag: v1.90.0@sha256:fff42531f836c22f79d1b5f6968479e40f5df079af86fd5ac184bcda591a86d3
           pullPolicy: IfNotPresent
 
 
