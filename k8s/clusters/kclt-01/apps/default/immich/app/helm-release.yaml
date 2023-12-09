@@ -49,7 +49,7 @@ spec:
       enabled: true
       image:
         repository: ghcr.io/immich-app/immich-machine-learning
-        tag: v1.90.0@sha256:11205a86f4d2e033f93ad991e9627cf31c9750b55f32719149ef2215448511eb
+        tag: v1.90.2@sha256:db29ac9e6c1205912df176b81c5c605a98ee18220e438b17151e84c5c5becfa1
         pullPolicy: IfNotPresent
       
       env:
