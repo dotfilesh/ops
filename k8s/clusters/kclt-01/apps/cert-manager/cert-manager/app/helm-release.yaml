@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: cert-manager
-      version: v1.13.2
+      version: v1.13.3
       sourceRef:
         kind: HelmRepository
         name: jetstack
@@ -27,7 +27,7 @@ spec:
   values:
     image:
       # renovate: registryUrl=https://charts.jetstack.io chart=cert-manager
-      tag: v1.13.2
+      tag: v1.13.3
     installCRDs: true
     webhook:
       enabled: true
