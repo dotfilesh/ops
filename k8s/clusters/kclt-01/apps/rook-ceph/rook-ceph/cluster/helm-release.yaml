@@ -71,7 +71,6 @@ spec:
               - name: "/dev/disk/by-id/wwn-0x50014ee6070ecea1"
           - name: mastema
             devices:
-              - name: "/dev/disk/by-id/wwn-0x500000e01f8e20d0"
               - name: "/dev/disk/by-id/wwn-0x500003975850df09"
               - name: "/dev/disk/by-id/wwn-0x50000397585306fd"
               - name: "/dev/disk/by-id/wwn-0x50000396f8325511"
