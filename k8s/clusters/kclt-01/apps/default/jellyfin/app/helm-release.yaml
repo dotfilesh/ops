@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.6.0
+      version: 3.0.4
       sourceRef:
         kind: HelmRepository
         name: bjw-s
@@ -24,11 +24,26 @@ spec:
     remediation:
       retries: 5
   values:
+    defaultPodOptions:
+      securityContext:
+        runAsUser: 568
+        runAsGroup: 568
+        fsGroup: 568
+        fsGroupChangePolicy: OnRootMismatch
+        # Setting this expands which group ID can be assigned to
+        # a process. 44 and 109 are related to hardware encoding,
+        # which at this time is not available.
+        supplementalGroups:
+          - 44
+          #- 105
+          #- 109
+
+
     controllers:
-      main:
+      jellyfin:
         type: statefulset
         containers:
-          main:
+          app:
             env:
               DOTNET_SYSTEM_IO_DISABLEFILELOCKING: "true"
               JELLYFIN_FFmpeg__probesize: 50000000
@@ -42,7 +57,6 @@ spec:
               liveness: &probes
                 # Jellyfin is PAINFULLY slow.
                 enabled: false
-                custom: true
                 spec:
                   httpGet:
                     path: /health
@@ -61,21 +75,8 @@ spec:
               limits:
                 memory: 2048Mi
         pod:
-          enableServiceLinks: false
           #nodeSelector:
             #gpulabel: "true"
-          securityContext:
-            runAsUser: 568
-            runAsGroup: 568
-            fsGroup: 568
-            fsGroupChangePolicy: OnRootMismatch
-            # Setting this expands which group ID can be assigned to
-            # a process. 44 and 109 are related to hardware encoding,
-            # which at this time is not available.
-            supplementalGroups:
-              - 44
-              #- 105
-              #- 109
         # jellyfin only allows for one container.
         replicas: 1
         statefulset:
@@ -88,7 +89,7 @@ spec:
 
 
     ingress:
-      main:
+      jellyfin:
         enabled: true
         className: "nginx"
         hosts:
@@ -96,7 +97,7 @@ spec:
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: jellyfin
                   port: http
         tls:
           - hosts:
@@ -118,7 +119,8 @@ spec:
 
 
     service:
-      main:
+      jellyfin:
+        controller: jellyfin
         type: LoadBalancer
         annotations:
           io.cilium/lb-ipam-ips: ${CILIUM_LB_JELLYFIN_ADDR}
