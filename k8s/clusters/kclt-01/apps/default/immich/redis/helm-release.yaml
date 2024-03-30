@@ -26,14 +26,24 @@ spec:
       retries: 5
   values:
     controllers:
-      main:
+      redis:
         containers:
-          main:
+          app:
             image:
               repository: public.ecr.aws/docker/library/redis
               tag: 7.2.4
             env:
               REDIS_REPLICATION_MODE: master
+            probes:
+              liveness:
+                enabled: true
+              readiness:
+                enabled: true
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 5
             resources:
               requests:
                 cpu: 5m
@@ -42,7 +52,8 @@ spec:
                 memory: 256M
 
     service:
-      main:
+      redis:
+        controller: redis
         ports:
           http:
             enabled: false

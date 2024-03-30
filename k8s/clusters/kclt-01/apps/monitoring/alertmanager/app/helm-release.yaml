@@ -27,7 +27,7 @@ spec:
     keepHistory: false
   values:
     controllers:
-      main:
+      alertmanager:
         type: statefulset
         statefulset:
           volumeClaimTemplates:
@@ -39,7 +39,7 @@ spec:
                 - path: /alertmanager
       
         containers:
-          main:
+          app:
             image:
               repository: quay.io/prometheus/alertmanager
               tag: v0.27.0
@@ -55,22 +55,22 @@ spec:
     
     
     service:
-      main:
+      alertmanager:
+        controller: alertmanager
         ports:
           http:
             port: 9093
 
 
     ingress:
-      main:
-        enabled: true
+      alertmanager:
         className: nginx
         hosts:
           - host: &host alertmanager.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: alertmanager
                   port: http
         tls:
           - hosts:
