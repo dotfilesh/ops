@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: authentik
-      version: 2023.10.7
+      version: 2024.2.2
       sourceRef:
         kind: HelmRepository
         name: authentik
@@ -32,62 +32,82 @@ spec:
         username: ${SECRET__PROTONMAIL_USER}
         password: ${SECRET__PROTONMAIL_PASSWORD}
         use_tls: true
+      
       error_reporting:
         enabled: true
+      
       postgresql:
         # Uses a dedicated cnpg cluster.
         host: "authentik-cnpg-rw"
         name: "authentik"
+    
+
+    global:
+      revisionHistoryLimit: 3
+
+      securityContext:
+        fsGroup: 1000
+
+      volumes:
+        - name: media
+          persistentVolumeClaim:
+            claimName: authentik-media
+        - name: cluster-internal-ca
+          configMap:
+            name: cluster-internal-ca
+        - name: protonmail-bridge-cert
+          configMap:
+            name: protonmail-bridge-cert
+      
+      volumeMounts:
+        - mountPath: /media
+          name: media
+        - mountPath: /etc/ssl/certs/ca-certificates.crt
+          name: cluster-internal-ca
+          optional: true
+          readOnly: true
+          subPath: cluster-internal-ca.pem
+        - mountPath: /etc/ssl/certs/protonmail-bridge-cert.pem
+          name: protonmail-bridge-cert
+          optional: true
+          subPath: protonmail-bridge-cert.pem
+          readOnly: true
+    
+    
+    server:
+      autoscaling:
+        enabled: true
+        minReplicas: 1
+
+      ingress:
+        ingressClassName: "nginx"
+        enabled: true
+        hosts:
+          - host: &host auth.${GLOBALSECRET__PUBLIC_DOMAIN}
+
+      serviceMonitor:
+        create: true
+      
+    
+    worker:
+      autoscaling:
+        enabled: true
+        minReplicas: 1
+
     postgresql:
       # disable the built-in PostgreSQL chart.
       enabled: false
+    
+
     prometheus:
       rules:
-        create: true
-      serviceMonitor:
-        create: true
-    ingress:
-      ingressClassName: "nginx"
-      enabled: true
-      hosts:
-        - host: &host auth.${GLOBALSECRET__PUBLIC_DOMAIN}
-          paths:
-            - path: "/"
-              pathType: Prefix
+        enabled: true
+    
+
     redis:
       # enable the built-in redis chart.
       # TODO: Move away from redis built-in subchart.
       enabled: true
-    replicas: 3
-    securityContext:
-      fsGroup: 1000
-    volumes:
-      - name: media
-        persistentVolumeClaim:
-          claimName: authentik-media
-      - name: cluster-internal-ca
-        configMap:
-          name: cluster-internal-ca
-      - name: protonmail-bridge-cert
-        configMap:
-          name: protonmail-bridge-cert
-    volumeMounts:
-      - mountPath: /media
-        name: media
-      - mountPath: /etc/ssl/certs/ca-certificates.crt
-        name: cluster-internal-ca
-        optional: true
-        readOnly: true
-        subPath: cluster-internal-ca.pem
-      - mountPath: /etc/ssl/certs/protonmail-bridge-cert.pem
-        name: protonmail-bridge-cert
-        optional: true
-        subPath: protonmail-bridge-cert.pem
-        readOnly: true
-    worker:
-      replicas: 3
-      securityContext:
-        fsGroup: 1000
   valuesFrom:
     - targetPath: authentik.secret_key
       kind: Secret
