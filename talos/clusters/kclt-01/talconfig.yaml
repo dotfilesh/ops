@@ -1,6 +1,6 @@
 clusterName: &clusterName kclt-01
-talosVersion: v1.5.4
-kubernetesVersion: v1.28.3
+talosVersion: v1.6.7
+kubernetesVersion: v1.29.2
 endpoint: https://${clusterEndpointIP}:6443
 clusterPodNets:
   - 10.244.0.0/16
@@ -23,7 +23,7 @@ nodes:
     disableSearchDomain: true
     installDiskSelector:
       type: nvme
-    namservers:
+    namservers: &nameservers
       - 1.1.1.1
       - 9.9.9.9
       - 8.8.8.8
@@ -42,6 +42,13 @@ nodes:
             gateway: 10.64.0.1
         vip:
           ip: ${clusterEndpointIP}
+    schematic:
+      customization:
+        systemExtensions:
+            officialExtensions:
+                - siderolabs/i915-ucode
+                - siderolabs/intel-ucode
+                - siderolabs/thunderbolt
     nodeLabels: &controllerLabels
       node-role.kubernetes.io/control-plane: "control-plane"
       topology.kubernetes.io/region: "us-east"
@@ -54,10 +61,7 @@ nodes:
     installDiskSelector:
       type: nvme
       size: <= 150GB
-    namservers:
-      - 1.1.1.1
-      - 9.9.9.9
-      - 8.8.8.8
+    namservers: *nameservers
     networkInterfaces:
       - interface: eno1
         dhcp: false
@@ -78,10 +82,7 @@ nodes:
     installDiskSelector:
       type: nvme
       size: <= 150GB
-    namservers:
-      - 1.1.1.1
-      - 9.9.9.9
-      - 8.8.8.8
+    namservers: *nameservers
     networkInterfaces:
       - interface: eno1
         dhcp: false
@@ -102,10 +103,7 @@ nodes:
     installDiskSelector:
       type: nvme
       size: <= 150GB
-    namservers:
-      - 1.1.1.1
-      - 9.9.9.9
-      - 8.8.8.8
+    namservers: *nameservers
     networkInterfaces:
       - interface: eno1
         dhcp: false
@@ -135,8 +133,12 @@ nodes:
             gateway: 10.64.0.1
         mtu: 9000
         dhcp: false
+    schematic:
+      customization:
+        systemExtensions:
+            officialExtensions:
+                - siderolabs/intel-ucode
     nodeLabels: &workerLabels
-      node-role.kubernetes.io/worker: "worker"
       topology.kubernetes.io/region: "us-east"
       topology.kubernetes.io/zone: *clusterName
   
@@ -174,6 +176,11 @@ nodes:
             gateway: 10.64.0.1
         mtu: 9000
         dhcp: false
+    schematic:
+      customization:
+        systemExtensions:
+            officialExtensions:
+                - siderolabs/intel-ucode
     nodeLabels: *workerLabels
   
   - hostname: verus
@@ -192,6 +199,12 @@ nodes:
             gateway: 10.64.0.1
         mtu: 9000
         dhcp: false
+    schematic:
+      customization:
+        systemExtensions:
+            officialExtensions:
+                - siderolabs/intel-ucode
+                - siderolabs/bnx2-bnx2x
     nodeLabels: *workerLabels
   
   - hostname: mastema
@@ -210,6 +223,11 @@ nodes:
             gateway: 10.64.0.1
         mtu: 9000
         dhcp: false
+    schematic:
+      customization:
+        systemExtensions:
+            officialExtensions:
+                - siderolabs/intel-ucode
     nodeLabels: *workerLabels
   
   - hostname: amdusias

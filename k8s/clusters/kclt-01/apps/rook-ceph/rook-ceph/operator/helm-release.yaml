@@ -39,6 +39,8 @@ spec:
           operator: "Exists"
       csiAddons:
         enabled: true
+      enableRdbDriver: true
+      enableCephfsDriver: true
       serviceMonitor:
         enabled: true
     monitoring:
