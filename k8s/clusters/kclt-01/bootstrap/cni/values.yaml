@@ -50,6 +50,7 @@ podDisruptionBudget:
   enabled: true
   maxUnavailable: 2
 rollOutCiliumPods: true
+routingMode: native
 securityContext:
   # False. that is what the list is for.
   privileged: false
@@ -79,7 +80,6 @@ securityContext:
       - NET_ADMIN
       - SYS_ADMIN
       - SYS_RESOURCE
-tunnel: disabled
 updateStrategy:
   rollingUpdate:
     maxUnavailable: 2
