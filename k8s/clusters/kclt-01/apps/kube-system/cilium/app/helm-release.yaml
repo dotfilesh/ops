@@ -110,6 +110,7 @@ spec:
       enabled: true
       maxUnavailable: 2
     rollOutCiliumPods: true
+    routing-mode: native
     securityContext:
       # False. that is what the list is for.
       privileged: false
@@ -139,7 +140,6 @@ spec:
           - NET_ADMIN
           - SYS_ADMIN
           - SYS_RESOURCE
-    tunnel: disabled
     updateStrategy:
       rollingUpdate:
         maxUnavailable: 2
