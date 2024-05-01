@@ -1,6 +1,6 @@
 clusterName: &clusterName kclt-01
-talosVersion: v1.6.7
-kubernetesVersion: v1.29.2
+talosVersion: v1.7.0
+kubernetesVersion: v1.30.0
 endpoint: https://${clusterEndpointIP}:6443
 clusterPodNets:
   - 10.244.0.0/16
@@ -259,6 +259,8 @@ controlPlane:
         disabled: true
     machine: &machine
       features:
+        hostDNS:
+          enabled: true
         kubePrism:
           enabled: true
           port: 7445

@@ -110,7 +110,7 @@ spec:
       enabled: true
       maxUnavailable: 2
     rollOutCiliumPods: true
-    routing-mode: native
+    routingMode: native
     securityContext:
       # False. that is what the list is for.
       privileged: false
