@@ -1,0 +1,9 @@
+---
+# kubernetes/apps/security/kyverno/kustomization.yaml
+# Source plan: ops-rebuild-plan.md §2026 — security/kyverno
+# Kyverno — policy engine for Kubernetes.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - helm-release.yaml

@@ -1,0 +1,69 @@
+---
+# kubernetes/apps/monitoring/kube-prometheus-stack/helm-release.yaml
+# Source plan: ops-rebuild-plan.md §2026 — monitoring/kube-prometheus-stack
+# kube-prometheus-stack v65.x — Prometheus + Alertmanager + Grafana + node-exporter.
+# Chart: prometheus-community/kube-prometheus-stack
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: monitoring
+  annotations:
+    ops.dotfile.sh/source-plan: "ops-rebuild-plan.md §2026"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    # renovate: registryUrl=https://prometheus-community.github.io/helm-charts chart=kube-prometheus-stack
+    targetRevision: "68.4.4"
+    helm:
+      valuesObject:
+        crds:
+          enabled: true
+        cleanPrometheusOperatorObjectNames: true
+        alertmanager:
+          enabled: true
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            hosts:
+              - alertmanager.dotfile.sh
+        prometheus:
+          prometheusSpec:
+            # Retain 30 days locally; long-term via Thanos
+            retention: 30d
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: ceph-block-ssd
+                  resources:
+                    requests:
+                      storage: 50Gi
+        grafana:
+          enabled: true
+          defaultDashboardsTimezone: America/New_York
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            hosts:
+              - grafana.dotfile.sh
+        nodeExporter:
+          enabled: true
+        kubeStateMetrics:
+          enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

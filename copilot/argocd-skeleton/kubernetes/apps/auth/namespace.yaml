@@ -1,0 +1,9 @@
+---
+# kubernetes/apps/auth/namespace.yaml
+# Source plan: ops-rebuild-plan.md §2026 — Namespace: auth
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: auth
+  labels:
+    ops.dotfile.sh/cluster: kclt-01

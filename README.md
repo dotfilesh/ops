@@ -74,6 +74,24 @@ Ok question time is over now. go home.
 
 ---
 
+## 🚧 2026 Rebuild — ArgoCD Skeleton
+
+> See [`copilot/argocd-skeleton/README.md`](./copilot/argocd-skeleton/README.md) for full details.
+> This is being built incrementally alongside the legacy tree per `ops-rebuild-plan.md §2026`.
+
+The new skeleton (under [`copilot/argocd-skeleton/`](./copilot/argocd-skeleton/)) migrates the
+GitOps controller from **Flux** to **ArgoCD**, adds **KSOPS** for secret management, and
+restructures the `kubernetes/` layout to follow ArgoCD ApplicationSet patterns.
+
+| Area | Old (Flux) | New (ArgoCD/2026) |
+|---|---|---|
+| GitOps controller | Flux v2 | ArgoCD v2.13 |
+| Secret management | SOPS via Flux | KSOPS v4 + ArgoCD |
+| App delivery | HelmRelease + Kustomization CRDs | ArgoCD Application / ApplicationSet |
+| Task runner | — | go-task (Taskfile.yaml) |
+
+---
+
 ## 🤝 Thanks
 
 Thanks to all folks who donate their time to the [Kubernetes @Home](https://github.com/k8s-at-home/) community.

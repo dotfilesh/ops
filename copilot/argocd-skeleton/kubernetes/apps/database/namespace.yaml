@@ -1,0 +1,9 @@
+---
+# kubernetes/apps/database/namespace.yaml
+# Source plan: ops-rebuild-plan.md §2026 — Namespace: database
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: database
+  labels:
+    ops.dotfile.sh/cluster: kclt-01

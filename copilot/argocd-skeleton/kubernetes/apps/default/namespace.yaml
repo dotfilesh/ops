@@ -1,0 +1,9 @@
+---
+# kubernetes/apps/default/namespace.yaml
+# Source plan: ops-rebuild-plan.md §2026 — Namespace: default
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: default
+  labels:
+    ops.dotfile.sh/cluster: kclt-01

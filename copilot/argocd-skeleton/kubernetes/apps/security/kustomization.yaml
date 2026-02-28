@@ -1,0 +1,9 @@
+---
+# kubernetes/apps/security/kustomization.yaml
+# Source plan: ops-rebuild-plan.md §2026 — Namespace: security
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - kyverno/

@@ -1,0 +1,65 @@
+---
+# kubernetes/apps/auth/authentik/helm-release.yaml
+# Source plan: ops-rebuild-plan.md §2026 — auth/authentik
+# Authentik identity provider — Helm chart via ArgoCD Application.
+# Chart version: 2024.12.x  (renovate will update this pin)
+# renovate: registryUrl=https://charts.goauthentik.io chart=authentik
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: authentik
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: auth
+  annotations:
+    ops.dotfile.sh/source-plan: "ops-rebuild-plan.md §2026"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.goauthentik.io
+    chart: authentik
+    # renovate: registryUrl=https://charts.goauthentik.io chart=authentik
+    targetRevision: "2024.12.3"
+    helm:
+      valuesObject:
+        authentik:
+          email:
+            # Populate via KSOPS-encrypted secret
+            from: "${SECRET__PROTONMAIL_USER}"
+            host: "${SECRET__PROTONMAIL_HOST}"
+            port: 25
+            useTLS: false
+            useSSL: false
+            username: "${SECRET__PROTONMAIL_USER}"
+            password: "${SECRET__PROTONMAIL_PASS}"
+          secret_key: "${SECRET__AUTHENTIK_SECRET_KEY}"
+          postgresql:
+            host: "authentik-cnpg-rw"
+            name: "authentik"
+            user: "authentik"
+            password: "${SECRET__AUTHENTIK_DB_PASS}"
+          redis:
+            host: "authentik-redis-master"
+        server:
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            hosts:
+              - auth.dotfile.sh
+            tls:
+              - secretName: authentik-tls
+                hosts:
+                  - auth.dotfile.sh
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: auth
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

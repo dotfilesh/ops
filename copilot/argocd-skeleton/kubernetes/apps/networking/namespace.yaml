@@ -1,0 +1,9 @@
+---
+# kubernetes/apps/networking/namespace.yaml
+# Source plan: ops-rebuild-plan.md §2026 — Namespace: networking
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: networking
+  labels:
+    ops.dotfile.sh/cluster: kclt-01

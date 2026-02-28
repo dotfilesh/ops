@@ -1,0 +1,60 @@
+---
+# kubernetes/clusters/kclt-01/argocd/applicationsets/cluster-apps.yaml
+# Source plan: ops-rebuild-plan.md §2026 — ApplicationSet (cluster-apps)
+# Generates one ArgoCD Application per sub-directory under
+#   copilot/argocd-skeleton/kubernetes/apps/
+# Each app directory must contain a kustomization.yaml.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: cluster-apps
+  namespace: argocd
+  annotations:
+    ops.dotfile.sh/source-plan: "ops-rebuild-plan.md §2026"
+spec:
+  # Generate one Application per app directory found under kubernetes/apps/
+  generators:
+    - git:
+        repoURL: https://github.com/dotfilesh/ops.git
+        revision: HEAD
+        directories:
+          # Match every namespace/<app> sub-directory (two levels deep)
+          - path: "copilot/argocd-skeleton/kubernetes/apps/*/*"
+  template:
+    metadata:
+      # App name is derived from the path: <namespace>-<app>
+      name: "{{path[4]}}-{{path[5]}}"
+      namespace: argocd
+      annotations:
+        ops.dotfile.sh/source-plan: "ops-rebuild-plan.md §2026"
+      labels:
+        ops.dotfile.sh/cluster: kclt-01
+        # Namespace label from the second-to-last path component
+        ops.dotfile.sh/namespace: "{{path[4]}}"
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/dotfilesh/ops.git
+        targetRevision: HEAD
+        path: "{{path}}"
+        plugin:
+          # Use the kustomize+KSOPS plugin configured in argocd-cm
+          name: kustomize-with-ksops
+      destination:
+        server: https://kubernetes.default.svc
+        # Deploy to the namespace matching the app's parent directory name
+        namespace: "{{path[4]}}"
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true
+          - ServerSideApply=true
+        retry:
+          limit: 5
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m

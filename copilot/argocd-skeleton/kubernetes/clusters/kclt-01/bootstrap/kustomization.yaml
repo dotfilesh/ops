@@ -1,0 +1,23 @@
+---
+# kubernetes/clusters/kclt-01/bootstrap/kustomization.yaml
+# Source plan: ops-rebuild-plan.md §2026 — Bootstrap secrets
+# Applied once during initial cluster setup to seed the KSOPS age key
+# and any other bootstrap-time secrets.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+
+resources:
+  # NOTE: ksops-agekey.sops.yaml is gitignored as plaintext.
+  # Encrypt with: task encrypt FILE=kubernetes/clusters/kclt-01/bootstrap/ksops-agekey.sops.yaml
+  # Then it is safe to commit the encrypted version.
+  # - ksops-agekey.sops.yaml
+  []
+
+# secretGenerator can be used instead if you prefer kubectl + age directly:
+# secretGenerator:
+#   - name: ksops-age-key
+#     namespace: argocd
+#     files:
+#       - key.txt=site.agekey

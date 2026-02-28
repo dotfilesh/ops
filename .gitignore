@@ -1,2 +1,9 @@
 **/*.kate-swp
 **/*.nocommit
+# argocd-skeleton: Talos generated configs (sensitive)
+copilot/argocd-skeleton/kubernetes/clusters/kclt-01/talos/clusterconfig/
+# argocd-skeleton: SOPS age key exports (never commit plaintext keys)
+copilot/argocd-skeleton/kubernetes/clusters/kclt-01/bootstrap/*.agekey
+copilot/argocd-skeleton/kubernetes/clusters/kclt-01/bootstrap/*.dirtysops
+# argocd-skeleton: go-task generated temp files
+.task/

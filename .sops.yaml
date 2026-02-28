@@ -31,6 +31,20 @@ creation_rules:
     pgp: >-
       2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
       9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
+    # 2026 ArgoCD/KSOPS skeleton — age-only rules for kubernetes/ paths.
+    # See: copilot/argocd-skeleton/README.md and ops-rebuild-plan.md §2026
+    # Cluster-specific secrets under the new kubernetes/ tree.
+  - path_regex: copilot/argocd-skeleton/kubernetes/clusters/kclt-01/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
+    encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
+    # age: kclt-01 cluster key (age-only, per ops-rebuild-plan.md §2026)
+    age: >-
+      age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz
+    # App-level secrets under the new kubernetes/ tree.
+  - path_regex: copilot/argocd-skeleton/kubernetes/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
+    encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
+    # age: global/cluster key (age-only, per ops-rebuild-plan.md §2026)
+    age: >-
+      age187teecmpvsa4kcme6apvqege0wqjnwd9whfpkq730m48mf8n93xqjn0jve
     # If nothing's taking, encrypt solely with Whit personal key.
   - path_regex: .*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
     # keys:

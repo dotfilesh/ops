@@ -1,0 +1,12 @@
+---
+# kubernetes/apps/storage/rook-ceph/kustomization.yaml
+# Source plan: ops-rebuild-plan.md §2026 — storage/rook-ceph
+# Rook-Ceph operator + cluster. Provides block (RBD), filesystem (CephFS), and
+# object storage (RGW/S3) for kclt-01.
+# Version: v1.15.x  (ops-rebuild-plan.md §2026)
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - operator.yaml
+  - cluster.yaml

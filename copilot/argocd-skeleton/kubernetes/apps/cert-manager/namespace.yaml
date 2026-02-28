@@ -1,0 +1,9 @@
+---
+# kubernetes/apps/cert-manager/namespace.yaml
+# Source plan: ops-rebuild-plan.md §2026 — Namespace: cert-manager
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
