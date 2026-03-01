@@ -1,0 +1,25 @@
+---
+# kubernetes/apps/networking/httproutes/helm-release.yaml
+# Deploys all HTTPRoute resources for apps using the shared Gateway.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: httproutes
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: networking
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dotfilesh/ops.git
+    targetRevision: HEAD
+    path: kubernetes/apps/networking/httproutes/resources
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

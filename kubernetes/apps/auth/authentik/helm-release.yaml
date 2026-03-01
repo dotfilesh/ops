@@ -1,0 +1,54 @@
+---
+# kubernetes/apps/auth/authentik/helm-release.yaml
+# Authentik identity provider — Helm chart via ArgoCD Application.
+# renovate: registryUrl=https://charts.goauthentik.io chart=authentik
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: authentik
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: auth
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.goauthentik.io
+    chart: authentik
+    # renovate: registryUrl=https://charts.goauthentik.io chart=authentik
+    targetRevision: "2024.12.3"
+    helm:
+      valuesObject:
+        authentik:
+          # Secret values are read from the 'authentik-secret' K8s Secret
+          # created via KSOPS. The chart reads these env vars from the secret
+          # when existingSecret is set (see global.env below).
+          postgresql:
+            host: "authentik-cnpg-rw"
+            name: "authentik"
+            user: "authentik"
+          redis:
+            host: "authentik-redis-master"
+        global:
+          envFrom:
+            - secretRef:
+                # KSOPS-decrypted secret containing:
+                #   AUTHENTIK_SECRET_KEY, AUTHENTIK_POSTGRESQL__PASSWORD,
+                #   AUTHENTIK_EMAIL__HOST, AUTHENTIK_EMAIL__USERNAME,
+                #   AUTHENTIK_EMAIL__PASSWORD, AUTHENTIK_EMAIL__FROM
+                name: authentik-secret
+        server:
+          ingress:
+            enabled: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: auth
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

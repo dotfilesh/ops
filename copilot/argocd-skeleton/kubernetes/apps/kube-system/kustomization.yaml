@@ -1,9 +1,0 @@
----
-# kubernetes/apps/kube-system/kustomization.yaml
-# Source plan: ops-rebuild-plan.md §2026 — Namespace: kube-system
-# Note: kube-system namespace is created by Kubernetes itself; no namespace.yaml needed.
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - cilium/

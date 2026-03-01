@@ -1,7 +1,8 @@
 <img src="https://camo.githubusercontent.com/5b298bf6b0596795602bd771c5bddbb963e83e0f/68747470733a2f2f692e696d6775722e636f6d2f7031527a586a512e706e67" align="left" width="144px" height="144px"/>
 
-# Cloud Infrastructure Operations Repository 🐱‍💻
-_... managed by Flux and Renovate_ 🤖
+# Cloud Infrastructure Operations Repository
+
+_... managed by ArgoCD and Renovate_
 
 <div align="center">
 
@@ -13,85 +14,70 @@ _... managed by Flux and Renovate_ 🤖
 
 ---
 
-## 📖 Overview
+## Overview
 
 This repository provides the configuration for our cloud infrastructure. Working to adhere to Infrastructure as Code (IaC) and GitOps practices, this system is intended for easy maintenance and use; along with making the system accessible, transparent, and more easily studied in a broader sense.
 
 ---
 
-## ⛵ Kubernetes
-
-This repo borrows heavily from [k8s-at-home/template-cluster-k3](https://github.com/k8s-at-home/template-cluster-k3s) and its derivatives such as [Devil Buhl's home-ops](https://github.com/onedr0p/home-ops) and [Toboshii Nakama's](https://github.com/toboshii/home-ops) in structure and practices.
-
-### Installation
+## Kubernetes
 
 Clusters run on [Talos Linux](https://talos.dev/), an immutable and ephemeral Linux distribution built around Kubernetes, deployed on bare-metal. [Rook Ceph](https://rook.io/) running hyper-converged with workloads provides persistent block, object, and file storage.
 
-### ☸️ Talos
+### Talos
 
 [talhelper](https://github.com/budimanjojo/talhelper) is used to organize the Talos config files.
 
 ### Core Components
 
-- [cilium/cilium](https://github.com/cilium/cilium): Internal Kubernetes networking plugin.
-- [rook/rook](https://github.com/rook/rook): Distributed block storage for peristent storage.
-- [mozilla/sops](https://toolkit.fluxcd.io/guides/mozilla-sops/): Manages secrets for Kubernetes, Ansible and Terraform.
-- [jetstack/cert-manager](https://cert-manager.io/docs/): Creates SSL certificates for cluster services.
-- [kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx/): Ingress controller to expose HTTP traffic to pods over DNS.
+| Component | Purpose |
+|---|---|
+| [ArgoCD](https://argo-cd.readthedocs.io/) | GitOps controller (app-of-apps pattern) |
+| [KSOPS](https://github.com/viaduct-ai/kustomize-sops) | SOPS decryption plugin for ArgoCD |
+| [Cilium](https://cilium.io/) | CNI + kube-proxy replacement + Gateway API |
+| [Rook Ceph](https://rook.io/) | Distributed block, filesystem, and object storage |
+| [cert-manager](https://cert-manager.io/) | TLS certificates via Let's Encrypt |
+| [SOPS](https://github.com/getsops/sops) | Secret encryption with age keys |
+| [go-task](https://taskfile.dev/) | Task runner for cluster operations |
 
 ### GitOps
 
-[Flux](https://github.com/fluxcd/flux2) watches the [k8s](./k8s/) directory and makes changes based on the YAML manifests.
+[ArgoCD](https://argo-cd.readthedocs.io/) watches the [kubernetes/](./kubernetes/) directory and reconciles manifests via an app-of-apps pattern. A root Application in `kubernetes/argocd/apps/` references all child Application CRs.
 
-[Renovate](https://github.com/renovatebot/renovate) watches the entire repository looking for dependency updates, when they are found a PR is automatically created. When PRs are merged, [Flux](https://github.com/fluxcd/flux2) applies the relevant changes to the cluster.
+[Renovate](https://github.com/renovatebot/renovate) watches the entire repository looking for dependency updates, when they are found a PR is automatically created. When PRs are merged, ArgoCD syncs the relevant changes to the cluster.
 
-### Directories
+### Directory Structure
 
-> The cloud infrastructure is intended to be able to support multiple clusters, and as such provides a distinction between [global configuration](./k8s/global/) and [cluster deployments || config](./k8s/clusters/). Clusters are named based on the airport geographically closest (\*ish) + sequential discriminator.
-
-```sh
-📁 k8s       # All k8s infrastructure defined below
-├─📁 clusters  # all instantiated k8s clusters, defined as code
-│ └─📁 icao-00   # example cluster
-│   ├─📁 apps      # Apps in cluster by namespace
-│   ├─📁 bootstrap # Cluster-specific keys
-│   └─📁 flux      # Flux configuration.
-└─📁 global    # global resources
-  ├─📁 bootstrap # Bootstrapping data (flux installation, global key)
-  ├─📁 config    # Universal config data
-  └─📁 repos     # (Helm|Git)Repository Flux sources
+```
+kubernetes/
+  argocd/            # ArgoCD install + root app-of-apps
+  apps/              # Application definitions by namespace
+    <ns>/<app>/        # ArgoCD Application CR (helm-release.yaml)
+  clusters/
+    kclt-01/           # Cluster-specific config and bootstrap
+talos/               # Talos Linux node configuration
+oob/                 # Out-of-band infrastructure (BGP, NUT, etc.)
+scripts/             # Bootstrap and helper scripts
+Taskfile.yaml        # go-task definitions
 ```
 
+### Quick Start
 
-### Networking:
+```sh
+# Install/verify required tools
+task deps
 
-Some cilium nightmare.
+# Full cluster bootstrap (Talos + ArgoCD + KSOPS + root app)
+task bootstrap
 
-### Data Backup
+# Encrypt a new secret
+task encrypt FILE=kubernetes/apps/auth/authentik/secret.sops.yaml
+```
 
-Ok question time is over now. go home.
-
-
----
-
-## 🚧 2026 Rebuild — ArgoCD Skeleton
-
-> See [`copilot/argocd-skeleton/README.md`](./copilot/argocd-skeleton/README.md) for full details.
-> This is being built incrementally alongside the legacy tree per `ops-rebuild-plan.md §2026`.
-
-The new skeleton (under [`copilot/argocd-skeleton/`](./copilot/argocd-skeleton/)) migrates the
-GitOps controller from **Flux** to **ArgoCD**, adds **KSOPS** for secret management, and
-restructures the `kubernetes/` layout to follow ArgoCD ApplicationSet patterns.
-
-| Area | Old (Flux) | New (ArgoCD/2026) |
-|---|---|---|
-| GitOps controller | Flux v2 | ArgoCD v2.13 |
-| Secret management | SOPS via Flux | KSOPS v4 + ArgoCD |
-| App delivery | HelmRelease + Kustomization CRDs | ArgoCD Application / ApplicationSet |
-| Task runner | — | go-task (Taskfile.yaml) |
+See `Taskfile.yaml` for all available tasks.
 
 ---
 
-## 🤝 Thanks
+## Thanks
 
 Thanks to all folks who donate their time to the [Kubernetes @Home](https://github.com/k8s-at-home/) community.

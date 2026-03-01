@@ -1,0 +1,45 @@
+---
+# kubernetes/apps/storage/rook-ceph/operator.yaml
+# Rook-Ceph operator v1.15.x — manages the Ceph cluster lifecycle.
+# Chart: rook-release/rook-ceph
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph-operator
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: storage
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.rook.io/release
+    chart: rook-ceph
+    # renovate: registryUrl=https://charts.rook.io/release chart=rook-ceph
+    targetRevision: "v1.15.7"
+    helm:
+      valuesObject:
+        crds:
+          enabled: true
+        csi:
+          kubeletDirPath: /var/lib/kubelet
+          enableCSIHostNetwork: true
+          pluginTolerations:
+            - effect: NoExecute
+              operator: Exists
+            - effect: NoSchedule
+              operator: Exists
+        monitoring:
+          enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: storage
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

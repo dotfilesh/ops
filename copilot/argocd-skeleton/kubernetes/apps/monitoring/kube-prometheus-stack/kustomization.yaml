@@ -1,8 +1,0 @@
----
-# kubernetes/apps/monitoring/kube-prometheus-stack/kustomization.yaml
-# Source plan: ops-rebuild-plan.md §2026 — monitoring/kube-prometheus-stack
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - helm-release.yaml

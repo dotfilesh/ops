@@ -1,0 +1,8 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../auth/authentik/httproute.yaml
+  - ../../default/echo-server/httproute.yaml
+  - ../../monitoring/kube-prometheus-stack/httproute-alertmanager.yaml
+  - ../../monitoring/kube-prometheus-stack/httproute-grafana.yaml

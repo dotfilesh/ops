@@ -1,0 +1,72 @@
+---
+# kubernetes/argocd/install/kustomization.yaml
+# Installs ArgoCD v2.13 with the KSOPS exec plugin configured via the
+# argocd-cm ConfigMap overlay below.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: argocd
+
+resources:
+  # Upstream ArgoCD install manifest — pin to plan version
+  # renovate: registryUrl=https://raw.githubusercontent.com/argoproj/argo-cd chart=argocd
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v2.13.3/manifests/install.yaml
+
+patches:
+  # Overlay the argocd-cm to enable the KSOPS plugin and repo-server env
+  - path: argocd-cm.yaml
+  # Patch the argocd-repo-server Deployment to mount the age key secret and
+  # the KSOPS binary, and inject SOPS_AGE_KEY_FILE env var.
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: argocd-repo-server
+    patch: |
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: ksops-age-key
+          secret:
+            secretName: ksops-age-key
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: ksops-age-key
+          mountPath: /var/run/secrets/age
+          readOnly: true
+      - op: add
+        path: /spec/template/spec/containers/0/env/-
+        value:
+          name: SOPS_AGE_KEY_FILE
+          value: /var/run/secrets/age/key.txt
+      - op: add
+        path: /spec/template/spec/initContainers/-
+        value:
+          name: install-ksops
+          # renovate: registryUrl=https://github.com/viaduct-ai/kustomize-sops releases
+          image: viaductoss/ksops:v4.3.2
+          command: ["/bin/sh", "-c"]
+          args:
+            - cp /usr/local/bin/ksops /custom-tools/ksops &&
+              cp /usr/local/bin/kustomize /custom-tools/kustomize
+          volumeMounts:
+            - name: custom-tools
+              mountPath: /custom-tools
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: custom-tools
+          emptyDir: {}
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: custom-tools
+          mountPath: /usr/local/bin/ksops
+          subPath: ksops
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: custom-tools
+          mountPath: /usr/local/bin/kustomize
+          subPath: kustomize

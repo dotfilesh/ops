@@ -1,9 +1,0 @@
----
-# kubernetes/apps/cert-manager/kustomization.yaml
-# Source plan: ops-rebuild-plan.md §2026 — Namespace: cert-manager
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - namespace.yaml
-  - cert-manager/

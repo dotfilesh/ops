@@ -1,9 +1,0 @@
----
-# kubernetes/apps/storage/namespace.yaml
-# Source plan: ops-rebuild-plan.md §2026 — Namespace: storage
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: storage
-  labels:
-    ops.dotfile.sh/cluster: kclt-01

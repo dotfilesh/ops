@@ -1,0 +1,33 @@
+---
+# kubernetes/apps/kube-system/gateway-api-crds/helm-release.yaml
+# Gateway API CRDs — standard-install bundle from kubernetes-sigs.
+# Must be installed before Cilium or any Gateway/HTTPRoute resources.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gateway-api-crds
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: kube-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dotfilesh/ops.git
+    targetRevision: HEAD
+    path: kubernetes/apps/kube-system/gateway-api-crds/install
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=false
+      - ServerSideApply=true
+      - Replace=true

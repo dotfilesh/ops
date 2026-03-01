@@ -1,8 +1,0 @@
----
-# kubernetes/apps/networking/ingress-nginx/kustomization.yaml
-# Source plan: ops-rebuild-plan.md §2026 — networking/ingress-nginx
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - helm-release.yaml

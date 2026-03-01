@@ -1,8 +1,0 @@
----
-# kubernetes/apps/database/cloudnative-pg/kustomization.yaml
-# Source plan: ops-rebuild-plan.md §2026 — database/cloudnative-pg
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-resources:
-  - helm-release.yaml

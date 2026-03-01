@@ -1,0 +1,93 @@
+---
+# kubernetes/apps/storage/rook-ceph/cluster.yaml
+# Rook-Ceph cluster definition — hyper-converged (storage co-located with workloads).
+# Storage classes: ceph-block, ceph-filesystem, ceph-bucket (and -hdd/-ssd variants).
+# Chart: rook-release/rook-ceph-cluster
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph-cluster
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: storage
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.rook.io/release
+    chart: rook-ceph-cluster
+    # renovate: registryUrl=https://charts.rook.io/release chart=rook-ceph-cluster
+    targetRevision: "v1.15.7"
+    helm:
+      valuesObject:
+        operatorNamespace: storage
+        monitoring:
+          enabled: true
+          createPrometheusRules: true
+        dashboard:
+          enabled: true
+          ssl: false
+        # Storage classes — hyper-converged with block + filesystem + bucket
+        cephBlockPools:
+          - name: ceph-block
+            spec:
+              failureDomain: host
+              replicated:
+                size: 3
+            storageClass:
+              enabled: true
+              name: ceph-block
+              isDefault: true
+              reclaimPolicy: Delete
+              allowVolumeExpansion: true
+        cephFileSystems:
+          - name: ceph-filesystem
+            spec:
+              metadataPool:
+                failureDomain: host
+                replicated:
+                  size: 3
+              dataPools:
+                - failureDomain: host
+                  replicated:
+                    size: 3
+                  name: data0
+              metadataServer:
+                activeCount: 1
+                activeStandby: true
+            storageClass:
+              enabled: true
+              isDefault: false
+              name: ceph-filesystem
+              reclaimPolicy: Delete
+              allowVolumeExpansion: true
+        cephObjectStores:
+          - name: ceph-bucket
+            spec:
+              metadataPool:
+                failureDomain: host
+                replicated:
+                  size: 3
+              dataPool:
+                failureDomain: host
+                replicated:
+                  size: 3
+              gateway:
+                port: 80
+                instances: 1
+            storageClass:
+              enabled: true
+              name: ceph-bucket
+              reclaimPolicy: Delete
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: storage
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

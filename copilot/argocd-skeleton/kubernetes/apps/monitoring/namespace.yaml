@@ -1,9 +1,0 @@
----
-# kubernetes/apps/monitoring/namespace.yaml
-# Source plan: ops-rebuild-plan.md §2026 — Namespace: monitoring
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: monitoring
-  labels:
-    ops.dotfile.sh/cluster: kclt-01

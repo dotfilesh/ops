@@ -1,0 +1,36 @@
+---
+# kubernetes/apps/backup/volsync/helm-release.yaml
+# Volsync — PVC replication operator.
+# Provides snapshot-to-S3 (Ceph RGW) backup for persistent volumes.
+# Chart: backube/volsync  version: 0.10.x
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: volsync
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: backup
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://backube.github.io/helm-charts
+    chart: volsync
+    # renovate: registryUrl=https://backube.github.io/helm-charts chart=volsync
+    targetRevision: "0.10.1"
+    helm:
+      valuesObject:
+        metrics:
+          disableAuth: false
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: backup
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
