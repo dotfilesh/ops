@@ -1,0 +1,28 @@
+---
+# kubernetes/apps/networking/gateway/helm-release.yaml
+# Shared Gateway resource — deploys the Cilium-backed Gateway for all HTTPRoutes.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gateway
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: networking
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/dotfilesh/ops.git
+    targetRevision: HEAD
+    path: kubernetes/apps/networking/gateway/resources
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: networking
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

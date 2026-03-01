@@ -1,0 +1,32 @@
+---
+# kubernetes/argocd/install/argocd-cm.yaml
+# Configures the KSOPS exec plugin and common ArgoCD settings.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  # Enable the KSOPS kustomize exec plugin (age-only)
+  kustomize.buildOptions: "--enable-alpha-plugins --enable-exec --load-restrictor=LoadRestrictionsNone"
+
+  # Cluster domain — used for OIDC redirects, notifications, etc.
+  url: "https://argocd.dotfile.sh"
+
+  # Timeouts
+  timeout.reconciliation: 180s
+  timeout.hard.reconciliation: 0s
+
+  # OIDC (Authentik) — placeholder, populate secret values separately
+  # oidc.config: |
+  #   name: Authentik
+  #   issuer: https://auth.dotfile.sh/application/o/argocd/
+  #   clientID: argocd
+  #   clientSecret: $argocd-oidc-secret:oidc.clientSecret
+  #   requestedScopes: ["openid", "profile", "email", "groups"]
+
+  # Resource tracking annotation
+  application.instanceLabelKey: argocd.argoproj.io/app-name

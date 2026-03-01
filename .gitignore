@@ -1,2 +1,7 @@
 **/*.kate-swp
 **/*.nocommit
+# SOPS age key exports (never commit plaintext keys)
+kubernetes/clusters/kclt-01/bootstrap/*.agekey
+kubernetes/clusters/kclt-01/bootstrap/*.dirtysops
+# go-task generated temp files
+.task/

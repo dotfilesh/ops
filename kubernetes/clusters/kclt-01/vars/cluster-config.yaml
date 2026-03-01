@@ -1,0 +1,54 @@
+---
+# kubernetes/clusters/kclt-01/vars/cluster-config.yaml
+#
+# NOTE: This ConfigMap is a REFERENCE DOCUMENT only.
+# In Flux, these values were injected via postBuild.substituteFrom.
+# ArgoCD does not have an equivalent mechanism — values are set directly
+# in each Application CR's helm.valuesObject.
+# Keep this file as the canonical source of truth for cluster parameters.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-config
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+data:
+  # ── Cluster identity ──────────────────────────────────────────────────────
+  CLUSTER_NAME: "kclt-01"
+  CLUSTER_DOMAIN: "dotfile.sh"
+  TIMEZONE: "America/New_York"
+
+  # ── Kubernetes / Talos versions ───────────────────────────────────────────
+  TALOS_VERSION: "v1.8.0"
+  KUBERNETES_VERSION: "v1.31.0"
+
+  # ── Networking (Cilium BGP) ───────────────────────────────────────────────
+  # Node subnet
+  NODE_CIDR: "10.64.6.0/24"
+  # Pod network
+  POD_CIDR: "10.244.0.0/16"
+  # Service network
+  SERVICE_CIDR: "10.96.0.0/12"
+  # Cilium BGP load-balancer pool
+  CILIUM_LB_CIDR: "10.64.3.0/24"
+  CILIUM_LB_INGRESS_ADDR: "10.64.3.2"
+  # BGP AS number
+  BGP_AS: "65420"
+
+  # ── Certificate management ────────────────────────────────────────────────
+  CERT_DEFAULT_CLUSTERISSUER: "letsencrypt-production"
+  CERT_STAGING_CLUSTERISSUER: "letsencrypt-staging"
+  CERT_PRODUCTION_CLUSTERISSUER: "letsencrypt-production"
+
+  # ── Storage (Rook-Ceph) ──────────────────────────────────────────────────
+  CLUSTER_STORAGE_BLOCK: "ceph-block"
+  CLUSTER_STORAGE_FILESYSTEM: "ceph-filesystem"
+  CLUSTER_STORAGE_BUCKET: "ceph-bucket"
+  CLUSTER_STORAGE_BLOCK_HDD: "ceph-block-hdd"
+  CLUSTER_STORAGE_FILESYSTEM_HDD: "ceph-filesystem-hdd"
+  CLUSTER_STORAGE_BLOCK_SSD: "ceph-block-ssd"
+  CLUSTER_STORAGE_FILESYSTEM_SSD: "ceph-filesystem-ssd"
+
+  # ── ArgoCD ────────────────────────────────────────────────────────────────
+  ARGOCD_URL: "https://argocd.dotfile.sh"

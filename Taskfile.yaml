@@ -1,0 +1,199 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+# Taskfile.yaml — go-task task definitions for the kclt-01 ArgoCD/KSOPS cluster.
+# Docs: https://taskfile.dev/
+---
+version: "3"
+
+vars:
+  CLUSTER: kclt-01
+  K8S_DIR: "{{.ROOT_DIR}}/kubernetes"
+  # ArgoCD namespace
+  ARGOCD_NS: argocd
+  # Talos config dir (generated, gitignored)
+  TALOS_DIR: "{{.K8S_DIR}}/clusters/{{.CLUSTER}}/talos/clusterconfig"
+
+env:
+  # SOPS age key file — assumes the key is exported to bootstrap/site.agekey.
+  # Override this env var if your key lives elsewhere.
+  SOPS_AGE_KEY_FILE: "{{.ROOT_DIR}}/kubernetes/clusters/{{.CLUSTER}}/bootstrap/site.agekey"
+
+tasks:
+  # ---------------------------------------------------------------------------
+  # Default: show help
+  # ---------------------------------------------------------------------------
+  default:
+    desc: Show available tasks
+    silent: true
+    cmds:
+      - task --list
+
+  # ---------------------------------------------------------------------------
+  # deps: Install/verify required tools
+  # ---------------------------------------------------------------------------
+  deps:
+    desc: Verify required tools are installed (age, sops, kubectl, talosctl, argocd, kustomize)
+    silent: true
+    cmds:
+      - which age      || (echo "Missing: age — https://github.com/FiloSottile/age" && exit 1)
+      - which sops     || (echo "Missing: sops — https://github.com/getsops/sops" && exit 1)
+      - which kubectl  || (echo "Missing: kubectl — https://kubernetes.io/docs/tasks/tools/" && exit 1)
+      - which talosctl || (echo "Missing: talosctl — https://www.talos.dev/latest/introduction/quickstart/" && exit 1)
+      - which argocd   || (echo "Missing: argocd CLI — https://argo-cd.readthedocs.io/en/stable/cli_installation/" && exit 1)
+      - which kustomize || (echo "Missing: kustomize — https://kubectl.docs.kubernetes.io/installation/kustomize/" && exit 1)
+      - echo "All required tools found."
+
+  # ---------------------------------------------------------------------------
+  # bootstrap: Full cluster bootstrap workflow
+  # ---------------------------------------------------------------------------
+  bootstrap:
+    desc: Full bootstrap — Talos apply, ArgoCD install, KSOPS setup, root app sync
+    summary: |
+      Bootstraps a fresh kclt-01 cluster:
+        1. Generate/apply Talos configs (talos:gen + talos:apply)
+        2. Bootstrap Kubernetes (talos:bootstrap)
+        3. Install ArgoCD via kustomize + kubectl
+        4. Apply KSOPS age key secret
+        5. Apply the ArgoCD root Application (app-of-apps)
+    cmds:
+      - task: talos:gen
+      - task: talos:apply
+      - task: talos:bootstrap
+      - task: argocd:install
+      - task: argocd:ksops-secret
+      - task: argocd:root-app
+
+  # ---------------------------------------------------------------------------
+  # talos:* — Talos Linux node management
+  # ---------------------------------------------------------------------------
+  talos:gen:
+    desc: Generate Talos configs using talhelper
+    dir: "{{.ROOT_DIR}}/talos/clusters/{{.CLUSTER}}"
+    cmds:
+      - talhelper genconfig
+
+  talos:apply:
+    desc: Apply Talos config to a specific node (NODE=<ip>)
+    summary: |
+      Apply Talos machine config to NODE.
+      Usage: task talos:apply NODE=10.64.6.1
+    requires:
+      vars: [NODE]
+    cmds:
+      - talosctl apply-config --insecure --nodes {{.NODE}} --file {{.TALOS_DIR}}/{{.CLUSTER}}-{{.NODE}}.yaml
+
+  talos:bootstrap:
+    desc: Bootstrap etcd on the first control plane node
+    summary: |
+      Bootstrap the Kubernetes control plane via talosctl.
+      Run only ONCE on the first control plane node.
+    requires:
+      vars: [NODE]
+    cmds:
+      - talosctl bootstrap --nodes {{.NODE}}
+      - talosctl kubeconfig --nodes {{.NODE}} --force
+
+  talos:reset:
+    desc: "WARNING: Reset a Talos node (wipes all data). NODE=<ip>"
+    requires:
+      vars: [NODE]
+    cmds:
+      - talosctl reset --graceful=false --reboot --nodes {{.NODE}}
+
+  talos:upgrade:
+    desc: Upgrade Talos on a node (NODE=<ip> VERSION=<version>)
+    requires:
+      vars: [NODE, VERSION]
+    cmds:
+      - talosctl upgrade --nodes {{.NODE}} --image ghcr.io/siderolabs/installer:{{.VERSION}}
+
+  # ---------------------------------------------------------------------------
+  # argocd:* — ArgoCD management
+  # ---------------------------------------------------------------------------
+  argocd:install:
+    desc: Install ArgoCD via kustomize (kubernetes/argocd/install/)
+    cmds:
+      - kubectl create namespace {{.ARGOCD_NS}} --dry-run=client -o yaml | kubectl apply -f -
+      - kustomize build --enable-alpha-plugins --enable-exec {{.K8S_DIR}}/argocd/install | kubectl apply -f -
+      - kubectl rollout status deployment argocd-server -n {{.ARGOCD_NS}} --timeout=120s
+
+  argocd:ksops-secret:
+    desc: Apply KSOPS age key secret to ArgoCD namespace
+    summary: |
+      Creates the 'ksops-age-key' secret in the argocd namespace so
+      ArgoCD's KSOPS plugin can decrypt secrets at sync time.
+    cmds:
+      - |
+        kubectl create secret generic ksops-age-key \
+          --namespace={{.ARGOCD_NS}} \
+          --from-file=key.txt=${SOPS_AGE_KEY_FILE} \
+          --dry-run=client -o yaml | kubectl apply -f -
+
+  argocd:root-app:
+    desc: Apply the ArgoCD root Application (app-of-apps bootstrap)
+    cmds:
+      - kubectl apply -f {{.K8S_DIR}}/argocd/apps/root-app.yaml
+
+  argocd:sync:
+    desc: Force a full ArgoCD sync of all apps
+    cmds:
+      - argocd app sync --all --prune
+
+  argocd:password:
+    desc: Print the initial ArgoCD admin password
+    silent: true
+    cmds:
+      - kubectl get secret argocd-initial-admin-secret -n {{.ARGOCD_NS}} -o jsonpath="{.data.password}" | base64 -d && echo
+
+  # ---------------------------------------------------------------------------
+  # encrypt / decrypt — SOPS secret management
+  # ---------------------------------------------------------------------------
+  encrypt:
+    desc: Encrypt a SOPS secret file (FILE=<path>)
+    summary: |
+      Encrypt FILE in-place using SOPS with the age key from .sops.yaml.
+      Usage: task encrypt FILE=kubernetes/apps/auth/authentik/secret.sops.yaml
+    requires:
+      vars: [FILE]
+    cmds:
+      - sops --encrypt --in-place {{.FILE}}
+
+  decrypt:
+    desc: Decrypt a SOPS secret file to stdout (FILE=<path>)
+    requires:
+      vars: [FILE]
+    cmds:
+      - sops --decrypt {{.FILE}}
+
+  decrypt:edit:
+    desc: Edit a SOPS secret file in-place (FILE=<path>)
+    requires:
+      vars: [FILE]
+    cmds:
+      - sops {{.FILE}}
+
+  # ---------------------------------------------------------------------------
+  # kustomize:build — Build/preview a kustomization without applying
+  # ---------------------------------------------------------------------------
+  kustomize:build:
+    desc: Build a kustomization and preview output (DIR=<path>)
+    requires:
+      vars: [DIR]
+    cmds:
+      - kustomize build --enable-alpha-plugins --enable-exec {{.DIR}}
+
+  # ---------------------------------------------------------------------------
+  # lint — Validate YAML and kustomize builds
+  # ---------------------------------------------------------------------------
+  lint:
+    desc: Lint all YAML (yamllint)
+    cmds:
+      - yamllint -c {{.ROOT_DIR}}/.github/linters/.yamllint.yaml {{.K8S_DIR}} || true
+
+  # ---------------------------------------------------------------------------
+  # clean — Remove generated/temp files
+  # ---------------------------------------------------------------------------
+  clean:
+    desc: Remove generated Talos clusterconfig and .task/ temp files
+    cmds:
+      - rm -rf {{.TALOS_DIR}} .task/
+      - echo "Cleaned generated Talos configs and .task/ temp files."

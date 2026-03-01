@@ -1,0 +1,44 @@
+---
+# kubernetes/apps/cert-manager/cert-manager/helm-release.yaml
+# cert-manager v1.16.x — TLS certificate management via Let's Encrypt + Cloudflare DNS.
+# Chart: jetstack/cert-manager
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+  labels:
+    ops.dotfile.sh/cluster: kclt-01
+    ops.dotfile.sh/namespace: cert-manager
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://charts.jetstack.io
+    chart: cert-manager
+    # renovate: registryUrl=https://charts.jetstack.io chart=cert-manager
+    targetRevision: "v1.16.3"
+    helm:
+      valuesObject:
+        crds:
+          enabled: true
+        # Enable the Prometheus metrics service
+        prometheus:
+          enabled: true
+          servicemonitor:
+            enabled: true
+        # DNS-01 challenge via Cloudflare — token in KSOPS secret
+        # extraArgs:
+        #   - --dns01-recursive-nameservers-only
+        #   - --dns01-recursive-nameservers=1.1.1.1:53,8.8.8.8:53
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

@@ -1,0 +1,17 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../apps/auth/authentik/helm-release.yaml
+  - ../../apps/backup/volsync/helm-release.yaml
+  - ../../apps/cert-manager/cert-manager/helm-release.yaml
+  - ../../apps/database/cloudnative-pg/helm-release.yaml
+  - ../../apps/default/echo-server/helm-release.yaml
+  - ../../apps/kube-system/cilium/helm-release.yaml
+  - ../../apps/kube-system/gateway-api-crds/helm-release.yaml
+  - ../../apps/monitoring/kube-prometheus-stack/helm-release.yaml
+  - ../../apps/networking/gateway/helm-release.yaml
+  - ../../apps/networking/httproutes/helm-release.yaml
+  - ../../apps/security/kyverno/helm-release.yaml
+  - ../../apps/storage/rook-ceph/operator.yaml
+  - ../../apps/storage/rook-ceph/cluster.yaml

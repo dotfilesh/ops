@@ -1,37 +1,24 @@
 ---
 creation_rules:
-    # Attempt first to confirm if file is within a specific cluster. If
-    # so encrypt with clusters key. Try both 📁 k8s/ and 📁 talos/
-  - path_regex: (k8s|talos)/clusters/kclt-01/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
+    # Cluster-specific secrets under kubernetes/clusters/kclt-01/
+  - path_regex: kubernetes/clusters/kclt-01/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
     encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
-    # keys: 
-    #   age: 
-    #     - kclt-01.kube.sys.dotfile.sh
-    #   pgp:
-    #     - rwx@whits.io (depreciated)
-    #     - rwx@whits.io (card)
+    # age: kclt-01 cluster key
     age: >-
-      age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz 
-    pgp: >-
-      2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
-      9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
-    #
-    # If not a cluster, see if the file is in 📁 k8s/ or 📁 talos/
-    # if so, default to use global key.
-  - path_regex: (k8s|talos)/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
+      age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz
+    # App-level secrets under kubernetes/ (non-cluster)
+  - path_regex: kubernetes/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
     encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
-    # keys: 
-    #   age: 
-    #     - kube.sys.dotfile.sh
-    #   pgp:
-    #     - rwx@whits.io (depreciated)
-    #     - rwx@whits.io (card)
+    # age: global key
     age: >-
       age187teecmpvsa4kcme6apvqege0wqjnwd9whfpkq730m48mf8n93xqjn0jve
-    pgp: >-
-      2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
-      9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
-    # If nothing's taking, encrypt solely with Whit personal key.
+    # Talos cluster secrets
+  - path_regex: talos/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
+    encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
+    # age: global key
+    age: >-
+      age187teecmpvsa4kcme6apvqege0wqjnwd9whfpkq730m48mf8n93xqjn0jve
+    # Fallback: encrypt solely with personal PGP keys.
   - path_regex: .*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
     # keys:
     #   pgp:
