@@ -1,7 +1,7 @@
 # Additional Notes on KCLT-01 Router
 
 The router used in KCLT-01 is a UniFi UDM Pro, which does not support
-BGP. However, there are tools to expand functionality outside Ubiquiti's support. This is done to install [FRR](https://frrouting.org/) to provide BGPd. The configuration files in this dir enumerate 
+BGP. However, there are tools to expand functionality outside Ubiquiti's support. This is done to install [FRR](https://frrouting.org/) to provide BGPd. The configuration files in this dir enumerate
 
 ---
 

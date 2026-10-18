@@ -10,7 +10,7 @@ spec:
       name: "${CLUSTER_NAME}-protonmail-bridge"
       key: "tls.crt"
   target:
-    configMap: 
+    configMap:
       key: "protonmail-bridge-cert.pem"
     namespaceSelector: {}
       # Currently, empty syncs to all namespaces.

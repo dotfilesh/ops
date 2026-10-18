@@ -14,7 +14,7 @@ As such, each database is given its own cluster.
 ## Backups
 
 I am using Ceph's S3 rigamaroll, which I initiate
-using an `ObjectBucketClaim`. This will 
+using an `ObjectBucketClaim`. This will
 
 For example, if I created an OBC with the name of
 `cloudnative-pg-backup`, the configmap would have two fields:
@@ -26,10 +26,10 @@ BUCKET_NAME: cloudnative-pg-backup-80c45d3a-edf5-4caf-b6aa-90bce5bd4e56
 ---
 # Secret: cloudnative-pg-backup
 AWS_ACCESS_KEY_ID: AKIAIOSFODNN7EXAMPLE
-AWS_SECRET_ACCESS_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY 
+AWS_SECRET_ACCESS_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 ```
 
-The API for a CNPG `Cluster` backs up WAL files via barman to an S3 
+The API for a CNPG `Cluster` backs up WAL files via barman to an S3
 object store. There are two/four big fields to talk about.
 - `s3Credentials.accessKeyId` and `s3Credentials.secretAccessKey` are
   meant to consume secrets, as such they can be hooked up directly to

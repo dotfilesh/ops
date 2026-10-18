@@ -17,7 +17,7 @@ spec:
         app: rook-direct-mount
     spec:
       dnsPolicy: ClusterFirstWithHostNet
-      containers: 
+      containers:
         - name: rook-ceph-tools
           image: rook/ceph:v1.14.0
           command: ["/bin/bash"]

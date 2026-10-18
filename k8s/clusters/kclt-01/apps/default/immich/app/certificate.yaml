@@ -10,4 +10,4 @@ spec:
     kind: ClusterIssuer
   commonName: *host
   dnsNames:
-  - *host 
+  - *host

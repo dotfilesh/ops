@@ -53,7 +53,7 @@ nodes:
       node-role.kubernetes.io/control-plane: "control-plane"
       topology.kubernetes.io/region: "us-east"
       topology.kubernetes.io/zone: *clusterName
-          
+
   - hostname: woglinde
     ipAddress: 10.64.6.1
     controlPlane: true
@@ -74,7 +74,7 @@ nodes:
         vip:
           ip: ${clusterEndpointIP}
     nodeLabels: *controllerLabels
-  
+
   - hostname: wellgunde
     ipAddress: 10.64.6.2
     controlPlane: true
@@ -95,7 +95,7 @@ nodes:
         vip:
           ip: ${clusterEndpointIP}
     nodeLabels: *controllerLabels
-  
+
   - hostname: flosshilde
     ipAddress: 10.64.6.3
     controlPlane: true
@@ -116,7 +116,7 @@ nodes:
         vip:
           ip: ${clusterEndpointIP}
     nodeLabels: *controllerLabels
-  
+
   - hostname: formula
     ipAddress: 10.64.6.9
     controlPlane: false
@@ -141,7 +141,7 @@ nodes:
     nodeLabels: &workerLabels
       topology.kubernetes.io/region: "us-east"
       topology.kubernetes.io/zone: *clusterName
-  
+
   - hostname: urban
     ipAddress: 10.64.6.10
     controlPlane: false
@@ -159,7 +159,7 @@ nodes:
         mtu: 9000
         dhcp: false
     nodeLabels: *workerLabels
-  
+
   - hostname: lailah
     ipAddress: 10.64.6.11
     controlPlane: false
@@ -182,7 +182,7 @@ nodes:
             officialExtensions:
                 - siderolabs/intel-ucode
     nodeLabels: *workerLabels
-  
+
   - hostname: verus
     ipAddress: 10.64.6.12
     controlPlane: false
@@ -206,7 +206,7 @@ nodes:
                 - siderolabs/intel-ucode
                 - siderolabs/bnx2-bnx2x
     nodeLabels: *workerLabels
-  
+
   - hostname: mastema
     ipAddress: 10.64.6.13
     controlPlane: false
@@ -229,7 +229,7 @@ nodes:
             officialExtensions:
                 - siderolabs/intel-ucode
     nodeLabels: *workerLabels
-  
+
   - hostname: amdusias
     ipAddress: 10.64.6.14
     controlPlane: false

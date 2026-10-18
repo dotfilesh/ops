@@ -12,4 +12,3 @@ spec:
   dnsNames:
   - "thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
   - "*.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
-

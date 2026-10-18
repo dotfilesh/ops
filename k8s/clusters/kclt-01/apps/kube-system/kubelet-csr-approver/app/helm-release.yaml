@@ -29,7 +29,6 @@ spec:
     # consequence of my sin (wanting cool names)
     providerRegex: |
       ^(junks|woglinde|wellgunde|flosshilde|formula|urban|verus|lailah|mastema|amdusias)$
-    providerRexgex: 
+    providerRexgex:
     providerIpPrefixes: 10.64.6.0/20
     bypassDnsResolution: true
-

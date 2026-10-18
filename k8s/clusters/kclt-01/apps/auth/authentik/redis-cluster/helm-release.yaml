@@ -9,7 +9,7 @@ spec:
   chart:
     spec:
       chart: redis-cluster
-      version: 
+      version:
       sourceRef:
         kind: HelmRepository
         name: authentik

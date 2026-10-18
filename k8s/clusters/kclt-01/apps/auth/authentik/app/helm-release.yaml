@@ -32,15 +32,15 @@ spec:
         username: ${SECRET__PROTONMAIL_USER}
         password: ${SECRET__PROTONMAIL_PASSWORD}
         use_tls: true
-      
+
       error_reporting:
         enabled: true
-      
+
       postgresql:
         # Uses a dedicated cnpg cluster.
         host: "authentik-cnpg-rw"
         name: "authentik"
-    
+
 
     global:
       revisionHistoryLimit: 3
@@ -58,7 +58,7 @@ spec:
         - name: protonmail-bridge-cert
           configMap:
             name: protonmail-bridge-cert
-      
+
       volumeMounts:
         - mountPath: /media
           name: media
@@ -72,8 +72,8 @@ spec:
           optional: true
           subPath: protonmail-bridge-cert.pem
           readOnly: true
-    
-    
+
+
     server:
       autoscaling:
         enabled: true
@@ -87,8 +87,8 @@ spec:
 
       serviceMonitor:
         create: true
-      
-    
+
+
     worker:
       autoscaling:
         enabled: true
@@ -97,12 +97,12 @@ spec:
     postgresql:
       # disable the built-in PostgreSQL chart.
       enabled: false
-    
+
 
     prometheus:
       rules:
         enabled: true
-    
+
 
     redis:
       # enable the built-in redis chart.

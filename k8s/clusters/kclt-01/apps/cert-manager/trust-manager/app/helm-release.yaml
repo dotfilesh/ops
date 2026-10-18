@@ -37,5 +37,5 @@ spec:
     image:
       repository: quay.io/jetstack/trust-manager
       tag: *version
-      # TODO: Toy with renovate to update tags too.  
+      # TODO: Toy with renovate to update tags too.
       #digest: sha256:bcc75013a52f6d784a376ac4693cd5b051e847f0ad2015f5063fca5477021323

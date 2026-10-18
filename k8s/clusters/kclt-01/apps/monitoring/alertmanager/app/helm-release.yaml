@@ -34,10 +34,10 @@ spec:
             - name: storage
               accessMode: ReadWriteOnce
               size: 50Mi
-              storageClass: ${CLUSTER_STORAGE_BLOCK_HDD} 
+              storageClass: ${CLUSTER_STORAGE_BLOCK_HDD}
               globalMounts:
                 - path: /alertmanager
-      
+
         containers:
           app:
             image:
@@ -52,8 +52,8 @@ spec:
                 memory: 50M
               limits:
                 memory: 100M
-    
-    
+
+
     service:
       alertmanager:
         controller: alertmanager
@@ -74,4 +74,4 @@ spec:
                   port: http
         tls:
           - hosts:
-            - *host
+              - *host

@@ -111,7 +111,7 @@ spec:
           - path: /media
         existingClaim: watch-media
         retain: true
-      
+
       cache:
         type: emptyDir
         globalMounts:
@@ -127,4 +127,4 @@ spec:
         externalTrafficPolicy: Cluster
         ports:
           http:
-            port: *port 
+            port: *port

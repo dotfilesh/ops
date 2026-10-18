@@ -35,7 +35,7 @@ uname -a
 date
 
 failure () { echo FAILED. >&3; exit 1; }
-trap failure EXIT 
+trap failure EXIT
 
 # move to root of repo. This does assume the script is "somewhere" in
 # the repo. Which I think is a perfectly healthy assumption to make.

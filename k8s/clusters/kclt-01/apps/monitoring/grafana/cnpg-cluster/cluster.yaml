@@ -23,7 +23,7 @@ spec:
         maxParallel: 8
   bootstrap:
     initdb:
-      database: grafana 
+      database: grafana
       owner: grafana
       secret:
         name: grafana-cnpg-user-grafana

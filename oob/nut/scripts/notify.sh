@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script was generated with the help of ChatGPT, Feb 13 Version. 
+# This script was generated with the help of ChatGPT, Feb 13 Version.
 
 # **** This script must be installed manually! ****
 # It is included in this repo for record-keeping, but has no one-liner

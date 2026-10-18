@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - ./certificate.yaml
   - ./helm-release.yaml
-  - ./object-bucket-claim.yaml 
+  - ./object-bucket-claim.yaml

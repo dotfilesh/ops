@@ -64,8 +64,8 @@ spec:
         - maxSkew: 1
           topologyKey: kubernetes.io/hostname
           # TODO: In current (2022-08-21) env, this constraint WILL
-          # fail. Why? 
-          whenUnsatisfiable: ScheduleAnyway 
+          # fail. Why?
+          whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
               app.kubernetes.io/name: ingress-nginx

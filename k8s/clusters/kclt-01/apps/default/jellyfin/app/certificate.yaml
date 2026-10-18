@@ -8,6 +8,6 @@ spec:
   issuerRef:
     name: "${CERT_DEFAULT_CLUSTERISSUER}"
     kind: ClusterIssuer
-  commonName: *host 
+  commonName: *host
   dnsNames:
-  - *host 
+  - *host

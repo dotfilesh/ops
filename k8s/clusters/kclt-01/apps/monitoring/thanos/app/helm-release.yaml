@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
   name: thanos
-  namespace: monitoring 
+  namespace: monitoring
 spec:
   interval: 30m
   chart:
@@ -42,28 +42,28 @@ spec:
       dnsDiscovery:
         sidecarsService: kube-prometheus-stack-thanos-discovery
         sidecarsNamespace: monitoring
-      
+
       enabled: true
-      
+
       ingress:
         enabled: true
         # NOTE: why isn't this using the standard hots[] setup?
-        hostname: &host "query.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+        hostname: &queryHost "query.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
           - hosts:
-            - *host
+              - *queryHost
             secretName: &thanosWebSecret thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}
-      
+
       replicaCount: 3
       replicaLabels:
         - "__replica__"
-    
+
 
     queryFrontend:
       enabled: false
-    
+
 
     bucketweb:
       enabled: true
@@ -73,43 +73,43 @@ spec:
         rollingUpdate:
           maxUnavailable: 1
           maxSurge: 1
-      
+
       podAntiAffinityPreset: hard
       ingress:
         enabled: true
-        hostname: &host "bucketweb.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+        hostname: &bucketwebHost "bucketweb.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
           - hosts:
-            - *host
+              - *bucketwebHost
             secretName: *thanosWebSecret
-    
+
 
     compactor:
       enabled: true
       extraFlags:
         - "--compact.concurrency=4"
         - --delete-delay=30m
-      
+
       retentionResolutionRaw: 14d
       retentionResolution5m: 14d
       retentionResolution1h: 14d
       ingress:
         enabled: true
-        hostname: &host "compactor.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+        hostname: &compactorHost "compactor.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
           - hosts:
-            - *host
+              - *compactorHost
             secretName: *thanosWebSecret
-      
+
       persistence:
         enabled: true
         storageClass: "ceph-block"
         size: 50Gi
-    
+
 
     storegateway:
       enabled: true
@@ -117,19 +117,19 @@ spec:
       podAntiAffinityPreset: hard
       ingress:
         enabled: true
-        hostname: &host "storegateway.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+        hostname: &storegatewayHost "storegateway.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
           - hosts:
-            - *host
+              - *storegatewayHost
             secretName: *thanosWebSecret
-      
+
       persistence:
         enabled: true
         storageClass: "ceph-block"
         size: 20Gi
-    
+
 
     ruler:
       enabled: true
@@ -137,36 +137,36 @@ spec:
       podAntiAffinityPreset: hard
       dnsDiscovery:
         enabled: true
-      
+
       alertmanagers:
         - http://kube-prometheus-stack-alertmanager.monitoring:9093
-      
+
       clusterName: ${CLUSTER_NAME}
       extraFlags:
         - "--web.prefix-header=X-Forwarded-Prefix"
-      
+
       config: |-
         groups:
           - name: "PrometheusWatcher"
             rules:
               - alert: "PrometheusDown"
                 expr: absent(up{job="kube-prometheus-stack-prometheus"})
-      
+
       ingress:
         enabled: true
-        hostname: &host "ruler.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
+        hostname: &rulerHost "ruler.thanos.${CLUSTER_NAME}.api.${GLOBALSECRET__PUBLIC_DOMAIN}"
         ingressClassName: "nginx"
         tls: true
         extraTls:
           - hosts:
-            - *host
+              - *rulerHost
             secretName: *thanosWebSecret
-      
+
       persistence:
         enabled: true
         storageClass: "ceph-block"
         size: 20Gi
-    
+
 
     metrics:
       enabled: true

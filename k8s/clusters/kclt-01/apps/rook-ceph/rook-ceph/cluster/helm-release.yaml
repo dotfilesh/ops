@@ -26,12 +26,12 @@ spec:
       retries: 5
   values:
     operatorNamespace: rook-ceph
-    
+
 
     monitoring:
       enabled: true
       createPrometheusRules: true
-    
+
 
     configOverride: |
       [global]
@@ -42,7 +42,7 @@ spec:
       [osd]
       osd_scrub_auto_repair
       osd_scrube_auto_repair_num_errors = 5
-    
+
     ingress:
       dashboard:
         ingressClassName: "nginx"
@@ -51,9 +51,9 @@ spec:
           path: "/"
         tls:
           - hosts:
-            - *host
-            secretName: *host 
-    
+              - *host
+            secretName: *host
+
 
     cephClusterSpec:
       network:
@@ -62,20 +62,20 @@ spec:
           requireMsgr2: true
           compression:
             enabled: true
-      
+
       crashCollector:
         disable: false
-      
+
       dashboard:
         enabled: true
         urlPrefix: /
-        ssl: false 
+        ssl: false
 
       logCollector:
         enabled: true
         periodicity: daily
         maxLogSize: 500M
-      
+
       storage:
         # Set to false for safety, all nodes should be used though.
         useAllNodes: false
@@ -88,7 +88,7 @@ spec:
             devices:
               - name: "/dev/disk/by-id/wwn-0x55cd2e404c1ca321"
               - name: "/dev/disk/by-id/wwn-0x55cd2e414d948115"
-              - name: "/dev/disk/by-id/wwn-0x5000c500dc5504c0" 
+              - name: "/dev/disk/by-id/wwn-0x5000c500dc5504c0"
           - name: verus
             devices:
               - name: "/dev/disk/by-id/wwn-0x55cd2e404c1ca2fd"
@@ -155,8 +155,8 @@ spec:
             cpu: "500m"
             memory: "100Mi"
 
-            
-    cephBlockPools: 
+
+    cephBlockPools:
       - name: ceph-blockpool
         spec:
           failureDomain: host
@@ -166,22 +166,22 @@ spec:
               primaryDeviceClass: ssd
               secondaryDeviceClass: hdd
         storageClass:
-            enabled: true
-            name: ${CLUSTER_STORAGE_BLOCK}
-            isDefault: true 
-            reclaimPolicy: Delete
-            allowVolumeExpansion: true
-            parameters:
-              imageFormat: &rbdFormat "63"
-              imageFeatures: &rbdFeatures layering,fast-diff,object-map,deep-flatten,exclusive-lock
-              csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
-              csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
-              csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
-              csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
-              csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
-              csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
-              csi.storage.k8s.io/fstype: ext4
-      
+          enabled: true
+          name: ${CLUSTER_STORAGE_BLOCK}
+          isDefault: true
+          reclaimPolicy: Delete
+          allowVolumeExpansion: true
+          parameters:
+            imageFormat: &rbdFormat "63"
+            imageFeatures: &rbdFeatures layering,fast-diff,object-map,deep-flatten,exclusive-lock
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+            csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+            csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+            csi.storage.k8s.io/fstype: ext4
+
       - name: ceph-blockpool-hdd
         spec:
           failureDomain: host
@@ -189,22 +189,22 @@ spec:
             size: 3
             deviceClass: hdd
         storageClass:
-            enabled: true
-            name: ${CLUSTER_STORAGE_BLOCK_HDD}
-            isDefault: false 
-            reclaimPolicy: Delete
-            allowVolumeExpansion: true
-            parameters:
-              imageFormat: *rbdFormat
-              imageFeatures: *rbdFeatures
-              csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
-              csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
-              csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
-              csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
-              csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
-              csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
-              csi.storage.k8s.io/fstype: ext4
-      
+          enabled: true
+          name: ${CLUSTER_STORAGE_BLOCK_HDD}
+          isDefault: false
+          reclaimPolicy: Delete
+          allowVolumeExpansion: true
+          parameters:
+            imageFormat: *rbdFormat
+            imageFeatures: *rbdFeatures
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+            csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+            csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+            csi.storage.k8s.io/fstype: ext4
+
       - name: ceph-blockpool-ssd
         spec:
           failureDomain: host
@@ -212,22 +212,22 @@ spec:
             size: 3
             deviceClass: ssd
         storageClass:
-            enabled: true
-            name: ${CLUSTER_STORAGE_BLOCK_SSD}
-            isDefault: false
-            reclaimPolicy: Delete
-            allowVolumeExpansion: true
-            parameters:
-              imageFormat: *rbdFormat
-              imageFeatures: *rbdFeatures
-              csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
-              csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
-              csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
-              csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
-              csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
-              csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
-              csi.storage.k8s.io/fstype: ext4
-    
+          enabled: true
+          name: ${CLUSTER_STORAGE_BLOCK_SSD}
+          isDefault: false
+          reclaimPolicy: Delete
+          allowVolumeExpansion: true
+          parameters:
+            imageFormat: *rbdFormat
+            imageFeatures: *rbdFeatures
+            csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
+            csi.storage.k8s.io/controller-expand-secret-name: rook-csi-rbd-provisioner
+            csi.storage.k8s.io/controller-expand-secret-namespace: rook-ceph
+            csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
+            csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
+            csi.storage.k8s.io/fstype: ext4
+
 
     cephFileSystems:
       - name: ceph-filesystem
@@ -265,7 +265,7 @@ spec:
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
             csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
             csi.storage.k8s.io/fstype: ext4
-      
+
       - name: ceph-filesystem-hdd
         spec:
           metadataPool:
@@ -299,7 +299,7 @@ spec:
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
             csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
             csi.storage.k8s.io/fstype: ext4
-      
+
       - name: ceph-filesystem-ssd
         spec:
           metadataPool:
@@ -328,7 +328,7 @@ spec:
             csi.storage.k8s.io/node-stage-secret-name: rook-csi-cephfs-node
             csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
             csi.storage.k8s.io/fstype: ext4
-    
+
 
     cephObjectStores:
       - name: ceph-bucket
@@ -361,7 +361,7 @@ spec:
           reclaimPolicy: Delete
           parameters:
             region: ${CLUSTER_NAME}
-    
+
 
     toolbox:
       enabled: true

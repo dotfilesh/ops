@@ -15,7 +15,7 @@ https://raw.githubusercontent.com/9p4/jellyfin-plugin-sso/manifest-release/manif
   - Must be made in Authentik
 - **Enable Role-Based Folder Access:**
   - `xyz.hellsite.watch/access-libraries`
-  - `sh.dotfile.auth/admin` 
+  - `sh.dotfile.auth/admin`
 - **Role Claim:** `groups`
   - Must be made in authentik
 - **Request Additional Scopes:** `["groups"]`

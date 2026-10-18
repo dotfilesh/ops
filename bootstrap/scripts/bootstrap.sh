@@ -48,7 +48,7 @@ cd "$(git rev-parse --show-toplevel)"
 kubectl --kubeconfig "${KUBECONFIG}" apply --server-side --kustomize \
   ./k8s/global/bootstrap/
 
-# This decrypts the sops-encrypted global and site age keys, 
+# This decrypts the sops-encrypted global and site age keys,
 # concatenates them through an array (TODO: there's gotta be a better
 # way), and creates a kubernetes secret with the data in a format
 # expected by flux.
@@ -76,7 +76,7 @@ sops --decrypt ./k8s/global/config/global-secrets.sops.yaml |\
 sops --decrypt \
   ./k8s/clusters/"${CLUSTER_NAME}"/flux/vars/cluster-secrets.sops.yaml |\
   kubectl apply -f -
-  
+
 # Begin reconciling flux repository.
 kubectl --kubeconfig "${KUBECONFIG}" apply --kustomize \
   k8s/clusters/"${CLUSTER_NAME}"/flux/config/

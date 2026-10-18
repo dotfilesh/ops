@@ -42,7 +42,7 @@ spec:
   externalClusters:
       # Previous cluster to restore backup from
     - name: authentik-cnpg-backup-iter1
-      barmanObjectStore: 
+      barmanObjectStore:
         destinationPath: *destinationPath
         endpointURL: *endpointUrl
         s3Credentials: *s3creds

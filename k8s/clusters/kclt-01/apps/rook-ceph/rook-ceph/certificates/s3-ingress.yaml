@@ -14,9 +14,9 @@ spec:
             backend:
               service:
                 name: rook-ceph-rgw-ceph-bucket
-                port: 
+                port:
                   number: 80
   tls:
     - hosts:
-      - *host
+        - *host
       secretName: *host
