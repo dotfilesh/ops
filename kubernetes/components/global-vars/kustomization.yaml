@@ -1,0 +1,9 @@
+---
+# Values shared by every cluster. Included by each namespace kustomization
+# under clusters/<cluster>/apps/, so every namespace gets its own copy and
+# the Flux Kustomizations living there can substitute from them.
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - ./global-settings.yaml
+  - ./global-secrets.sops.yaml

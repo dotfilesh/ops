@@ -1,16 +1,33 @@
+---
+exclude: ^bootstrap/clover/
 repos:
-  - repo: https://github.com/k8s-at-home/sops-pre-commit
-    rev: v2.1.1
+  - repo: local
     hooks:
-    - id: forbid-secrets
+      - id: forbid-unencrypted-sops
+        name: forbid unencrypted SOPS files
+        description: Fail if a *.sops.yaml or *.dirtysops file is missing SOPS metadata.
+        language: system
+        files: \.(sops\.ya?ml|sops|dirtysops)$
+        exclude: ^\.sops\.yaml$
+        entry: >-
+          bash -c 'rc=0; for f in "$@"; do
+          grep -Eq "^sops:|\"sops\":" "$f" || { echo "$f is not SOPS-encrypted"; rc=1; };
+          done; exit $rc' --
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+        exclude: \.sops\.|\.dirtysops$
       - id: end-of-file-fixer
+        exclude: \.sops\.|\.dirtysops$
       - id: mixed-line-ending
+        exclude: \.sops\.|\.dirtysops$
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        exclude: \.img$
   - repo: https://github.com/adrienverge/yamllint
-    rev: v1.35.1
+    rev: v1.38.0
     hooks:
       - args:
           - --config-file

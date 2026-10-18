@@ -1,0 +1,17 @@
+---
+# CNPG generates the authentik-db-app Secret (host, dbname, username, password, uri)
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: authentik-db
+spec:
+  instances: 3
+  storage:
+    size: 10Gi
+    storageClass: ${CLUSTER_STORAGE_BLOCK}
+  bootstrap:
+    initdb:
+      database: authentik
+      owner: authentik
+  monitoring:
+    enablePodMonitor: true

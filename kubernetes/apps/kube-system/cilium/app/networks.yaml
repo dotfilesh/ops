@@ -1,0 +1,24 @@
+---
+# LoadBalancer IPs come from a block inside the node LAN and are announced
+# with ARP (L2 announcements), so they work for on-LAN clients and need
+# nothing from the router.
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: pool
+spec:
+  allowFirstLastIPs: "No"
+  blocks:
+    - cidr: ${CLUSTER_LB_CIDR}
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: l2-policy
+spec:
+  loadBalancerIPs: true
+  interfaces:
+    - ^bond0$
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/os: linux

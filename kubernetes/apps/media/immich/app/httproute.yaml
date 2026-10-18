@@ -1,0 +1,17 @@
+---
+# LAN only: Cloudflare's CDN terms bar bulk photo/video serving via the tunnel.
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: immich
+spec:
+  hostnames:
+    - immich.${SECRET_DOMAIN_PUBLIC}
+  parentRefs:
+    - name: envoy-internal
+      namespace: network
+      sectionName: https
+  rules:
+    - backendRefs:
+        - name: immich-server
+          port: 2283

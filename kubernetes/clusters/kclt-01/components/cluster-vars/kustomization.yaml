@@ -1,0 +1,7 @@
+---
+# Values specific to kclt-01; see components/global-vars for shared ones.
+apiVersion: kustomize.config.k8s.io/v1alpha1
+kind: Component
+resources:
+  - ./cluster-settings.yaml
+  - ./cluster-secrets.sops.yaml

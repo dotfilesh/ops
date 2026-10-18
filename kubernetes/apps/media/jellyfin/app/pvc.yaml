@@ -1,0 +1,15 @@
+---
+# Library data: never pruned by Flux, and the storage class retains the volume.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jellyfin-media
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Ti
+  storageClassName: ${CLUSTER_STORAGE_BULK}

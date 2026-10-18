@@ -1,9 +1,0 @@
----
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: cluster-internal-ca
-  namespace: cert-manager
-spec:
-  ca:
-    secretName: cluster-internal-ca-keys

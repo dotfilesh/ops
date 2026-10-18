@@ -1,0 +1,12 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: database
+components:
+  - ../../../../components/global-vars
+  - ../../components/cluster-vars
+  - ../../components/flux-alerts
+resources:
+  - ../../../../apps/database/namespace.yaml
+  - ../../../../apps/database/cloudnative-pg/ks.yaml
+  - ../../../../apps/database/barman-cloud/ks.yaml

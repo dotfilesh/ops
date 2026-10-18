@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/helmfile
+
+# CRDs that Flux-managed resources need before their owning charts exist.
+# Only rendered (--include-crds) and piped to kubectl by `just bootstrap
+# apps`; these releases are never installed by helmfile.
+helmDefaults:
+  args:
+    - --include-crds
+    - --no-hooks
+
+bases:
+  - default.yaml
+
+releases:
+  - name: cloudflare-dns
+    namespace: network
+    inherit:
+      - template: default
+
+  - name: envoy-gateway
+    namespace: network
+    inherit:
+      - template: default
+
+  - name: prometheus-operator-crds
+    namespace: observability
+    chart: oci://ghcr.io/prometheus-community/charts/prometheus-operator-crds
+    # renovate: datasource=docker depName=ghcr.io/prometheus-community/charts/prometheus-operator-crds
+    version: 32.0.1

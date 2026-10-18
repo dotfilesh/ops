@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: rook-ceph
+components:
+  - ../../../../components/global-vars
+  - ../../components/cluster-vars
+  - ../../components/flux-alerts
+resources:
+  - ../../../../apps/rook-ceph/namespace.yaml
+  - ../../../../apps/rook-ceph/rook-ceph-operator/ks.yaml
+  - ../../../../apps/rook-ceph/rook-ceph-cluster/ks.yaml
+configMapGenerator:
+  # Hardware-specific values for the shared rook-ceph-cluster HelmRelease
+  - name: rook-ceph-cluster-values
+    files:
+      - values.yaml=./rook-ceph-cluster-values.yaml
+generatorOptions:
+  disableNameSuffixHash: true

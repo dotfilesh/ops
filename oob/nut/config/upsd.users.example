@@ -1,5 +1,5 @@
 [admin]
-        password = secretpassword 
+        password = secretpassword
         actions = SET
         instcmds = ALL
 [monuser]

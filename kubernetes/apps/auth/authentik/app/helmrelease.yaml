@@ -1,0 +1,63 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: authentik
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: authentik
+  interval: 1h
+  values:
+    global:
+      deploymentAnnotations:
+        secret.reloader.stakater.com/reload: authentik-secret,authentik-db-app
+      envFrom:
+        - secretRef:
+            name: authentik-secret
+      env:
+        - name: AUTHENTIK_POSTGRESQL__HOST
+          valueFrom:
+            secretKeyRef:
+              name: &db authentik-db-app
+              key: host
+        - name: AUTHENTIK_POSTGRESQL__NAME
+          valueFrom:
+            secretKeyRef:
+              name: *db
+              key: dbname
+        - name: AUTHENTIK_POSTGRESQL__USER
+          valueFrom:
+            secretKeyRef:
+              name: *db
+              key: username
+        - name: AUTHENTIK_POSTGRESQL__PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: *db
+              key: password
+    authentik:
+      error_reporting:
+        enabled: false
+    postgresql:
+      enabled: false
+    prometheus:
+      rules:
+        enabled: true
+    server:
+      replicas: 2
+      metrics:
+        serviceMonitor:
+          enabled: true
+      route:
+        main:
+          enabled: true
+          hostnames:
+            - auth.${SECRET_DOMAIN_PUBLIC}
+          parentRefs:
+            - name: envoy-external
+              namespace: network
+              sectionName: https
+    worker:
+      replicas: 2

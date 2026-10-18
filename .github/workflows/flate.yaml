@@ -1,0 +1,54 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Flate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  # renovate: datasource=github-releases depName=home-operations/flate
+  FLATE_VERSION: "v0.6.5"
+
+jobs:
+  test:
+    name: Render Flux tree
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install flate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          asset="flate_${FLATE_VERSION#v}_linux_amd64.tar.gz"
+          gh release download "${FLATE_VERSION}" --repo home-operations/flate \
+            --pattern "${asset}" --pattern "${asset}.sha256" --dir "${RUNNER_TEMP}"
+          cd "${RUNNER_TEMP}"
+          echo "$(cat "${asset}.sha256")  ${asset}" | sha256sum --check
+          tar -xzf "${asset}" flate
+          echo "${RUNNER_TEMP}" >> "${GITHUB_PATH}"
+
+      - name: Test every cluster against known failures
+        run: |
+          rc=0
+          for dir in kubernetes/clusters/*/; do
+            export CLUSTER="$(basename "$dir")"
+            echo "::group::${CLUSTER}"
+            .github/scripts/flate-ratchet.sh flate || rc=1
+            echo "::endgroup::"
+          done
+          exit "$rc"

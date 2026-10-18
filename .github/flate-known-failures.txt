@@ -1,0 +1,3 @@
+# Flux resources that flate is known to fail on, as "<Kind> <namespace>/<name>".
+# Checked by .github/scripts/flate-ratchet.sh: entries may only be removed.
+# Keep this empty; add an entry only with a comment explaining the plan to fix it.

@@ -1,0 +1,16 @@
+---
+# Namespaces (and, inside each, apps) that kclt-01 runs.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ./flux-system
+  - ./kube-system
+  - ./cert-manager
+  - ./network
+  - ./rook-ceph
+  - ./database
+  - ./observability
+  - ./auth
+  - ./media
+  - ./games
+  - ./default

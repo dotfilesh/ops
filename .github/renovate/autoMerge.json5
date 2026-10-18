@@ -6,7 +6,7 @@
             "matchDatasources": ["helm"],
             "automerge": true,
             "automergeType": "branch",
-            "requiredStatusChecks": null,
+            "ignoreTests": true,
             "matchUpdateTypes": ["minor", "patch"],
             "matchPackageNames": [""]
         }
