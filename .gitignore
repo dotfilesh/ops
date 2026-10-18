@@ -4,3 +4,9 @@
 # Local-only files (e.g. .claude/CLAUDE.local.md, .claude/settings.local.json)
 *.local
 *.local.*
+
+# Per-cluster admin credentials and rendered machine configs (never commit)
+talos/clusters/*/kubeconfig
+talos/clusters/*/talosconfig
+talos/clusters/*/rendered/
+talos/clusters/*/clusterconfig/

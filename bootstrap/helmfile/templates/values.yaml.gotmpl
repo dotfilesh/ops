@@ -1,0 +1,4 @@
+{{- /* Shared apps use Flux ${VARS}; resolve them from the environment the
+       bootstrap recipe exports (cluster + global settings and secrets). */ -}}
+{{- $hr := fromYaml (readFile (printf "../../../kubernetes/apps/%s/%s/app/helmrelease.yaml" .Release.Namespace .Release.Name)) -}}
+{{ exec "flux" (list "envsubst" "--strict") ($hr.spec.values | toYaml) }}
