@@ -1,0 +1,45 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Renovate config
+
+on:
+  pull_request:
+    paths:
+      - .github/renovate.json5
+      - .github/renovate/**
+      - .github/workflows/renovate.yaml
+  push:
+    branches:
+      - main
+    paths:
+      - .github/renovate.json5
+      - .github/renovate/**
+      - .github/workflows/renovate.yaml
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  # renovate: datasource=npm depName=renovate
+  RENOVATE_VERSION: "44.166.0"
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Validate Renovate config
+        run: >-
+          npx --yes --package "renovate@${RENOVATE_VERSION}" --
+          renovate-config-validator --strict
+          .github/renovate.json5 .github/renovate/*.json5

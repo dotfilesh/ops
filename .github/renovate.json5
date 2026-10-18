@@ -27,6 +27,15 @@
     "customManagers": [
         {
             "customType": "regex",
+            "description": "Process '# renovate:' annotated versions in workflows and Talos config",
+            "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/", "/^talos/.+\\.ya?ml$/"],
+            "matchStrings": [
+                "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+\\S+:\\s*\"?(?<currentValue>[^\"\\s]+)\"?"
+            ],
+            "versioningTemplate": "{{#if versioning}}{{{versioning}}}{{else}}semver{{/if}}"
+        },
+        {
+            "customType": "regex",
             "description": "Process CRD dependencies",
             "managerFilePatterns": ["/k8s/.+\\.ya?ml$/"],
             "matchStrings": [

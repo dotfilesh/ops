@@ -1,0 +1,12 @@
+# Flux resources that flate is known to fail on, as "<Kind> <namespace>/<name>".
+# Checked by .github/scripts/flate-ratchet.sh: entries may only be removed.
+# See .claude/CLAUDE.local.md for the phase that fixes each one.
+
+# https://bjw-s.github.io/helm-charts/ is gone; move to the bjw-s-labs OCI chart.
+HelmRelease default/immich-redis
+HelmRelease default/jellyfin
+HelmRelease monitoring/alertmanager
+HelmRelease networking/echo-server
+
+# postfinance-charts.yaml exists but is not listed in k8s/global/sources/helm/kustomization.yaml.
+HelmRelease kube-system/kubelet-csr-approver
