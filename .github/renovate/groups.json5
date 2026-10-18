@@ -3,23 +3,15 @@
         {
             "groupName": "cert-manager",
             "description": "Cert-Manager image (for CRDs) and chart",
-            "matchPackagePatterns": ["cert-manager"],
+            "matchPackageNames": ["/cert-manager/"],
             "matchDatasources": ["docker", "helm"],
-            "group": { "commitMessageTopic": "{{{groupName}}} group" },
-            "separateMinorPatch": true
-        },
-        {
-            "groupName": "metallb",
-            "description": "MetalLB kustomization (for CRDs) and chart",
-            "matchPackagePatterns": ["metallb"],
-            "matchDatasources": ["github-tags", "helm"],
             "group": { "commitMessageTopic": "{{{groupName}}} group" },
             "separateMinorPatch": true
         },
         {
             "groupName": "rook-ceph",
             "description": "Rook-Ceph image, CRDs, and chart",
-            "matchPackagePatterns": ["rook.ceph", "rook.ceph.cluster"],
+            "matchPackageNames": ["/rook.ceph/"],
             "matchDatasources": ["docker", "github-tags", "helm"],
             "group": { "commitMessageTopic": "{{{groupName}}} group" },
             "separateMinorPatch": true
@@ -27,11 +19,10 @@
         {
             "groupName": "thanos",
             "description": "Thanos image and chart - mismatched versions",
-            "matchPackagePatterns": ["thanos"],
+            "matchPackageNames": ["/thanos/"],
             "matchDatasources": ["docker", "github-releases", "helm"],
             "matchUpdateTypes": ["minor", "patch"],
-            "group": { "commitMessageTopic": "{{{groupName}}} group" },
-            "separateMinorPatch": false
+            "group": { "commitMessageTopic": "{{{groupName}}} group" }
         }
     ]
 }

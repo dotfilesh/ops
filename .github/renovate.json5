@@ -1,7 +1,7 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        "config:base",
+        "config:recommended",
         ":dependencyDashboard",
         ":semanticCommits",
         "docker:enableMajor",
@@ -16,19 +16,19 @@
     "rebaseWhen": "conflicted",
     "dependencyDashboardTitle": "Renovate Dashboard 🤖",
     "flux": {
-        "fileMatch": ["k8s/.+\\.yaml$"]
+        "managerFilePatterns": ["/k8s/.+\\.ya?ml$/"]
     },
     "helm-values": {
-        "fileMatch": ["k8s/.+\\.yaml$"]
+        "managerFilePatterns": ["/k8s/.+\\.ya?ml$/"]
     },
     "kubernetes": {
-        "fileMatch": ["k8s/.+\\.yaml$"]
+        "managerFilePatterns": ["/k8s/.+\\.ya?ml$/"]
     },
-    "regexManagers": [
+    "customManagers": [
         {
+            "customType": "regex",
             "description": "Process CRD dependencies",
-            "fileMatch": ["k8s/.+\\.ya?ml$"],
-            //"fileMatch": ["k8s/(global/|clusters/[\\w-]+)/crds.+\\.ya?ml$"],
+            "managerFilePatterns": ["/k8s/.+\\.ya?ml$/"],
             "matchStrings": [
                 // GitRepository where 'Git release/tag' matches 'Helm' version
                 "registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n",
