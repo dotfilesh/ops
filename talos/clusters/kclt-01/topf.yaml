@@ -1,0 +1,86 @@
+---
+# kclt-01 Talos cluster, applied with topf (https://postfinance.github.io/topf).
+# Patches: all/ → every node, control-plane/ → control planes, worker/ → workers,
+# node/<host>/ → one node. *.yaml.tpl files are Go templates over .Node / .Data.
+clusterName: kclt-01
+clusterEndpoint: https://10.64.0.48:6443
+
+# renovate: datasource=github-releases depName=siderolabs/talos
+talosVersion: v1.14.4
+# renovate: datasource=docker depName=ghcr.io/siderolabs/kubelet
+kubernetesVersion: v1.37.1
+
+secretsPath: secrets.sops.yaml
+# Per-node system extensions, rendered from node data (see schematic.yaml.tpl)
+schematicId: "@schematic.yaml.tpl"
+
+data:
+  apiAddr: 10.64.0.48
+  nodeCIDR: 10.64.0.0/20
+  podCIDR: 10.244.0.0/16
+  svcCIDR: 10.96.0.0/12
+  gateway: 10.64.0.1
+  # 150GB cap keeps Talos off the larger NVMe drives some nodes carry
+  installDisk: disk.transport == "nvme" && disk.size <= 150u * GB
+
+nodes:
+  # Control plane: three nodes (an even fourth etcd member adds no fault tolerance)
+  - host: woglinde
+    ip: 10.64.6.1
+    role: control-plane
+    data: &eno1
+      link: eno1
+      bondMode: active-backup
+      mtu: 9000
+      extensions: []
+  - host: wellgunde
+    ip: 10.64.6.2
+    role: control-plane
+    data: *eno1
+  - host: flosshilde
+    ip: 10.64.6.3
+    role: control-plane
+    data: *eno1
+
+  # Workers
+  - host: junks
+    ip: 10.64.6.8
+    role: worker
+    data:
+      macAddr: 00:e0:4c:01:49:94
+      bondMode: 802.3ad
+      mtu: 9000
+      installDisk: disk.transport == "nvme"
+      extensions: [siderolabs/i915, siderolabs/intel-ucode, siderolabs/thunderbolt]
+  - host: formula
+    ip: 10.64.6.9
+    role: worker
+    data: &eno1-intel
+      link: eno1
+      bondMode: active-backup
+      mtu: 9000
+      extensions: [siderolabs/intel-ucode]
+  - host: urban
+    ip: 10.64.6.10
+    role: worker
+    data: *eno1
+  - host: lailah
+    ip: 10.64.6.11
+    role: worker
+    data: *eno1-intel
+  - host: verus
+    ip: 10.64.6.12
+    role: worker
+    data:
+      link: eno1
+      bondMode: active-backup
+      mtu: 9000
+      extensions: [siderolabs/intel-ucode, siderolabs/bnx2-bnx2x]
+  - host: mastema
+    ip: 10.64.6.13
+    role: worker
+    data: *eno1-intel
+  - host: amdusias
+    ip: 10.64.6.14
+    role: worker
+    data: *eno1
