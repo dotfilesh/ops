@@ -1,42 +1,46 @@
 ---
+# Two age keys, both also readable with Whit's PGP keys (card + legacy):
+#   cluster key  age1spkux7…  — secrets that belong to one cluster (kclt-01)
+#   global key   age187tee…   — secrets shared by every cluster
+# Flux receives both keys at bootstrap (sops-age Secret built from the local
+# age key file). The age keys themselves are backed up under keys/ encrypted
+# to PGP only, so they can be recovered with the card.
 creation_rules:
-    # Attempt first to confirm if file is within a specific cluster. If
-    # so encrypt with clusters key. Try both 📁 k8s/ and 📁 talos/
-  - path_regex: (k8s|talos)/clusters/kclt-01/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
-    encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
-    # keys: 
-    #   age: 
-    #     - kclt-01.kube.sys.dotfile.sh
-    #   pgp:
-    #     - rwx@whits.io (depreciated)
-    #     - rwx@whits.io (card)
+  # Talos secrets bundle for kclt-01 (not a Kubernetes Secret: encrypt everything)
+  - path_regex: talos/clusters/kclt-01/.*\.sops\.ya?ml$
+    mac_only_encrypted: true
     age: >-
-      age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz 
+      age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz
     pgp: >-
       2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
       9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
-    #
-    # If not a cluster, see if the file is in 📁 k8s/ or 📁 talos/
-    # if so, default to use global key.
-  - path_regex: (k8s|talos)/.*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
-    encrypted_regex: '((?i)(pass|secret($|[^N])|key|token|^data$|^stringData))'
-    # keys: 
-    #   age: 
-    #     - kube.sys.dotfile.sh
-    #   pgp:
-    #     - rwx@whits.io (depreciated)
-    #     - rwx@whits.io (card)
+
+  # Kubernetes secrets for kclt-01
+  - path_regex: kubernetes/clusters/kclt-01/.*\.sops\.ya?ml$
+    encrypted_regex: ^(data|stringData)$
+    mac_only_encrypted: true
+    age: >-
+      age1spkux7hcrspxgl3xq8x7chykdr2d47q5l0jtucqu4gpkvre2cdfsgf38dz
+    pgp: >-
+      2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
+      9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
+
+  # Kubernetes secrets shared by all clusters
+  - path_regex: kubernetes/.*\.sops\.ya?ml$
+    encrypted_regex: ^(data|stringData)$
+    mac_only_encrypted: true
     age: >-
       age187teecmpvsa4kcme6apvqege0wqjnwd9whfpkq730m48mf8n93xqjn0jve
     pgp: >-
       2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
       9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
-    # If nothing's taking, encrypt solely with Whit personal key.
-  - path_regex: .*\.sops\.ya?ml(\.(old|new|tmp|nocommit))?
-    # keys:
-    #   pgp:
-    #     - rwx@whits.io (depreciated)
-    #     - rwx@whits.io (card)
+
+  # Age private key backups: PGP only, so losing the age keys is recoverable
+  - path_regex: keys/.*\.sops$
     pgp: >-
       2CE2F0FA3F3E807815447A06B5B5EEA464CA97AB,
       9BB4C5E61E5800ECF5174E6696E67F871ED1AF65
+
+stores:
+  yaml:
+    indent: 2
