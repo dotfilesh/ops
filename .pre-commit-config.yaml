@@ -7,7 +7,7 @@ repos:
         name: forbid unencrypted SOPS files
         description: Fail if a *.sops.yaml or *.dirtysops file is missing SOPS metadata.
         language: system
-        files: \.(sops\.ya?ml|dirtysops)$
+        files: \.(sops\.ya?ml|sops|dirtysops)$
         exclude: ^\.sops\.yaml$
         entry: >-
           bash -c 'rc=0; for f in "$@"; do

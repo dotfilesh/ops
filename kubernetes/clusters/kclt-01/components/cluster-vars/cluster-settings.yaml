@@ -1,0 +1,27 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-settings
+data:
+  CLUSTER_NAME: kclt-01
+  CLUSTER_ID: "1"
+  # Networks (must match talos/clusters/kclt-01)
+  CLUSTER_NODE_CIDR: 10.64.0.0/20
+  CLUSTER_POD_CIDR: 10.244.0.0/16
+  CLUSTER_SVC_CIDR: 10.96.0.0/12
+  CLUSTER_API_ADDR: 10.64.0.48
+  CLUSTER_COREDNS_ADDR: 10.96.0.10
+  # LoadBalancer IPs, announced on the node LAN by Cilium L2 announcements
+  CLUSTER_LB_CIDR: 10.64.3.0/24
+  CLUSTER_LB_GATEWAY_INTERNAL: 10.64.3.2
+  CLUSTER_LB_MINECRAFT: 10.64.3.3
+  CLUSTER_LB_DNS: 10.64.3.4
+  CLUSTER_LB_SATISFACTORY: 10.64.3.5
+  CLUSTER_LB_GATEWAY_EXTERNAL: 10.64.3.6
+
+  # Storage classes (defined in clusters/kclt-01/apps/rook-ceph/rook-ceph-cluster-values.yaml)
+  CLUSTER_STORAGE_BLOCK: ceph-block
+  CLUSTER_STORAGE_FILESYSTEM: ceph-filesystem
+  CLUSTER_STORAGE_BULK: ceph-filesystem-hdd
+  CLUSTER_STORAGE_BUCKET: ceph-bucket

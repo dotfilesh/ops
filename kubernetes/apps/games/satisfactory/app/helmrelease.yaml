@@ -1,0 +1,109 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: satisfactory
+spec:
+  interval: 30m
+  chartRef:
+    kind: OCIRepository
+    name: satisfactory
+  maxHistory: 3
+  install:
+    remediation:
+      retries: 5
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 5
+  values:
+    defaultPodOptions:
+      # The image's init.sh only remaps uid/gid when started as root;
+      # started as its steam user (1000:1000) it skips straight to the server.
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+    controllers:
+      satisfactory:
+        type: statefulset
+        replicas: 1
+        containers:
+          app:
+            env:
+              MAXPLAYERS: "4"
+              TZ: ${TIMEZONE}
+            image:
+              repository: ghcr.io/robtme/satisfactory-server
+              tag: v1.9.11@sha256:ac252dba41653eb21c6feed94b577f98fa152f5792b1aeff2ce11fe364355137
+            probes:
+              # The image's healthcheck queries the game's own HealthCheck API.
+              liveness: &probes
+                enabled: true
+                command: ["/home/steam/healthcheck.sh"]
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 30
+                  failureThreshold: 4
+              readiness: *probes
+              # First start downloads the game (~8GB) via steamcmd.
+              startup:
+                enabled: true
+                command: ["/home/steam/healthcheck.sh"]
+                spec:
+                  periodSeconds: 10
+                  timeoutSeconds: 30
+                  failureThreshold: 120
+            securityContext:
+              allowPrivilegeEscalation: false
+              capabilities:
+                drop: ["ALL"]
+            resources:
+              requests:
+                cpu: 500m
+                memory: 4Gi
+              limits:
+                # Upstream recommends 8-16GB; late-game saves grow.
+                memory: 10Gi
+        statefulset:
+          volumeClaimTemplates:
+            - name: config
+              accessMode: ReadWriteOnce
+              size: 32Gi
+              storageClass: ${CLUSTER_STORAGE_BLOCK}
+              globalMounts:
+                - path: /config
+    service:
+      satisfactory:
+        controller: satisfactory
+        type: LoadBalancer
+        annotations:
+          lbipam.cilium.io/ips: ${CLUSTER_LB_SATISFACTORY}
+        externalTrafficPolicy: Cluster
+        ports:
+          game-tcp:
+            port: 7777
+            protocol: TCP
+          game-udp:
+            port: 7777
+            protocol: UDP
+          messaging:
+            port: 8888
+            protocol: TCP
+    persistence:
+      # Replace the server's self-signed API certificate with the
+      # cert-manager one from certificate.yaml.
+      certs:
+        type: secret
+        name: satisfactory.${SECRET_DOMAIN_TERTIARY}
+        items:
+          - key: tls.crt
+            path: cert_chain.pem
+          - key: tls.key
+            path: private_key.pem
+        globalMounts:
+          - path: /config/gamefiles/FactoryGame/Certificates
+            readOnly: true

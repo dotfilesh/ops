@@ -1,0 +1,14 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kube-system
+components:
+  - ../../../../components/global-vars
+  - ../../components/cluster-vars
+  - ../../components/flux-alerts
+resources:
+  - ../../../../apps/kube-system/namespace.yaml
+  - ../../../../apps/kube-system/cilium/ks.yaml
+  - ../../../../apps/kube-system/coredns/ks.yaml
+  - ../../../../apps/kube-system/metrics-server/ks.yaml
+  - ../../../../apps/kube-system/reloader/ks.yaml

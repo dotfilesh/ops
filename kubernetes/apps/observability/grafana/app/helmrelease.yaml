@@ -1,0 +1,83 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: grafana
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: grafana
+  interval: 1h
+  values:
+    annotations:
+      reloader.stakater.com/auto: "true"
+    envFromSecrets:
+      - name: grafana-oidc
+    grafana.ini:
+      analytics:
+        check_for_updates: false
+        check_for_plugin_updates: false
+        reporting_enabled: false
+      auth:
+        oauth_auto_login: true
+      auth.generic_oauth:
+        enabled: true
+        name: Authentik
+        scopes: openid profile email groups
+        auth_url: https://auth.${SECRET_DOMAIN_PUBLIC}/application/o/authorize/
+        token_url: https://auth.${SECRET_DOMAIN_PUBLIC}/application/o/token/
+        api_url: https://auth.${SECRET_DOMAIN_PUBLIC}/application/o/userinfo/
+        signout_redirect_url: https://auth.${SECRET_DOMAIN_PUBLIC}/application/o/grafana/end-session/
+        login_attribute_path: preferred_username
+        role_attribute_path: contains(groups[*], 'sh.dotfile.auth/admin') && 'Admin' || 'Viewer'
+        use_pkce: true
+      server:
+        root_url: https://grafana-${CLUSTER_NAME}.${SECRET_DOMAIN_PUBLIC}
+      news:
+        news_feed_enabled: false
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            uid: prometheus
+            access: proxy
+            url: http://prometheus-operated.observability.svc.cluster.local:9090
+            isDefault: true
+          - name: Alertmanager
+            type: alertmanager
+            uid: alertmanager
+            access: proxy
+            url: http://alertmanager-operated.observability.svc.cluster.local:9093
+            jsonData:
+              implementation: prometheus
+    persistence:
+      enabled: true
+      storageClassName: ${CLUSTER_STORAGE_BLOCK}
+      size: 10Gi
+    route:
+      main:
+        enabled: true
+        hostnames:
+          - grafana-${CLUSTER_NAME}.${SECRET_DOMAIN_PUBLIC}
+        parentRefs:
+          - name: envoy-internal
+            namespace: network
+            sectionName: https
+    serviceMonitor:
+      enabled: true
+    sidecar:
+      dashboards:
+        enabled: true
+        searchNamespace: ALL
+        label: grafana_dashboard
+        folderAnnotation: grafana_folder
+        provider:
+          foldersFromFilesStructure: true
+      datasources:
+        enabled: true
+        searchNamespace: ALL
+    testFramework:
+      enabled: false

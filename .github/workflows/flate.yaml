@@ -42,5 +42,13 @@ jobs:
           tar -xzf "${asset}" flate
           echo "${RUNNER_TEMP}" >> "${GITHUB_PATH}"
 
-      - name: Test against known failures
-        run: .github/scripts/flate-ratchet.sh flate
+      - name: Test every cluster against known failures
+        run: |
+          rc=0
+          for dir in kubernetes/clusters/*/; do
+            export CLUSTER="$(basename "$dir")"
+            echo "::group::${CLUSTER}"
+            .github/scripts/flate-ratchet.sh flate || rc=1
+            echo "::endgroup::"
+          done
+          exit "$rc"

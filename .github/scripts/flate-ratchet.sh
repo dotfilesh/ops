@@ -14,7 +14,7 @@ trap 'rm -rf "${work}"' EXIT
 
 cd "${root}"
 "${flate}" test all \
-  --path ./k8s/clusters/kclt-01/flux \
+  --path "./kubernetes/clusters/${CLUSTER:-kclt-01}/flux" \
   --allow-missing-secrets \
   --no-progress >"${work}/flate.log" 2>&1 || true
 cat "${work}/flate.log"
@@ -26,14 +26,14 @@ fi
 
 # Failure lines look like: "  ✗  HelmRelease     default/jellyfin  <reason>"
 awk '$1 == "✗" && $2 ~ /^[A-Z]/ { print $2, $3 }' "${work}/flate.log" | sort -u >"${work}/actual"
-grep -Ev '^\s*(#|$)' "${known}" | sort -u >"${work}/known"
+{ grep -Ev '^\s*(#|$)' "${known}" || true; } | sort -u >"${work}/known"
 
 comm -13 "${work}/known" "${work}/actual" >"${work}/new"
 comm -23 "${work}/known" "${work}/actual" >"${work}/fixed"
 
 summary="${GITHUB_STEP_SUMMARY:-/dev/null}"
 {
-  echo "## flate"
+  echo "## flate: ${CLUSTER:-kclt-01}"
   echo
   echo "$(grep -E '[0-9]+ passed' "${work}/flate.log" | tail -1 | sed 's/^ *//')"
   echo

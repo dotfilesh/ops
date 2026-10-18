@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://k8s-schemas.home-operations.com/helm.toolkit.fluxcd.io/helmrelease_v2.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: minecraft
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: minecraft
+  interval: 1h
+  values:
+    resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        memory: 6Gi
+    minecraftServer:
+      eula: "TRUE"
+      version: LATEST
+      type: PAPER
+      difficulty: normal
+      icon: https://cdn.discordapp.com/attachments/588168204635865119/844264371979157504/Tumblr_l_47563468744304.png
+      maxPlayers: 32
+      maxWorldSize: 32768
+      forcegameMode: true
+      motd: "§dMinecraft for the §lGirlies§r§d!"
+      pvp: true
+      onlineMode: true
+      memory: 4500M
+      serviceType: LoadBalancer
+      rcon:
+        enabled: true
+        existingSecret: minecraft-rcon
+        secretKey: rcon-password
+    persistence:
+      storageClass: ${CLUSTER_STORAGE_BLOCK}
+      dataDir:
+        enabled: true
+        size: 16Gi
+    serviceAnnotations:
+      lbipam.cilium.io/ips: ${CLUSTER_LB_MINECRAFT}

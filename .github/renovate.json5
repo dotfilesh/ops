@@ -16,19 +16,19 @@
     "rebaseWhen": "conflicted",
     "dependencyDashboardTitle": "Renovate Dashboard 🤖",
     "flux": {
-        "managerFilePatterns": ["/k8s/.+\\.ya?ml$/"]
+        "managerFilePatterns": ["/kubernetes/.+\\.ya?ml$/"]
     },
     "helm-values": {
-        "managerFilePatterns": ["/k8s/.+\\.ya?ml$/"]
+        "managerFilePatterns": ["/kubernetes/.+\\.ya?ml$/"]
     },
     "kubernetes": {
-        "managerFilePatterns": ["/k8s/.+\\.ya?ml$/"]
+        "managerFilePatterns": ["/kubernetes/.+\\.ya?ml$/"]
     },
     "customManagers": [
         {
             "customType": "regex",
             "description": "Process '# renovate:' annotated versions in workflows and Talos config",
-            "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/", "/^talos/.+\\.ya?ml$/"],
+            "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/", "/^talos/.+\\.ya?ml$/", "/^bootstrap/.+\\.ya?ml$/"],
             "matchStrings": [
                 "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\s+\\S+:\\s*\"?(?<currentValue>[^\"\\s]+)\"?"
             ],
@@ -37,7 +37,7 @@
         {
             "customType": "regex",
             "description": "Process CRD dependencies",
-            "managerFilePatterns": ["/k8s/.+\\.ya?ml$/"],
+            "managerFilePatterns": ["/kubernetes/.+\\.ya?ml$/"],
             "matchStrings": [
                 // GitRepository where 'Git release/tag' matches 'Helm' version
                 "registryUrl=(?<registryUrl>\\S+) chart=(?<depName>\\S+)\n.*?(?<currentValue>[^-\\s]*)\n",

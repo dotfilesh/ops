@@ -1,0 +1,26 @@
+---
+# Postgres with VectorChord (Immich accepts >=0.3 <2.0). The app user is not
+# a superuser, so the extensions Immich needs are created at bootstrap.
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: immich-db
+spec:
+  instances: 3
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:17.11-1.1.1
+  postgresql:
+    shared_preload_libraries:
+      - vchord.so
+  storage:
+    size: 20Gi
+    storageClass: ${CLUSTER_STORAGE_BLOCK}
+  bootstrap:
+    initdb:
+      database: immich
+      owner: immich
+      postInitApplicationSQL:
+        - CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS cube CASCADE;
+        - CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE;
+  monitoring:
+    enablePodMonitor: true
